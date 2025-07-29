@@ -256,15 +256,14 @@
         .illustration-error svg { width: 40px; height: 40px; margin-bottom: 1rem; stroke: #e74c3c; }
         .illustration-error p { font-family: var(--font-sans); font-size: 0.9rem; color: #e74c3c; line-height: 1.6; }
 
-        /* --- REVISED: 新增專為插圖頁設計的樣式 --- */
         .page-content--illustration {
-            padding: 0 !important; /* 強制移除邊距，讓圖片最大化 */
+            padding: 0 !important;
             display: flex;
             justify-content: center;
             align-items: center;
         }
         .page-content--illustration .illustration-container {
-            margin: 1rem; /* 在全頁模式下給予一個小邊距 */
+            margin: 1rem;
             width: 90%;
             height: 90%;
             border-style: solid;
@@ -272,7 +271,7 @@
         .page-content--illustration .illustration-container img {
             width: 100%;
             height: 100%;
-            object-fit: contain; /* 確保圖片完整顯示不變形 */
+            object-fit: contain;
         }
         
         /* --- 8. 全螢幕模式 (Fullscreen Mode) --- */
@@ -780,7 +779,7 @@ JSON 格式如下：
         }
         
         /**
-         * REVISED: 重構分頁邏輯以獨立處理插圖頁面
+         * BUG FIX: 修訂分頁邏輯以防止在插圖後產生空白頁。
          */
         function paginateArticle(article) {
             const containerWidth = bookContainer.clientWidth;
@@ -791,7 +790,7 @@ JSON 格式如下：
             }
 
             sizer.style.width = containerWidth + 'px';
-            sizer.style.height = containerHeight + 'px'; // sizer needs a fixed height to check against scrollHeight
+            sizer.style.height = containerHeight + 'px';
             
             const firstPageHeader = `<h2 class="article-title">${article.title}</h2><p class="article-author">文 / ${article.author}</p><div class="article-outline">${article.outline}</div>`;
             
@@ -837,30 +836,26 @@ JSON 格式如下：
             sizer.innerHTML = currentPageHTML;
 
             for (const node of contentNodes) {
-                // REVISED LOGIC: Check if the node is an illustration container.
                 if (node.nodeType === 1 && node.classList.contains('illustration-container')) {
-                    // 1. Finalize the preceding text page, but only if it has actual content.
-                    // The header alone counts as content for the first page.
                     if (currentPageHTML.trim()) {
                         pages.push(currentPageHTML);
                     }
-
-                    // 2. Add the illustration as its own, separate page.
                     pages.push(node.outerHTML);
-                    
-                    // 3. Reset for the next text page, starting fresh.
                     currentPageHTML = '';
                     sizer.innerHTML = '';
-                    continue; // Move to the next node.
+                    continue;
                 }
 
-                // --- Original logic for text nodes ---
                 const nodeHTML = node.outerHTML || node.textContent;
                 const potentialHTML = currentPageHTML + nodeHTML;
                 sizer.innerHTML = potentialHTML;
                 
                 if (sizer.scrollHeight > containerHeight) {
-                    pages.push(currentPageHTML);
+                    // BUG FIX: 只有當 currentPageHTML 有實際內容時才將其存為一頁。
+                    // 這可以防止在插圖後，因下一個元素溢位而產生空白頁。
+                    if (currentPageHTML) { 
+                        pages.push(currentPageHTML);
+                    }
                     currentPageHTML = nodeHTML;
                     sizer.innerHTML = currentPageHTML;
                 } else {
@@ -868,12 +863,9 @@ JSON 格式如下：
                 }
             }
 
-            // Push the last remaining page if it has content.
             if (currentPageHTML.trim()) {
                 pages.push(currentPageHTML);
             }
-            
-            // If no content was ever added, create at least one page with the header.
             if (pages.length === 0) {
                 pages.push(firstPageHeader);
             }
@@ -881,9 +873,6 @@ JSON 格式如下：
             return pages;
         }
 
-        /**
-         * REVISED: Dynamically add a class to illustration pages for special styling.
-         */
         function displayArticleAsBook(article) {
             const currentPageBeforeRepagination = state.currentPageNum;
             book.innerHTML = '';
@@ -901,7 +890,6 @@ JSON 格式如下：
                     const pageElement = document.createElement('div');
                     pageElement.className = 'page';
                     
-                    // REVISED: Check if the content is an illustration to apply the correct class.
                     const isIllustrationPage = content.includes('class="illustration-container"');
                     const contentClass = isIllustrationPage ? 'page-content page-content--illustration' : 'page-content';
                     
