@@ -133,7 +133,8 @@
         .password-error { color: #e74c3c; margin-top: 1rem; font-size: 0.9rem; }
 
         /* --- 4. 主要區塊：設定、閱讀器 (Main Sections: Settings, Reader) --- */
-        .main-content-wrapper { width: 100%; max-width: var(--max-width); transition: all 0.4s ease-in-out; }
+        /* REVISION #1: Main container width changed to 90% */
+        .main-content-wrapper { width: 90%; max-width: var(--max-width); transition: all 0.4s ease-in-out; margin: 0 auto; }
         .settings-card, .reader-card {
             border: 1px solid; border-radius: 8px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
@@ -202,6 +203,10 @@
         .dark-mode .page-content { color: var(--text-primary-dark); }
         .page-content h2.article-title { font-size: calc(var(--reader-font-size) + 0.9rem); font-weight: 600; margin-bottom: 0.75rem; text-align: center; }
         .page-content p.article-author { font-family: var(--font-sans); font-size: calc(var(--reader-font-size) - 0.1rem); margin-bottom: 1.5rem; text-align: center; color: var(--accent-color); }
+        /* REVISION #3: Added margin-bottom to main article paragraphs to create space between them */
+        .page-content > p:not(.article-author) {
+            margin-bottom: 1em;
+        }
         .page-content .article-outline { font-family: var(--font-sans); font-style: italic; font-size: calc(var(--reader-font-size) - 0.1rem); text-align: center; margin: 1rem 0 2rem 0; padding-bottom: 2rem; border-bottom: 1px solid; }
         .light-mode .page-content .article-outline { color: var(--text-secondary-light); border-color: var(--border-color-light); }
         .dark-mode .page-content .article-outline { color: var(--text-secondary-dark); border-color: var(--border-color-dark); }
@@ -209,7 +214,7 @@
         .light-mode .article-appreciation { border-color: var(--border-color-light); }
         .dark-mode .article-appreciation { border-color: var(--border-color-dark); }
         .article-appreciation h3 { font-family: var(--font-sans); font-weight: 500; font-size: calc(var(--reader-font-size) + 0.15rem); margin-bottom: 1rem; }
-        .article-appreciation p { font-family: var(--font-sans); font-size: calc(var(--reader-font-size) - 0.1rem); line-height: 1.8; }
+        .article-appreciation p { font-family: var(--font-sans); font-size: calc(var(--reader-font-size) - 0.1rem); line-height: 1.8; margin-bottom: 1em; } /* Added margin for consistency */
         .page-content .page-number { position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%); font-family: var(--font-sans); font-size: 0.9rem; }
         .light-mode .page-content .page-number { color: var(--text-secondary-light); }
         .dark-mode .page-content .page-number { color: var(--text-secondary-dark); }
@@ -218,7 +223,7 @@
         /* --- 插圖樣式 (Illustration Styles) --- */
         .illustration-container {
             width: 85%;
-            margin: 0 auto;
+            margin: 1em auto; /* Adjusted margin for paragraph spacing */
             padding: 1rem;
             padding-top: 2.5rem;
             padding-bottom: 2.5rem;
@@ -247,7 +252,6 @@
         .illustration-error p { font-family: var(--font-sans); font-size: 0.9rem; color: #e74c3c; line-height: 1.6; }
 
         /* --- 8. 全螢幕模式 (Fullscreen Mode) --- */
-        /* REVISION: Fullscreen is now the default and only reading mode. */
         body.fullscreen-mode { overflow: hidden; }
         body.light-mode.fullscreen-mode { background-color: var(--content-bg-light); }
         body.dark-mode.fullscreen-mode { background-color: var(--content-bg-dark); }
@@ -302,6 +306,7 @@
 
         /* --- 10. 響應式設計 (Responsive Design) --- */
         @media (max-width: 768px) {
+            /* REVISION #1: Let main container take full width on mobile for better use of space */
             .main-content-wrapper { width: 100%; }
             .page-container { padding: 1rem 0; }
             .settings-card, .reader-card { padding: 1.5rem; border-radius: 0; border: none; box-shadow: none; }
@@ -400,7 +405,6 @@
                            <svg class="icon-theme-light" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                            <svg class="icon-theme-dark hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
                         </button>
-                        <!-- REVISION: Fullscreen button has been removed as per requirements. -->
                     </div>
                 </div>
                 <div class="book-container" id="book-container">
@@ -515,7 +519,6 @@
                 const isLight = body.classList.contains('light-mode');
                 const newTheme = isLight ? 'dark-mode' : 'light-mode';
                 body.className = newTheme;
-                // If theme is changed while in fullscreen, maintain it
                 if (readingSection.classList.contains('hidden') === false) {
                     body.classList.add('fullscreen-mode');
                 }
@@ -561,11 +564,10 @@
 
                 article.generatedDate = new Date().toISOString();
                 state.currentArticle = article;
-                state.currentPageNum = 0; // Reset to first page for new article
+                state.currentPageNum = 0;
 
                 addToHistory(state.currentArticle);
                 switchToReaderView();
-                // REVISION: Enter fullscreen mode automatically
                 enterFullscreen();
 
             } catch (error) {
@@ -577,7 +579,6 @@
         });
         
         backToSettingsBtn.addEventListener('click', () => {
-            // REVISION: Ensure fullscreen is exited before going back
             exitFullscreen();
             switchToSettingsView();
         });
@@ -644,11 +645,9 @@
             state.currentArticle = null;
         }
 
-        // REVISION: Dedicated functions for entering and exiting fullscreen
         function enterFullscreen() {
             if (!body.classList.contains('fullscreen-mode')) {
                 body.classList.add('fullscreen-mode');
-                // Repaginate with new dimensions after a short delay for layout to settle
                 if (state.currentArticle) {
                     setTimeout(() => displayArticleAsBook(state.currentArticle), 50);
                 }
@@ -672,7 +671,8 @@ ${userPrompt ? `用戶的個性化要求： "${userPrompt}"` : `請隨機推薦�
 2. 作品內容必須是完整的段落或一篇適合一次閱讀完畢的作品(5000字以內)。
 3. 你的回傳內容必須嚴格遵循以下 JSON 格式，不要包含任何 markdown 語法或額外說明。
 4. 所有文字都必須是繁體中文。
-5. [作品賞析] 必須針對你推薦的這篇真實作品進行分析，可包含作者背景、寫作風格、或該作品的歷史意義。
+5. [作品賞析] 必須針對你推薦的這篇真實作品進行分析，可包含作者背景、寫作風格、或該作品的歷史意義。段落之間請用 \\n 分隔。
+6. [content] 的內容，段落與段落之間，必須用 \\n 分隔。
 
 JSON 格式如下：
 {
@@ -682,7 +682,7 @@ JSON 格式如下：
   "content": "{這裡貼上完整的真實散文內容，段落之間用 \\n 分隔}",
   "appreciation": {
     "title": "作品賞析",
-    "text": "{這裡填寫對這篇真實作品的賞析內容}"
+    "text": "{這裡填寫對這篇真實作品的賞析內容，段落之間用 \\n 分隔}"
   }
 }`;
             
@@ -779,8 +779,10 @@ JSON 格式如下：
             } else {
                 fullContentHTML = article.content.split('\n').filter(p => p.trim() !== '').map(p => `<p>${p}</p>`).join('');
             }
-
-            fullContentHTML += `<div class="article-appreciation"><h3>${article.appreciation.title}</h3><p>${article.appreciation.text.replace(/\n/g, '<br>')}</p></div>`;
+            
+            // REVISION #2: Split appreciation text into individual paragraphs for correct pagination.
+            const appreciationParagraphs = article.appreciation.text.split('\n').filter(p => p.trim() !== '').map(p => `<p>${p}</p>`).join('');
+            fullContentHTML += `<div class="article-appreciation"><h3>${article.appreciation.title}</h3>${appreciationParagraphs}</div>`;
             
             const contentDoc = new DOMParser().parseFromString(`<div>${fullContentHTML}</div>`, 'text/html');
             const contentNodes = Array.from(contentDoc.body.firstChild.childNodes);
@@ -789,21 +791,19 @@ JSON 格式如下：
             let currentPageHTML = firstPageHeader;
             sizer.innerHTML = currentPageHTML;
 
-            // This loop iterates through each element (paragraph, image) and adds it to the page
-            // If an element overflows, a new page is created. This ensures content never covers the page number.
             for (const node of contentNodes) {
                 const nodeHTML = node.outerHTML || node.textContent;
                 sizer.innerHTML += nodeHTML;
                 
                 if (sizer.scrollHeight > sizer.clientHeight) {
-                    pages.push(currentPageHTML); // Push the content *before* the overflow
-                    currentPageHTML = nodeHTML; // The new page starts with the overflowing element
-                    sizer.innerHTML = currentPageHTML; // Reset the sizer for the new page
+                    pages.push(currentPageHTML);
+                    currentPageHTML = nodeHTML;
+                    sizer.innerHTML = currentPageHTML;
                 } else {
-                    currentPageHTML += nodeHTML; // If it fits, add it to the current page's HTML
+                    currentPageHTML += nodeHTML;
                 }
             }
-            pages.push(currentPageHTML); // Push the final page
+            pages.push(currentPageHTML);
             return pages;
         }
 
@@ -811,7 +811,6 @@ JSON 格式如下：
             book.innerHTML = '';
             book.style.transition = 'none';
 
-            // Use a short timeout to ensure the container dimensions (especially in fullscreen) are correctly calculated by the browser
             setTimeout(() => {
                 if (!bookContainer.clientWidth) {
                     console.error("Pagination failed: book container not visible or has zero width.");
@@ -1003,11 +1002,10 @@ JSON 格式如下：
                 const article = state.history.find(item => item.title === articleTitle);
                 if (article) {
                     state.currentArticle = article;
-                    state.currentPageNum = 0; // Reset to first page
+                    state.currentPageNum = 0;
                     
                     switchToReaderView();
                     hideHistory();
-                    // REVISION: Enter fullscreen mode automatically when loading from history
                     enterFullscreen();
                 }
             }
