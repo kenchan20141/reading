@@ -381,9 +381,16 @@
                 box-shadow: none; 
             }
             body.fullscreen-mode .reader-card { padding: 1rem; }
-            .settings-header { margin-bottom: 1.5rem; }
-            .settings-header .title-group h1 { font-size: 1.8rem; }
-            .settings-header .header-controls { top: -8px; right: 0; }
+           .settings-header {
+        margin-bottom: 2rem;      /* 增加一些底部間距，讓整體佈局更舒適 */
+        flex-direction: column;   /* 將內部元素改為垂直排列 */
+        align-items: center;      /* 讓垂直排列的元素水平置中 */
+        gap: 0.75rem;             /* 在標題和按鈕之間增加一些間隙 */
+    }
+    .settings-header .title-group h1 { font-size: 1.8rem; }
+    .settings-header .header-controls {
+        position: static;         /* 取消絕對定位，讓按鈕回到正常的排版流程 */
+    }
             .reader-controls .left-controls, .reader-controls .right-controls { gap: 0.2rem; }
             /* REVISED: Mobile padding for page content */
             .page-content { padding: 1.5rem; padding-bottom: 4.5rem; line-height: 1.9; }
