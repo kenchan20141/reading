@@ -87,7 +87,6 @@
         .light-mode .icon-btn:hover { background-color: rgba(0,0,0,0.05); }
         .dark-mode .icon-btn:hover { background-color: var(--content-bg-dark); }
         .icon-btn:hover { transform: scale(1.1); }
-        .fullscreen-btn .icon-exit-fullscreen { display: none; }
         
         /* --- Password Overlay & Modal --- */
         .password-overlay {
@@ -196,7 +195,6 @@
         .book-container:active { cursor: grabbing; }
         .book { width: 100%; height: 100%; display: flex; }
         .page { width: 100%; height: 100%; flex-shrink: 0; position: relative; border: 1px solid; }
-        /* REVISION 2: Changed overflow-y from 'auto' to 'hidden' to prevent content scrolling over the page number. */
         .page-content { width: 100%; height: 100%; padding: 2rem 2.5rem 5rem 2.5rem; overflow: hidden; font-family: var(--font-serif); font-size: var(--reader-font-size); letter-spacing: 0.05em; line-height: 2; }
         .light-mode .page { background: var(--content-bg-light); border-color: var(--border-color-light); }
         .dark-mode .page { background: var(--content-bg-dark); border-color: var(--border-color-dark); }
@@ -218,13 +216,12 @@
         #sizer { position: absolute; visibility: hidden; z-index: -100; overflow: hidden; font-family: var(--font-serif); font-size: var(--reader-font-size); letter-spacing: 0.05em; line-height: 2; padding: 2rem 2.5rem 5rem 2.5rem; }
 
         /* --- 插圖樣式 (Illustration Styles) --- */
-        /* REVISION 3: Changed margin to padding for more accurate height calculation in JS pagination. */
         .illustration-container {
             width: 85%;
-            margin: 0 auto; /* Changed */
+            margin: 0 auto;
             padding: 1rem;
-            padding-top: 2.5rem; /* Changed */
-            padding-bottom: 2.5rem; /* Changed */
+            padding-top: 2.5rem;
+            padding-bottom: 2.5rem;
             border: 1px dashed;
             border-radius: 8px;
             display: flex;
@@ -250,7 +247,7 @@
         .illustration-error p { font-family: var(--font-sans); font-size: 0.9rem; color: #e74c3c; line-height: 1.6; }
 
         /* --- 8. 全螢幕模式 (Fullscreen Mode) --- */
-        /* REVISION 1: Fullscreen is now the default reading mode. These styles are applied automatically. */
+        /* REVISION: Fullscreen is now the default and only reading mode. */
         body.fullscreen-mode { overflow: hidden; }
         body.light-mode.fullscreen-mode { background-color: var(--content-bg-light); }
         body.dark-mode.fullscreen-mode { background-color: var(--content-bg-dark); }
@@ -258,8 +255,6 @@
         body.fullscreen-mode .main-content-wrapper { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; max-width: none; z-index: 1000; }
         body.fullscreen-mode .reader-card { border-radius: 0; border: none; box-shadow: none; height: 100%; display: flex; flex-direction: column; padding: 1.5rem; }
         body.fullscreen-mode .book-container { flex-grow: 1; min-height: auto; height: auto; }
-        body.fullscreen-mode .fullscreen-btn .icon-enter-fullscreen { display: none; }
-        body.fullscreen-mode .fullscreen-btn .icon-exit-fullscreen { display: block; }
         
         /* --- 9. 歷史紀錄彈窗 (History Modal) --- */
         .history-modal {
@@ -315,7 +310,6 @@
             .settings-header .title-group h1 { font-size: 1.8rem; }
             .settings-header .header-controls { position: static; }
             .reader-controls .left-controls, .reader-controls .right-controls { gap: 0.2rem; }
-            /* REVISION 2: Ensure overflow is hidden on mobile too. */
             .page-content { padding: 1.5rem; padding-bottom: 4.5rem; line-height: 1.9; overflow: hidden; }
             .page-content h2.article-title { font-size: calc(var(--reader-font-size) + 0.4rem); }
             .history-controls { flex-direction: column; }
@@ -406,11 +400,7 @@
                            <svg class="icon-theme-light" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                            <svg class="icon-theme-dark hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
                         </button>
-                        <!-- REVISION 1: This button now only exits fullscreen mode. -->
-                        <button class="icon-btn fullscreen-btn" id="fullscreen-btn" title="離開全螢幕模式">
-                            <svg class="icon-enter-fullscreen hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
-                            <svg class="icon-exit-fullscreen" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 0-2-2h-3m-12 0H5a2 2 0 0 0-2 2v3"></path></svg>
-                        </button>
+                        <!-- REVISION: Fullscreen button has been removed as per requirements. -->
                     </div>
                 </div>
                 <div class="book-container" id="book-container">
@@ -476,7 +466,6 @@
         const book = document.getElementById('book');
         const bookContainer = document.getElementById('book-container');
         const sizer = document.getElementById('sizer');
-        const fullscreenBtn = document.getElementById('fullscreen-btn');
         const backToSettingsBtn = document.getElementById('back-to-settings-btn');
         const historyBtn = document.getElementById('history-btn');
         const historyModal = document.getElementById('history-modal');
@@ -526,7 +515,7 @@
                 const isLight = body.classList.contains('light-mode');
                 const newTheme = isLight ? 'dark-mode' : 'light-mode';
                 body.className = newTheme;
-                // REVISION 1: If theme is changed while in fullscreen, maintain it
+                // If theme is changed while in fullscreen, maintain it
                 if (readingSection.classList.contains('hidden') === false) {
                     body.classList.add('fullscreen-mode');
                 }
@@ -576,7 +565,7 @@
 
                 addToHistory(state.currentArticle);
                 switchToReaderView();
-                // REVISION 1: Enter fullscreen mode automatically
+                // REVISION: Enter fullscreen mode automatically
                 enterFullscreen();
 
             } catch (error) {
@@ -587,11 +576,8 @@
             }
         });
         
-        // REVISION 1: This button now ONLY exits fullscreen
-        fullscreenBtn.addEventListener('click', exitFullscreen);
-
         backToSettingsBtn.addEventListener('click', () => {
-            // REVISION 1: Ensure fullscreen is exited before going back
+            // REVISION: Ensure fullscreen is exited before going back
             exitFullscreen();
             switchToSettingsView();
         });
@@ -658,7 +644,7 @@
             state.currentArticle = null;
         }
 
-        // REVISION 1: New dedicated functions for entering and exiting fullscreen
+        // REVISION: Dedicated functions for entering and exiting fullscreen
         function enterFullscreen() {
             if (!body.classList.contains('fullscreen-mode')) {
                 body.classList.add('fullscreen-mode');
@@ -1021,7 +1007,7 @@ JSON 格式如下：
                     
                     switchToReaderView();
                     hideHistory();
-                    // REVISION 1: Enter fullscreen mode automatically when loading from history
+                    // REVISION: Enter fullscreen mode automatically when loading from history
                     enterFullscreen();
                 }
             }
