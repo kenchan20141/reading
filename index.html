@@ -1,39 +1,40 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>小說散文・節錄</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@400;600&display=swap" rel="stylesheet">TC:wght@400;600&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小說散文・節錄</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDK (Compatibility version for easier integration) -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
 
-<!-- Firebase SDK（相容版本，更易於整合）-->
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <style>
+        /* --- 1. 核心與主題設定 (Core & Theming) --- */
+        :root {
+            --bg-color-light: #F4F4F3;
+            --text-primary-light: #2c3e50;
+            --text-secondary-light: #7f8c8d;
+            --content-bg-light: #FFFFFF;
+            --border-color-light: #EAEAEA;
+            --accent-color: #2980b9;
+            --accent-color-hover: #3498db;
+            
+            --bg-color-dark: #1F1F1F;
+            --text-primary-dark: #D1CFCB;
+            --text-secondary-dark: #888888;
+            --content-bg-dark: #2A2A2A;
+            --border-color-dark: #444444;
 
-<style>
-/* --- 1. 核心與主題設定 (Core & Theming) --- */
-:root {
---bg-color-light: #F4F4F3;
---text-primary-light: #2c3e50;
---text-secondary-light: #7f8c8d;
---content-bg-light: #FFFFFF;
---border-color-light: #EAEAEA;
---accent-color: #2980b9;
---accent-color-hover: #3498db;
+            --overlay-bg: rgba(44, 62, 80, 0.7);
 
---背景顏色：深色：#1F1F1F；
---主文：深色：#D1CFCB；
---輔助文字：深色：#888888；
---內容背景顏色：深色：#2A2A2A；
---邊框顏色：深色：#444444；
+            --font-sans: 'Noto Sans TC', sans-serif;
+            --font-serif: 'Noto Serif TC', serif;
+            --max-width: 1100px;
 
---涵蓋背景：rgba(44, 62, 80, 0.7)；
-
---字體：'Noto Sans TC'，無襯線字體；
---字體：'Noto Serif TC'，襯線字體；
---最大寬度：1100px；
             --reader-font-size: 1.1rem;
         }
 
