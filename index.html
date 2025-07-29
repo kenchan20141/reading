@@ -729,7 +729,7 @@
         async function generateProse() {
             const userPrompt = promptTextarea.value.trim();
             // 修訂 #3：加入唯一時間戳 ID，確保請求唯一性
-            const systemPrompt = `你是一位精通世界文學的大作家。你的任務是根據用戶要求，從浩瀚的文學作品中，找出一段真實、經典的繁體中文散文，然後進行仿作。
+            const systemPrompt = `你是一位精通世界文學的大作家。你的任務是根據用戶要求，從浩瀚的文學作品中，找出一段真實、經典的繁體中文散文，然後進行仿作，仿作文章字數在1500字到3500字之間。
 用戶的文學鑑賞難度偏好（1星最淺白，5星最艱深，標準為：詞匯深度、主題思想、情感表達、結構修辭等）：${state.difficulty}顆星。
 ${userPrompt ? `用戶的個性化要求： "${userPrompt}"` : `請隨機推薦一篇符合上述難度的經典散文。`}
 
