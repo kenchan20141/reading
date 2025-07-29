@@ -176,6 +176,7 @@
             font-family: inherit; font-size: 1.1rem; font-weight: 500; transition: background-color 0.3s, transform 0.2s;
             display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: 100%; margin-top: 1rem;
         }
+        .submit-btn .btn-text { transition: opacity 0.2s; }
         .submit-btn:hover { background-color: var(--accent-color-hover); }
         .submit-btn:active { transform: scale(0.98); }
         .submit-btn:disabled { background-color: #cccccc; cursor: not-allowed; }
@@ -215,7 +216,7 @@
         .dark-mode .page-content .page-number { color: var(--text-secondary-dark); }
         #sizer { position: absolute; visibility: hidden; z-index: -100; overflow: hidden; font-family: var(--font-serif); font-size: var(--reader-font-size); letter-spacing: 0.05em; line-height: 2; padding: 2rem 2.5rem 5rem 2.5rem; }
 
-        /* --- NEW: Illustration Styles --- */
+        /* --- REVISED: Illustration Styles --- */
         .illustration-container {
             width: 85%;
             margin: 2.5rem auto;
@@ -226,20 +227,21 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 250px;
+            min-height: 220px; /* Revised for better layout calculation */
             page-break-inside: avoid;
+            cursor: pointer; /* Add cursor to entire container for retry */
         }
         .light-mode .illustration-container { border-color: var(--border-color-light); }
         .dark-mode .illustration-container { border-color: var(--border-color-dark); }
-        .illustration-container img { max-width: 100%; height: auto; border-radius: 4px; cursor: pointer; transition: opacity 0.3s; }
+        .illustration-container img { max-width: 100%; height: auto; border-radius: 4px; transition: opacity 0.3s; }
         .illustration-container img:hover { opacity: 0.85; }
-        .illustration-loader { display: flex; align-items: center; gap: 15px; }
+        .illustration-loader { display: flex; align-items: center; gap: 15px; cursor: default; }
         .illustration-loader .spinner { width: 30px; height: 30px; border: 4px solid rgba(0,0,0,0.1); border-radius: 50%; animation: spin 1s linear infinite; }
         .light-mode .illustration-loader .spinner { border-top-color: var(--text-secondary-light); }
         .dark-mode .illustration-loader .spinner { border-top-color: var(--text-secondary-dark); }
         .light-mode .illustration-loader p { color: var(--text-secondary-light); }
         .dark-mode .illustration-loader p { color: var(--text-secondary-dark); }
-        .illustration-error { cursor: pointer; text-align: center; padding: 1rem; }
+        .illustration-error { text-align: center; padding: 1rem; }
         .illustration-error svg { width: 40px; height: 40px; margin-bottom: 1rem; stroke: #e74c3c; }
         .illustration-error p { font-family: var(--font-sans); font-size: 0.9rem; color: #e74c3c; line-height: 1.6; }
 
@@ -304,13 +306,15 @@
             .page-container { padding: 1rem 0; }
             .settings-card, .reader-card { padding: 1.5rem; box-shadow: none; }
             body.fullscreen-mode .reader-card { padding: 1rem; }
-           .settings-header { margin-bottom: 2rem; flex-direction: column; align-items: center; gap: 0.75rem; }
+            .settings-header { margin-bottom: 2rem; flex-direction: column; align-items: center; gap: 0.75rem; }
             .settings-header .title-group h1 { font-size: 1.8rem; }
             .settings-header .header-controls { position: static; }
             .reader-controls .left-controls, .reader-controls .right-controls { gap: 0.2rem; }
-            .page-content { padding: 1.5rem; padding-bottom: 4.5rem; line-height: 1.9; overflow-y: hidden; } /* Prevent double scrollbar */
+            .page-content { padding: 1.5rem; padding-bottom: 4.5rem; line-height: 1.9; overflow-y: auto; } /* REVISED: Ensure scroll on mobile */
             .page-content h2.article-title { font-size: calc(var(--reader-font-size) + 0.4rem); }
             .history-controls { flex-direction: column; }
+            /* REVISED: Illustration responsive styles */
+            .illustration-container { width: 100%; min-height: 180px; }
         }
     </style>
 </head>
@@ -366,13 +370,12 @@
                         <label for="prompt">作品主題或風格 (選填)</label>
                         <textarea id="prompt" placeholder="輸入作品主題或風格..."></textarea>
                     </div>
-                    <!-- NEW: Illustration Checkbox -->
                     <div class="form-group" style="display: flex; align-items: center; gap: 10px; margin-bottom: 1.5rem;">
                         <input type="checkbox" id="generate-illustrations-checkbox" style="width: 18px; height: 18px; cursor: pointer;">
                         <label for="generate-illustrations-checkbox" style="margin-bottom: 0; cursor: pointer; font-weight: normal;">為文章生成內文插圖</label>
                     </div>
                     <button type="submit" id="generate-btn" class="submit-btn">
-                        <span>尋找經典</span>
+                        <span class="btn-text">尋找經典</span>
                     </button>
                 </form>
             </section>
@@ -463,6 +466,7 @@
         const errorMessage = document.getElementById('error-message');
         const promptTextarea = document.getElementById('prompt');
         const generateBtn = document.getElementById('generate-btn');
+        const generateBtnText = generateBtn.querySelector('.btn-text');
         const book = document.getElementById('book');
         const bookContainer = document.getElementById('book-container');
         const sizer = document.getElementById('sizer');
@@ -545,18 +549,28 @@
                 errorMessage.style.display = 'block';
                 return;
             }
-            setLoading(true);
+
+            setLoading(true, '尋找文章中...');
             try {
                 const article = await generateProse();
-                if (article) {
-                    state.currentArticle = { ...article, generatedDate: new Date().toISOString() };
-                    addToHistory(state.currentArticle);
-                    displayArticleAsBook(state.currentArticle);
-                    switchToReaderView();
+                if (!article) return; // Error already alerted in generateProse
+
+                // REVISED LOGIC: Pre-generate illustrations if checkbox is checked
+                if (generateIllustrationsCheckbox.checked) {
+                    setLoading(true, '生成插圖中...');
+                    article.illustrationData = await prepareIllustrations(article.content);
                 }
+
+                article.generatedDate = new Date().toISOString();
+                state.currentArticle = article;
+
+                addToHistory(state.currentArticle);
+                displayArticleAsBook(state.currentArticle);
+                switchToReaderView();
+
             } catch (error) {
-                console.error('生成文章時發生錯誤:', error);
-                alert(`生成失敗: ${error.message}`);
+                console.error('生成流程錯誤:', error);
+                alert(`處理失敗: ${error.message}`);
             } finally {
                 setLoading(false);
             }
@@ -602,20 +616,20 @@
             });
         }
         
-        function setLoading(isLoading) {
+        function setLoading(isLoading, text = '尋找經典') {
             generateBtn.disabled = isLoading;
-            const span = generateBtn.querySelector('span');
+            generateBtnText.textContent = text;
+            
+            const existingLoader = generateBtn.querySelector('.loader');
             if (isLoading) {
-                span.style.display = 'none';
-                if (!generateBtn.querySelector('.loader')) {
+                if (!existingLoader) {
                     const loader = document.createElement('div');
                     loader.className = 'loader';
-                    generateBtn.appendChild(loader);
+                    generateBtn.insertBefore(loader, generateBtnText);
                 }
             } else {
-                span.style.display = 'inline';
-                const loader = generateBtn.querySelector('.loader');
-                if (loader) loader.remove();
+                if (existingLoader) existingLoader.remove();
+                generateBtnText.textContent = '尋找經典';
             }
         }
 
@@ -633,14 +647,12 @@
         function toggleFullscreen() { 
             body.classList.toggle('fullscreen-mode');
             if (state.currentArticle) {
-                // Short delay to allow layout to settle before re-paginating
                 setTimeout(() => displayArticleAsBook(state.currentArticle), 50);
             }
         }
 
         async function generateProse() {
-            // ... (same as original)
-             const userPrompt = promptTextarea.value.trim();
+            const userPrompt = promptTextarea.value.trim();
             const systemPrompt = `你是一位精通世界文學的圖書館員。你的任務是根據用戶要求，從浩瀚的文學作品中，找出一段真實、經典的繁體中文散文。
 用戶的文學鑑賞難度偏好（1星最淺白，5星最艱深）：${state.difficulty}顆星。
 ${userPrompt ? `用戶的個性化要求： "${userPrompt}"` : `請隨機推薦一篇符合上述難度的經典散文。`}
@@ -702,7 +714,7 @@ JSON 格式如下：
             localStorage.setItem('proseHistory_v3', JSON.stringify(state.history));
         }
         
-        // --- 6. 書本、分頁與插圖邏輯 ---
+        // --- 6. 書本、分頁與插圖邏輯 (REVISED) ---
         function changeFontSize(amount) {
             const newSize = Math.max(0.8, Math.min(1.8, state.fontSize + amount));
             state.fontSize = Math.round(newSize * 10) / 10;
@@ -727,29 +739,38 @@ JSON 格式如下：
             const firstPageHeader = `<h2 class="article-title">${article.title}</h2><p class="article-author">文 / ${article.author}</p><div class="article-outline">${article.outline}</div>`;
             
             let fullContentHTML;
-            if (generateIllustrationsCheckbox.checked) {
-                const CHARS_PER_IMAGE = 500;
-                let paragraphs = article.content.split('\n').filter(p => p.trim() !== '');
+            // REVISED: Build content with pre-generated illustrations
+            if (article.illustrationData) {
+                const paragraphs = article.content.split('\n').filter(p => p.trim() !== '');
                 let processedHTML = '';
-                let charCountSinceLastImage = 0;
-                let textBufferForPrompt = '';
+                let illustrationIndex = 0;
+                
+                const illustrationChunks = chunkTextForIllustrations(article.content);
 
-                for (const para of paragraphs) {
-                    textBufferForPrompt += para + " ";
-                    charCountSinceLastImage += para.length;
-                    processedHTML += `<p>${para}</p>`;
-
-                    if (charCountSinceLastImage >= CHARS_PER_IMAGE) {
-                        const placeholderId = `illustration-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-                        const placeholderHTML = `<div class="illustration-container" id="${placeholderId}" data-text-prompt="${encodeURIComponent(textBufferForPrompt.trim())}"></div>`;
-                        processedHTML += placeholderHTML;
-                        charCountSinceLastImage = 0;
-                        textBufferForPrompt = '';
+                for (let i = 0; i < illustrationChunks.length; i++) {
+                    const chunk = illustrationChunks[i];
+                    processedHTML += chunk.paragraphs.map(p => `<p>${p}</p>`).join('');
+                    
+                    const illustrationResult = article.illustrationData[i];
+                    if (illustrationResult) {
+                       const textPromptAttr = `data-text-prompt="${encodeURIComponent(chunk.textForPrompt)}"`;
+                       if (illustrationResult.status === 'fulfilled') {
+                           processedHTML += `<div class="illustration-container" ${textPromptAttr}><img src="${illustrationResult.value}" alt="文章插圖"></div>`;
+                       } else {
+                           const errorMessage = illustrationResult.reason.message.includes('翻譯') ? '翻譯失敗，無法生成。' : '圖片生成失敗。';
+                           processedHTML += `<div class="illustration-container" ${textPromptAttr}>
+                                <div class="illustration-error" title="點擊以重試">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+                                    <p>${errorMessage}<br>點擊此處重試。</p>
+                                </div>
+                           </div>`;
+                       }
                     }
                 }
                 fullContentHTML = processedHTML;
+
             } else {
-                fullContentHTML = article.content.replace(/\n/g, '<p></p>');
+                fullContentHTML = article.content.split('\n').filter(p => p.trim() !== '').map(p => `<p>${p}</p>`).join('');
             }
 
             fullContentHTML += `<div class="article-appreciation"><h3>${article.appreciation.title}</h3><p>${article.appreciation.text.replace(/\n/g, '<br>')}</p></div>`;
@@ -782,7 +803,6 @@ JSON 格式如下：
             book.innerHTML = '';
             book.style.transition = 'none';
 
-            // Delay to ensure container is rendered with correct dimensions
             setTimeout(() => {
                 if (!bookContainer.clientWidth) {
                     console.error("Pagination failed: book container not visible or has zero width.");
@@ -801,9 +821,6 @@ JSON 格式如下：
                 const newPage = Math.min(currentPageBeforeRepagination, state.totalPages - 1);
                 goToPage(newPage, true);
 
-                if (generateIllustrationsCheckbox.checked) {
-                    processImagePlaceholders();
-                }
             }, 50);
         }
 
@@ -815,60 +832,101 @@ JSON 格式如下：
             book.style.transform = `translateX(${currentTranslate}px)`;
         }
 
-        async function processImagePlaceholders() {
-            const placeholders = book.querySelectorAll('.illustration-container');
-            const baseSeed = Math.floor(Math.random() * 1000000);
-            let i = 0;
-            for (const placeholder of placeholders) {
-                if (placeholder.innerHTML.trim() !== '') continue;
-                const textPrompt = decodeURIComponent(placeholder.dataset.textPrompt);
-                await generateSingleImage(textPrompt, placeholder, baseSeed + i);
-                i++;
+        // REVISED: Prepare illustrations before displaying
+        function chunkTextForIllustrations(content) {
+            const CHARS_PER_IMAGE = 500;
+            let paragraphs = content.split('\n').filter(p => p.trim() !== '');
+            let chunks = [];
+            let charCountSinceLastImage = 0;
+            let textBufferForPrompt = '';
+            let paragraphBuffer = [];
+
+            for (const para of paragraphs) {
+                paragraphBuffer.push(para);
+                textBufferForPrompt += para + " ";
+                charCountSinceLastImage += para.length;
+
+                if (charCountSinceLastImage >= CHARS_PER_IMAGE) {
+                    chunks.push({ paragraphs: [...paragraphBuffer], textForPrompt: textBufferForPrompt.trim() });
+                    charCountSinceLastImage = 0;
+                    textBufferForPrompt = '';
+                    paragraphBuffer = [];
+                }
             }
+            // Add any remaining paragraphs as the last chunk
+            if (paragraphBuffer.length > 0) {
+                 chunks.push({ paragraphs: [...paragraphBuffer], textForPrompt: textBufferForPrompt.trim() });
+            }
+
+            return chunks;
+        }
+
+        async function prepareIllustrations(content) {
+            const chunks = chunkTextForIllustrations(content);
+            const baseSeed = Math.floor(Math.random() * 1000000);
+            
+            const illustrationPromises = chunks.map((chunk, i) => {
+                return generateSingleImageURL(chunk.textForPrompt, baseSeed + i);
+            });
+
+            // Use Promise.allSettled to wait for all, even if some fail
+            return await Promise.allSettled(illustrationPromises);
         }
         
-        async function generateSingleImage(textPrompt, containerElement, seed) {
-            containerElement.innerHTML = `<div class="illustration-loader"><div class="spinner"></div><p>生成插圖中...</p></div>`;
-            try {
-                const englishPara = await translateToEnglish(textPrompt);
-                if (!englishPara) throw new Error('翻譯失敗');
+        // REVISED: Now returns a URL promise, doesn't touch DOM
+        async function generateSingleImageURL(textPrompt, seed) {
+            const englishPara = await translateToEnglish(textPrompt);
+            if (!englishPara) throw new Error('翻譯失敗');
 
-                const prompt = generateImagePrompt(englishPara);
-                const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?token=Jeq-UCxbpvrqUEzN&model=flux&enhance=false&private=true&nologo=true&seed=${seed}`;
+            const prompt = generateImagePrompt(englishPara);
+            const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?token=Jeq-UCxbpvrqUEzN&model=flux&enhance=false&private=true&nologo=true&seed=${seed}`;
 
-                const img = new Image();
-                await new Promise((resolve, reject) => {
-                    img.onload = () => { containerElement.innerHTML = ''; containerElement.appendChild(img); resolve(); };
-                    img.onerror = () => reject(new Error('圖片生成失敗'));
-                    img.src = imageUrl;
-                    img.alt = '文章插圖';
-                });
-            } catch (error) {
-                const errorMessage = error.message.includes('翻譯') ? '翻譯失敗，無法生成。' : '圖片生成失敗。';
-                containerElement.innerHTML = `
-                    <div class="illustration-error" title="點擊以重試">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
-                        <p>${errorMessage}<br>點擊此處重試。</p>
-                    </div>`;
+            // Pre-fetch the image to check if it's valid
+            const response = await fetch(imageUrl);
+            if (!response.ok) {
+                 throw new Error('圖片生成失敗 (fetch failed)');
             }
+            // Cannot check blob content with no-cors, so we assume OK is good enough
+            return imageUrl;
         }
 
         async function handleIllustrationClick(e) {
             const container = e.target.closest('.illustration-container');
             if (!container) return;
-            if (e.target.tagName === 'IMG' || e.target.closest('.illustration-error')) {
-                if (confirm('您確定要重新生成這張插圖嗎？')) {
-                    const textPrompt = decodeURIComponent(container.dataset.textPrompt);
-                    const newSeed = Math.floor(Math.random() * 10000000);
-                    await generateSingleImage(textPrompt, container, newSeed);
+
+            if (confirm('您確定要重新生成這張插圖嗎？')) {
+                const textPrompt = decodeURIComponent(container.dataset.textPrompt);
+                const newSeed = Math.floor(Math.random() * 10000000);
+                
+                // Show loader in the clicked container
+                container.innerHTML = `<div class="illustration-loader"><div class="spinner"></div><p>重新生成中...</p></div>`;
+
+                try {
+                    const imageUrl = await generateSingleImageURL(textPrompt, newSeed);
+                    const img = new Image();
+                    img.onload = () => {
+                        container.innerHTML = '';
+                        container.appendChild(img);
+                    };
+                    img.onerror = () => { throw new Error('圖片載入失敗'); };
+                    img.src = imageUrl;
+                    img.alt = '文章插圖';
+
+                } catch (error) {
+                    const errorMessage = error.message.includes('翻譯') ? '翻譯失敗，無法生成。' : '圖片生成失敗。';
+                    container.innerHTML = `
+                        <div class="illustration-error" title="點擊以重試">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+                            <p>${errorMessage}<br>點擊此處重試。</p>
+                        </div>`;
                 }
             }
         }
 
         // --- 7. 翻頁互動處理 ---
-        function dragStart(e) { /* ... (same as original) ... */ isDragging = true; dragStartX = e.touches ? e.touches[0].clientX : e.clientX; startTranslate = currentTranslate; book.style.transition = 'none'; }
-        function dragMove(e) { /* ... (same as original) ... */ if (!isDragging) return; const currentX = e.touches ? e.touches[0].clientX : e.clientX; const diff = currentX - dragStartX; currentTranslate = startTranslate + diff; book.style.transform = `translateX(${currentTranslate}px)`; }
-        function dragEnd() { /* ... (same as original) ... */ if (!isDragging) return; isDragging = false; const threshold = bookContainer.clientWidth / 5; const endTranslate = -state.currentPageNum * bookContainer.clientWidth; const movedBy = currentTranslate - endTranslate; if (movedBy < -threshold && state.currentPageNum < state.totalPages - 1) { goToPage(state.currentPageNum + 1); } else if (movedBy > threshold && state.currentPageNum > 0) { goToPage(state.currentPageNum - 1); } else { goToPage(state.currentPageNum); } }
+        function dragStart(e) { isDragging = true; dragStartX = e.touches ? e.touches[0].clientX : e.clientX; startTranslate = currentTranslate; book.style.transition = 'none'; }
+        function dragMove(e) { if (!isDragging) return; const currentX = e.touches ? e.touches[0].clientX : e.clientX; const diff = currentX - dragStartX; currentTranslate = startTranslate + diff; book.style.transform = `translateX(${currentTranslate}px)`; }
+        function dragEnd() { if (!isDragging) return; isDragging = false; const threshold = bookContainer.clientWidth / 5; const endTranslate = -state.currentPageNum * bookContainer.clientWidth; const movedBy = currentTranslate - endTranslate; if (movedBy < -threshold && state.currentPageNum < state.totalPages - 1) { goToPage(state.currentPageNum + 1); } else if (movedBy > threshold && state.currentPageNum > 0) { goToPage(state.currentPageNum - 1); } else { goToPage(state.currentPageNum); } }
 
         // --- 8. 歷史紀錄相關函式 ---
         function showHistory() { renderHistory(); historyModal.classList.add('is-visible'); }
@@ -924,6 +982,8 @@ JSON 格式如下：
                 const article = state.history.find(item => item.title === articleTitle);
                 if (article) {
                     state.currentArticle = article;
+                    // When loading from history, we assume illustrations are pre-generated
+                    // if the `illustrationData` property exists.
                     displayArticleAsBook(article);
                     switchToReaderView();
                     hideHistory();
@@ -931,7 +991,7 @@ JSON 格式如下：
             }
         }
 
-        // --- 9. 插圖生成輔助函式 (移植自文章幻燈片) ---
+        // --- 9. 插圖生成輔助函式 ---
         async function translateToEnglish(textToTranslate) {
             const myEmail = 'kenchan20151@gmail.com'; 
             const apiUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(textToTranslate)}&langpair=zh-TW|en&de=${myEmail}`;
@@ -954,7 +1014,6 @@ JSON 格式如下：
 
     // --- Password validation logic on page load ---
     document.addEventListener('DOMContentLoaded', () => {
-        // ... (same as original, no changes needed here)
         const passwordOverlay = document.getElementById('password-overlay');
         const pageContainer = document.querySelector('.page-container');
         const savedTheme = localStorage.getItem('theme') || 'light-mode';
