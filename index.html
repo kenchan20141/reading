@@ -201,7 +201,20 @@
         .font-controls .icon-btn svg { width: 22px; height: 22px; }
 
         /* --- 7. 書本閱讀器 (Book Reader) --- */
-        .book-container { width: 100%; height: 75vh; min-height: 550px; display: flex; justify-content: center; align-items: center; overflow: hidden; user-select: none; cursor: grab; margin-top: 1.5rem; margin-bottom: 1.5rem; }
+        /* --- 7. 書本閱讀器 (Book Reader) --- */
+.book-container { 
+    width: 100%; 
+    height: 75vh; 
+    min-height: 550px; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    overflow: hidden; 
+    user-select: none; 
+    cursor: grab; 
+    margin-top: 0.5rem; /* 改動這裡：將上邊距從 1.5rem 減少到 0.5rem，以拉近與工具列的距離 */
+    margin-bottom: 1.5rem; /* 保持這個值，確保與頁面底部有足夠的距離 */
+}
         .book-container:active { cursor: grabbing; }
         .book { width: 100%; height: 100%; display: flex; }
         .page { width: 100%; height: 100%; flex-shrink: 0; position: relative; border: 1px solid; }
