@@ -91,22 +91,32 @@
         
         /* --- Password Overlay & Modal --- */
         .password-overlay {
-            position: fixed; top: 0; left: 0;
+            position: fixed;
+            top: 0; left: 0;
             width: 100%; height: 100%;
             background-color: var(--bg-color-light);
-            display: flex; justify-content: center; align-items: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             z-index: 9999;
             transition: opacity 0.3s, visibility 0.3s;
         }
         .dark-mode .password-overlay { background-color: var(--bg-color-dark); }
         .password-modal {
-            background-color: var(--content-bg-light); color: var(--text-primary-light);
-            padding: 2.5rem; border-radius: 8px;
+            background-color: var(--content-bg-light);
+            color: var(--text-primary-light);
+            padding: 2.5rem;
+            border-radius: 8px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            text-align: center; width: 90%; max-width: 400px;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
             transition: background-color 0.4s, color 0.4s;
         }
-        .dark-mode .password-modal { background-color: var(--content-bg-dark); color: var(--text-primary-dark); }
+        .dark-mode .password-modal {
+            background-color: var(--content-bg-dark);
+            color: var(--text-primary-dark);
+        }
         .password-modal h2 { font-family: var(--font-serif); margin-bottom: 0.75rem; }
         .password-modal .subtitle { font-size: 0.9rem; margin-bottom: 1.5rem; }
         .light-mode .password-modal .subtitle { color: var(--text-secondary-light); }
@@ -115,14 +125,40 @@
             width: 100%; padding: 0.75rem 1rem; border-radius: 5px; border: 1px solid;
             font-size: 1rem; margin-bottom: 1rem; text-align: center;
         }
-        .light-mode #password-input { border-color: var(--border-color-light); background-color: var(--bg-color-light); color: var(--text-primary-light); }
-        .dark-mode #password-input { border-color: var(--border-color-dark); background-color: var(--bg-color-dark); color: var(--text-primary-dark); }
-        #password-input:focus { outline: none; border-color: var(--accent-color); box-shadow: 0 0 0 2px rgba(41, 128, 185, 0.3); }
-        .password-modal .remember-me-wrapper { display: flex; align-items: center; justify-content: flex-start; gap: 8px; margin-bottom: 1.25rem; }
-        .password-modal .remember-me-wrapper input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; }
-        .password-modal .remember-me-wrapper label { font-size: 0.9rem; cursor: pointer; user-select: none; }
+        .light-mode #password-input {
+            border-color: var(--border-color-light); background-color: var(--bg-color-light);
+            color: var(--text-primary-light);
+        }
+        .dark-mode #password-input {
+            border-color: var(--border-color-dark); background-color: var(--bg-color-dark);
+            color: var(--text-primary-dark);
+        }
+        #password-input:focus {
+            outline: none; border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(41, 128, 185, 0.3);
+        }
+        
+        /* --- NEW: Remember Me Checkbox Styling --- */
+        .password-modal .remember-me-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 8px;
+            margin-bottom: 1.25rem;
+        }
+        .password-modal .remember-me-wrapper input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+        .password-modal .remember-me-wrapper label {
+            font-size: 0.9rem;
+            cursor: pointer;
+            user-select: none;
+        }
         .light-mode .password-modal .remember-me-wrapper label { color: var(--text-secondary-light); }
         .dark-mode .password-modal .remember-me-wrapper label { color: var(--text-secondary-dark); }
+
         .password-modal button {
             width: 100%; background-color: var(--accent-color); color: white; border: none;
             padding: 0.75rem 1.5rem; border-radius: 5px; cursor: pointer;
@@ -134,26 +170,44 @@
         .password-error { color: #e74c3c; margin-top: 1rem; font-size: 0.9rem; }
 
         /* --- 4. 主要區塊：設定、閱讀器 (Main Sections: Settings, Reader) --- */
-        .main-content-wrapper { width: 100%; max-width: var(--max-width); transition: all 0.4s ease-in-out; }
+        .main-content-wrapper {
+            width: 100%; max-width: var(--max-width);
+            transition: all 0.4s ease-in-out;
+        }
         .settings-card, .reader-card {
             border: 1px solid; border-radius: 8px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
             padding: 2rem 3rem;
             transition: background-color 0.4s, border-color 0.4s;
         }
-        .light-mode .settings-card, .light-mode .reader-card { background-color: var(--content-bg-light); border-color: var(--border-color-light); }
-        .dark-mode .settings-card, .dark-mode .reader-card { background-color: var(--content-bg-dark); border-color: var(--border-color-dark); }
+        .light-mode .settings-card, .light-mode .reader-card {
+            background-color: var(--content-bg-light); border-color: var(--border-color-light);
+        }
+        .dark-mode .settings-card, .dark-mode .reader-card {
+            background-color: var(--content-bg-dark); border-color: var(--border-color-dark);
+        }
         
         /* --- 5. 設定區塊樣式 (Settings Section Styles) --- */
-        .settings-header { display: flex; justify-content: space-between; align-items: flex-start; position: relative; margin-bottom: 2.5rem; }
+        .settings-header {
+            display: flex; justify-content: space-between; align-items: flex-start;
+            position: relative; margin-bottom: 2.5rem;
+        }
         .settings-header .title-group { text-align: center; width: 100%; }
-        .settings-header .title-group h1 { font-family: var(--font-serif); font-weight: 600; font-size: 2rem; margin-bottom: 0.5rem; }
+        .settings-header .title-group h1 {
+            font-family: var(--font-serif); font-weight: 600;
+            font-size: 2rem; margin-bottom: 0.5rem;
+        }
         .settings-header .title-group p { font-size: 1rem; }
         .light-mode .settings-header .title-group p { color: var(--text-secondary-light); }
         .dark-mode .settings-header .title-group p { color: var(--text-secondary-dark); }
-        .settings-header .header-controls { position: absolute; top: -12px; right: -16px; display: flex; align-items: center; gap: 0.25rem; }
+        .settings-header .header-controls { 
+            position: absolute; top: -12px; right: -16px; 
+            display: flex; align-items: center; gap: 0.25rem;
+        }
+        
         .form-group { margin-bottom: 2rem; }
         .form-group label { display: block; margin-bottom: 0.75rem; font-weight: 500; font-size: 1.1rem; }
+        
         .rating-dots { display: flex; gap: 12px; cursor: pointer; }
         .rating-dot { width: 28px; height: 28px; border-radius: 50%; border: 2px solid; transition: all 0.2s ease-in-out; }
         .light-mode .rating-dot { border-color: #ccc; }
@@ -161,8 +215,10 @@
         .rating-dots:hover .rating-dot, .rating-dots .rating-dot.selected { border-color: var(--accent-color); background-color: var(--accent-color); transform: scale(1.1); }
         .rating-dots:hover .rating-dot:hover ~ .rating-dot { background-color: transparent; border-color: #ccc; }
         .dark-mode .rating-dots:hover .rating-dot:hover ~ .rating-dot { border-color: #555; }
+        
         .required-indicator { color: #e74c3c; margin-left: 4px; }
         #error-message { color: #e74c3c; margin-top: 0.5rem; display: none; font-size: 0.9rem; }
+        
         textarea {
             width: 100%; min-height: 100px; padding: 0.75rem 1rem; border-radius: 5px;
             font-family: inherit; font-size: 1rem; line-height: 1.6;
@@ -171,12 +227,12 @@
         .light-mode textarea { background-color: var(--bg-color-light); border: 1px solid var(--border-color-light); color: var(--text-primary-light); }
         .dark-mode textarea { background-color: var(--bg-color-dark); border: 1px solid var(--border-color-dark); color: var(--text-primary-dark); }
         textarea:focus { outline: none; border-color: var(--accent-color); box-shadow: 0 0 0 2px rgba(41, 128, 185, 0.3); }
+        
         .submit-btn {
             background-color: var(--accent-color); color: white; border: none; padding: 0.75rem 1.75rem; border-radius: 5px; cursor: pointer;
             font-family: inherit; font-size: 1.1rem; font-weight: 500; transition: background-color 0.3s, transform 0.2s;
             display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: 100%; margin-top: 1rem;
         }
-        .submit-btn .btn-text { transition: opacity 0.2s; }
         .submit-btn:hover { background-color: var(--accent-color-hover); }
         .submit-btn:active { transform: scale(0.98); }
         .submit-btn:disabled { background-color: #cccccc; cursor: not-allowed; }
@@ -192,60 +248,83 @@
         .font-controls .icon-btn svg { width: 22px; height: 22px; }
 
         /* --- 7. 書本閱讀器 (Book Reader) --- */
-        .book-container { width: 100%; height: 75vh; min-height: 550px; display: flex; justify-content: center; align-items: center; overflow: hidden; user-select: none; cursor: grab; }
+        .book-container {
+            width: 100%;
+            height: 75vh;
+            min-height: 550px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            user-select: none;
+            cursor: grab;
+        }
         .book-container:active { cursor: grabbing; }
-        .book { width: 100%; height: 100%; display: flex; }
-        .page { width: 100%; height: 100%; flex-shrink: 0; position: relative; border: 1px solid; }
-        .page-content { width: 100%; height: 100%; padding: 2rem 2.5rem 5rem 2.5rem; overflow: hidden; font-family: var(--font-serif); font-size: var(--reader-font-size); letter-spacing: 0.05em; line-height: 2; }
+
+        .book {
+            width: 100%;
+            height: 100%;
+            display: flex;
+        }
+
+        .page {
+            width: 100%;
+            height: 100%;
+            flex-shrink: 0;
+            position: relative;
+            border: 1px solid;
+        }
+        
+        .page-content {
+            width: 100%;
+            height: 100%;
+            padding: 2rem 2.5rem 5rem 2.5rem; 
+            overflow: hidden;
+            font-family: var(--font-serif);
+            font-size: var(--reader-font-size);
+            letter-spacing: 0.05em;
+            line-height: 2;
+        }
+
         .light-mode .page { background: var(--content-bg-light); border-color: var(--border-color-light); }
         .dark-mode .page { background: var(--content-bg-dark); border-color: var(--border-color-dark); }
         .light-mode .page-content { color: var(--text-primary-light); }
         .dark-mode .page-content { color: var(--text-primary-dark); }
+        
         .page-content h2.article-title { font-size: calc(var(--reader-font-size) + 0.9rem); font-weight: 600; margin-bottom: 0.75rem; text-align: center; }
         .page-content p.article-author { font-family: var(--font-sans); font-size: calc(var(--reader-font-size) - 0.1rem); margin-bottom: 1.5rem; text-align: center; color: var(--accent-color); }
         .page-content .article-outline { font-family: var(--font-sans); font-style: italic; font-size: calc(var(--reader-font-size) - 0.1rem); text-align: center; margin: 1rem 0 2rem 0; padding-bottom: 2rem; border-bottom: 1px solid; }
         .light-mode .page-content .article-outline { color: var(--text-secondary-light); border-color: var(--border-color-light); }
         .dark-mode .page-content .article-outline { color: var(--text-secondary-dark); border-color: var(--border-color-dark); }
-        .article-appreciation { margin-top: 0rem; padding-top: 0rem; border-top: 1px solid; }
+        
+        .article-appreciation { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid; }
         .light-mode .article-appreciation { border-color: var(--border-color-light); }
         .dark-mode .article-appreciation { border-color: var(--border-color-dark); }
         .article-appreciation h3 { font-family: var(--font-sans); font-weight: 500; font-size: calc(var(--reader-font-size) + 0.15rem); margin-bottom: 1rem; }
         .article-appreciation p { font-family: var(--font-sans); font-size: calc(var(--reader-font-size) - 0.1rem); line-height: 1.8; }
-        .page-content .page-number { position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%); font-family: var(--font-sans); font-size: 0.9rem; }
+        
+        .page-content .page-number {
+            position: absolute;
+            bottom: 2.5rem; 
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+        }
         .light-mode .page-content .page-number { color: var(--text-secondary-light); }
         .dark-mode .page-content .page-number { color: var(--text-secondary-dark); }
-        #sizer { position: absolute; visibility: hidden; z-index: -100; overflow: hidden; font-family: var(--font-serif); font-size: var(--reader-font-size); letter-spacing: 0.05em; line-height: 2; padding: 2rem 2.5rem 5rem 2.5rem; }
-
-        /* --- 插圖樣式 (Illustration Styles) --- */
-        .illustration-container {
-            width: 85%;
-            margin: 0 auto; 
-            padding: 1rem;
-            padding-top: 2.5rem;
-            padding-bottom: 2.5rem;
-            border: 1px dashed;
-            border-radius: 8px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 220px;
-            page-break-inside: avoid;
-            cursor: pointer;
+        
+        #sizer {
+            position: absolute;
+            visibility: hidden;
+            z-index: -100;
+            overflow: hidden;
+            font-family: var(--font-serif);
+            font-size: var(--reader-font-size);
+            letter-spacing: 0.05em;
+            line-height: 2;
+            padding: 2rem 2.5rem 5rem 2.5rem;
         }
-        .light-mode .illustration-container { border-color: var(--border-color-light); }
-        .dark-mode .illustration-container { border-color: var(--border-color-dark); }
-        .illustration-container img { max-width: 100%; height: auto; border-radius: 4px; transition: opacity 0.3s; }
-        .illustration-container img:hover { opacity: 0.85; }
-        .illustration-loader { display: flex; align-items: center; gap: 15px; cursor: default; }
-        .illustration-loader .spinner { width: 30px; height: 30px; border: 4px solid rgba(0,0,0,0.1); border-radius: 50%; animation: spin 1s linear infinite; }
-        .light-mode .illustration-loader .spinner { border-top-color: var(--text-secondary-light); }
-        .dark-mode .illustration-loader .spinner { border-top-color: var(--text-secondary-dark); }
-        .light-mode .illustration-loader p { color: var(--text-secondary-light); }
-        .dark-mode .illustration-loader p { color: var(--text-secondary-dark); }
-        .illustration-error { text-align: center; padding: 1rem; }
-        .illustration-error svg { width: 40px; height: 40px; margin-bottom: 1rem; stroke: #e74c3c; }
-        .illustration-error p { font-family: var(--font-sans); font-size: 0.9rem; color: #e74c3c; line-height: 1.6; }
 
         /* --- 8. 全螢幕模式 (Fullscreen Mode) --- */
         body.fullscreen-mode { overflow: hidden; }
@@ -253,9 +332,13 @@
         body.dark-mode.fullscreen-mode { background-color: var(--content-bg-dark); }
         body.fullscreen-mode .page-container { padding: 0; }
         body.fullscreen-mode .main-content-wrapper { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; max-width: none; z-index: 1000; }
-        body.fullscreen-mode .reader-card { border-radius: 0; border: none; box-shadow: none; height: 100%; display: flex; flex-direction: column; padding: 1.5rem; }
-        body.fullscreen-mode .book-container { flex-grow: 1; min-height: auto; height: auto; }
-        /* MODIFICATION: CSS now controls the icon visibility for both states */
+        body.fullscreen-mode .reader-card {
+            border-radius: 0; border: none; box-shadow: none; height: 100%;
+            display: flex; flex-direction: column; padding: 1.5rem;
+        }
+        body.fullscreen-mode .book-container {
+            flex-grow: 1; min-height: auto; height: auto;
+        }
         body.fullscreen-mode .fullscreen-btn .icon-enter-fullscreen { display: none; }
         body.fullscreen-mode .fullscreen-btn .icon-exit-fullscreen { display: block; }
         
@@ -274,49 +357,60 @@
         .light-mode .history-container { background-color: var(--content-bg-light); }
         .dark-mode .history-container { background-color: var(--content-bg-dark); }
         .history-modal.is-visible .history-container { transform: scale(1); }
+
         .history-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 1rem; margin-bottom: 1rem; border-bottom: 1px solid; }
         .light-mode .history-header { border-color: var(--border-color-light); }
         .dark-mode .history-header { border-color: var(--border-color-dark); }
         .history-header h2 { font-size: 1.5rem; font-weight: 500; }
+        
         .history-controls { display: flex; gap: 1rem; margin-bottom: 1rem; }
         #history-search { flex-grow: 1; padding: 0.5rem 0.75rem; border-radius: 5px; font-size: 1rem; font-family: var(--font-sans); }
         #history-sort { padding: 0.5rem; border-radius: 5px; font-size: 1rem; font-family: var(--font-sans); }
         .light-mode #history-search, .light-mode #history-sort { background-color: var(--bg-color-light); border: 1px solid var(--border-color-light); color: var(--text-primary-light); }
         .dark-mode #history-search, .dark-mode #history-sort { background-color: var(--bg-color-dark); border: 1px solid var(--border-color-dark); color: var(--text-primary-dark); }
         #history-search:focus, #history-sort:focus { outline: none; border-color: var(--accent-color); }
+        
         .history-list { list-style: none; overflow-y: auto; flex-grow: 1; }
-        .history-list li { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1rem; border-radius: 5px; transition: background-color 0.2s; border-bottom: 1px solid; }
+        .history-list li { padding: 1rem; border-radius: 5px; cursor: pointer; transition: background-color 0.2s; border-bottom: 1px solid; }
         .history-list li:last-child { border-bottom: none; }
-        .history-item-content { flex-grow: 1; cursor: pointer; }
         .history-list-item-title { font-family: var(--font-serif); font-size: 1.2rem; font-weight: 600; }
         .history-list-item-author { font-family: var(--font-sans); font-size: 0.9rem; margin-top: 0.25rem; }
         .light-mode .history-list li { border-color: var(--border-color-light); }
         .dark-mode .history-list li { border-color: var(--border-color-dark); }
-        .light-mode .history-item-content:hover { background-color: var(--bg-color-light); }
-        .dark-mode .history-item-content:hover { background-color: var(--bg-color-dark); }
+        .light-mode .history-list li:hover { background-color: var(--bg-color-light); }
+        .dark-mode .history-list li:hover { background-color: var(--bg-color-dark); }
         .light-mode .history-list-item-author { color: var(--text-secondary-light); }
         .dark-mode .history-list-item-author { color: var(--text-secondary-dark); }
-        .delete-history-btn svg { width: 20px; height: 20px; }
-        .light-mode .delete-history-btn:hover svg { stroke: #e74c3c; }
-        .dark-mode .delete-history-btn:hover svg { stroke: #e74c3c; }
-        .no-history-msg { padding: 2rem; text-align: center; justify-content: center; }
+
+        .no-history-msg { padding: 2rem; text-align: center; }
         .light-mode .no-history-msg { color: var(--text-secondary-light); }
         .dark-mode .no-history-msg { color: var(--text-secondary-dark); }
 
         /* --- 10. 響應式設計 (Responsive Design) --- */
         @media (max-width: 768px) {
-            .main-content-wrapper { width: 100%; }
+            .main-content-wrapper {
+                width: 90%;
+            }
             .page-container { padding: 1rem 0; }
-            .settings-card, .reader-card { padding: 1.5rem; border-radius: 0; border: none; box-shadow: none; }
+            .settings-card, .reader-card { 
+                padding: 1.5rem; 
+                box-shadow: none; 
+            }
             body.fullscreen-mode .reader-card { padding: 1rem; }
-            .settings-header { margin-bottom: 2rem; flex-direction: column; align-items: center; gap: 0.75rem; }
+           .settings-header {
+                margin-bottom: 2rem;
+                flex-direction: column;
+                align-items: center;
+                gap: 0.75rem;
+            }
             .settings-header .title-group h1 { font-size: 1.8rem; }
-            .settings-header .header-controls { position: static; }
+            .settings-header .header-controls {
+                position: static;
+            }
             .reader-controls .left-controls, .reader-controls .right-controls { gap: 0.2rem; }
-            .page-content { padding: 1.5rem; padding-bottom: 4.5rem; line-height: 1.9; overflow: hidden; }
+            .page-content { padding: 1.5rem; padding-bottom: 4.5rem; line-height: 1.9; }
             .page-content h2.article-title { font-size: calc(var(--reader-font-size) + 0.4rem); }
             .history-controls { flex-direction: column; }
-            .illustration-container { width: 100%; min-height: 180px; }
         }
     </style>
 </head>
@@ -328,6 +422,7 @@
             <h2>請輸入密碼登入</h2>
             <form id="password-form">
                 <input type="password" id="password-input" placeholder="••••••••" required autocomplete="current-password">
+                <!-- NEW: "Remember Me" Checkbox -->
                 <div class="remember-me-wrapper">
                     <input type="checkbox" id="remember-me" checked>
                     <label for="remember-me">記住登入狀態</label>
@@ -372,12 +467,8 @@
                         <label for="prompt">作品主題或風格 (選填)</label>
                         <textarea id="prompt" placeholder="輸入作品主題或風格..."></textarea>
                     </div>
-                    <div class="form-group" style="display: flex; align-items: center; gap: 10px; margin-bottom: 1.5rem;">
-                        <input type="checkbox" id="generate-illustrations-checkbox" style="width: 18px; height: 18px; cursor: pointer;">
-                        <label for="generate-illustrations-checkbox" style="margin-bottom: 0; cursor: pointer; font-weight: normal;">為文章生成內文插圖</label>
-                    </div>
                     <button type="submit" id="generate-btn" class="submit-btn">
-                        <span class="btn-text">尋找經典</span>
+                        <span>尋找經典</span>
                     </button>
                 </form>
             </section>
@@ -403,8 +494,7 @@
                            <svg class="icon-theme-light" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                            <svg class="icon-theme-dark hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
                         </button>
-                        <!-- MODIFICATION: This button now toggles fullscreen. The 'hidden' class on the enter icon is removed. -->
-                        <button class="icon-btn fullscreen-btn" id="fullscreen-btn" title="切換全螢幕模式">
+                        <button class="icon-btn fullscreen-btn" id="fullscreen-btn" title="全螢幕模式">
                             <svg class="icon-enter-fullscreen" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
                             <svg class="icon-exit-fullscreen" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 0-2-2h-3m-12 0H5a2 2 0 0 0-2 2v3"></path></svg>
                         </button>
@@ -469,7 +559,6 @@
         const errorMessage = document.getElementById('error-message');
         const promptTextarea = document.getElementById('prompt');
         const generateBtn = document.getElementById('generate-btn');
-        const generateBtnText = generateBtn.querySelector('.btn-text');
         const book = document.getElementById('book');
         const bookContainer = document.getElementById('book-container');
         const sizer = document.getElementById('sizer');
@@ -483,7 +572,6 @@
         const historySort = document.getElementById('history-sort');
         const fontSizeIncreaseBtn = document.getElementById('font-size-increase-btn');
         const fontSizeDecreaseBtn = document.getElementById('font-size-decrease-btn');
-        const generateIllustrationsCheckbox = document.getElementById('generate-illustrations-checkbox');
 
         // --- API 配置信息 ---
         const API_KEYS = ["sk-GruTbLTbtSeWof3rEBjtIg"];
@@ -498,7 +586,7 @@
             currentArticle: null,
             currentPageNum: 0,
             totalPages: 0,
-            fontSize: 1.1,
+            fontSize: 1.1, // Font size state
         };
         let isDragging = false, dragStartX = 0, currentTranslate = 0, startTranslate = 0;
 
@@ -523,14 +611,11 @@
                 const isLight = body.classList.contains('light-mode');
                 const newTheme = isLight ? 'dark-mode' : 'light-mode';
                 body.className = newTheme;
-                if (readingSection.classList.contains('hidden') === false) {
-                    body.classList.add('fullscreen-mode');
-                }
                 localStorage.setItem('theme', newTheme);
                 updateThemeIcons(newTheme);
 
-                if (!readingSection.classList.contains('hidden')) {
-                    displayArticleAsBook(state.currentArticle);
+                if (!readingSection.classList.contains('hidden') && !body.classList.contains('fullscreen-mode')) {
+                    toggleFullscreen();
                 }
             });
         });
@@ -555,38 +640,29 @@
                 errorMessage.style.display = 'block';
                 return;
             }
-
-            setLoading(true, '尋找文章中...');
+            setLoading(true);
             try {
                 const article = await generateProse();
-                if (!article) return; 
-
-                if (generateIllustrationsCheckbox.checked) {
-                    setLoading(true, '生成插圖中...');
-                    article.illustrationData = await prepareIllustrations(article.content);
+                if (article) {
+                    state.currentArticle = { ...article, generatedDate: new Date().toISOString() };
+                    addToHistory(state.currentArticle);
+                    displayArticleAsBook(state.currentArticle);
+                    switchToReaderView();
+                    if (!body.classList.contains('fullscreen-mode')) {
+                         toggleFullscreen();
+                    }
                 }
-
-                article.generatedDate = new Date().toISOString();
-                state.currentArticle = article;
-                state.currentPageNum = 0;
-
-                addToHistory(state.currentArticle);
-                switchToReaderView();
-                enterFullscreen();
-
             } catch (error) {
-                console.error('生成流程錯誤:', error);
-                alert(`處理失敗: ${error.message}`);
+                console.error('生成文章時發生錯誤:', error);
+                alert(`生成失敗: ${error.message}`);
             } finally {
                 setLoading(false);
             }
         });
-        
-        // MODIFICATION: The fullscreen button now toggles the mode.
-        fullscreenBtn.addEventListener('click', toggleFullscreen);
 
+        fullscreenBtn.addEventListener('click', toggleFullscreen);
         backToSettingsBtn.addEventListener('click', () => {
-            exitFullscreen();
+            if (body.classList.contains('fullscreen-mode')) toggleFullscreen();
             switchToSettingsView();
         });
 
@@ -596,7 +672,7 @@
         historyBtn.addEventListener('click', showHistory);
         historyCloseBtn.addEventListener('click', hideHistory);
         historyModal.addEventListener('click', (e) => { if (e.target === historyModal) hideHistory(); });
-        historyList.addEventListener('click', handleHistoryListClick);
+        historyList.addEventListener('click', handleHistoryItemClick);
         historySearch.addEventListener('input', renderHistory);
         historySort.addEventListener('change', renderHistory);
         
@@ -606,7 +682,6 @@
         document.addEventListener('touchmove', dragMove, { passive: true });
         document.addEventListener('mouseup', dragEnd);
         document.addEventListener('touchend', dragEnd);
-        book.addEventListener('click', handleIllustrationClick);
 
         // --- 5. 核心功能函式 ---
         function updateThemeIcons(theme) {
@@ -624,20 +699,20 @@
             });
         }
         
-        function setLoading(isLoading, text = '尋找經典') {
+        function setLoading(isLoading) {
             generateBtn.disabled = isLoading;
-            generateBtnText.textContent = text;
-            
-            const existingLoader = generateBtn.querySelector('.loader');
+            const span = generateBtn.querySelector('span');
             if (isLoading) {
-                if (!existingLoader) {
+                span.style.display = 'none';
+                if (!generateBtn.querySelector('.loader')) {
                     const loader = document.createElement('div');
                     loader.className = 'loader';
-                    generateBtn.insertBefore(loader, generateBtnText);
+                    generateBtn.appendChild(loader);
                 }
             } else {
-                if (existingLoader) existingLoader.remove();
-                generateBtnText.textContent = '尋找經典';
+                span.style.display = 'inline';
+                const loader = generateBtn.querySelector('.loader');
+                if (loader) loader.remove();
             }
         }
 
@@ -649,38 +724,13 @@
         function switchToSettingsView() {
             readingSection.classList.add('hidden');
             settingsSection.classList.remove('hidden');
-            state.currentArticle = null;
         }
 
-        // MODIFICATION: New function to toggle fullscreen state.
-        function toggleFullscreen() {
-            if (body.classList.contains('fullscreen-mode')) {
-                exitFullscreen();
-            } else {
-                enterFullscreen();
+        function toggleFullscreen() { 
+            body.classList.toggle('fullscreen-mode');
+            if (state.currentArticle) {
+                displayArticleAsBook(state.currentArticle);
             }
-        }
-
-        // MODIFICATION: enterFullscreen now also updates the button's title.
-        function enterFullscreen() {
-            if (!body.classList.contains('fullscreen-mode')) {
-                body.classList.add('fullscreen-mode');
-                if (state.currentArticle) {
-                    setTimeout(() => displayArticleAsBook(state.currentArticle), 50);
-                }
-            }
-            fullscreenBtn.title = '離開全螢幕模式';
-        }
-
-        // MODIFICATION: exitFullscreen now repaginates and updates the button's title.
-        function exitFullscreen() {
-            if (body.classList.contains('fullscreen-mode')) {
-                body.classList.remove('fullscreen-mode');
-                if (state.currentArticle) {
-                    setTimeout(() => displayArticleAsBook(state.currentArticle), 50);
-                }
-            }
-            fullscreenBtn.title = '進入全螢幕模式';
         }
 
         async function generateProse() {
@@ -722,19 +772,30 @@ JSON 格式如下：
                     })
                 });
 
-                if (!response.ok) throw new Error(`API 請求失敗，狀態碼：${response.status}`);
+                if (!response.ok) {
+                    throw new Error(`API 請求失敗，狀態碼：${response.status}`);
+                }
                 
                 const data = await response.json();
-                if (!data.choices?.[0]?.message?.content) throw new Error("API 回應格式不正確。");
+                if (!data.choices || !data.choices[0] || !data.choices[0].message || !data.choices[0].message.content) {
+                    throw new Error("API 回應格式不正確，缺少必要欄位。");
+                }
 
-                const article = JSON.parse(data.choices[0].message.content);
-                if (!article.title || !article.author || !article.content) throw new Error("API 回應的 JSON 內容不完整。");
-                
+                const contentString = data.choices[0].message.content;
+                const article = JSON.parse(contentString);
+
+                if (!article.title || !article.author || !article.content) {
+                    throw new Error("API 回應的 JSON 內容不完整。");
+                }
                 return article;
+
             } catch(error) {
                 console.error("API Error:", error);
-                if (error instanceof SyntaxError) alert("API 回傳格式錯誤，無法解析文章。請稍後再試。");
-                else alert(`獲取文章時發生錯誤: ${error.message}`);
+                if (error instanceof SyntaxError) {
+                    alert("API 回傳格式錯誤，無法解析文章。請稍後再試。");
+                } else {
+                    alert(`獲取文章時發生錯誤: ${error.message}`);
+                }
                 return null;
             }
         }
@@ -745,18 +806,20 @@ JSON 格式如下：
             if (state.history.length > 50) state.history.pop();
             localStorage.setItem('proseHistory_v3', JSON.stringify(state.history));
         }
-        
-        // --- 6. 書本、分頁與插圖邏輯 ---
+
+        // --- 6. 書本與分頁邏輯 ---
         function changeFontSize(amount) {
             const newSize = Math.max(0.8, Math.min(1.8, state.fontSize + amount));
             state.fontSize = Math.round(newSize * 10) / 10;
+            
             localStorage.setItem('fontSize', state.fontSize);
             root.style.setProperty('--reader-font-size', `${state.fontSize}rem`);
+
             if (state.currentArticle) {
                 displayArticleAsBook(state.currentArticle);
             }
         }
-        
+
         function paginateArticle(article) {
             const containerWidth = bookContainer.clientWidth;
             const containerHeight = bookContainer.clientHeight;
@@ -768,51 +831,14 @@ JSON 格式如下：
             sizer.style.width = containerWidth + 'px';
             sizer.style.height = containerHeight + 'px';
             
-            const titlePageHTML = `<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">
-                                    <h2 class="article-title">${article.title}</h2>
-                                    <p class="article-author">文 / ${article.author}</p>
-                                    <div class="article-outline">${article.outline}</div>
-                                 </div>`;
-            let pages = [titlePageHTML];
-
-            let fullContentHTML;
-            if (article.illustrationData) {
-                const paragraphs = article.content.split('\n').filter(p => p.trim() !== '');
-                let processedHTML = '';
-                const illustrationChunks = chunkTextForIllustrations(article.content);
-
-                for (let i = 0; i < illustrationChunks.length; i++) {
-                    const chunk = illustrationChunks[i];
-                    processedHTML += chunk.paragraphs.map(p => `<p>${p}</p>`).join('');
-                    
-                    const illustrationResult = article.illustrationData[i];
-                    if (illustrationResult) {
-                       const textPromptAttr = `data-text-prompt="${encodeURIComponent(chunk.textForPrompt)}"`;
-                       const indexAttr = `data-illustration-index="${i}"`;
-                       if (illustrationResult.status === 'fulfilled') {
-                           processedHTML += `<div class="illustration-container" ${textPromptAttr} ${indexAttr}><img src="${illustrationResult.value}" alt="文章插圖"></div>`;
-                       } else {
-                           const errorMessage = illustrationResult.reason?.message?.includes('翻譯') ? '翻譯失敗，無法生成。' : '圖片生成失敗。';
-                           processedHTML += `<div class="illustration-container" ${textPromptAttr} ${indexAttr}>
-                                <div class="illustration-error" title="點擊以重試">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
-                                    <p>${errorMessage}<br>點擊此處重試。</p>
-                                </div>
-                           </div>`;
-                       }
-                    }
-                }
-                fullContentHTML = processedHTML;
-            } else {
-                fullContentHTML = article.content.split('\n').filter(p => p.trim() !== '').map(p => `<p>${p}</p>`).join('');
-            }
-
-            fullContentHTML += `<div class="article-appreciation"><h3>${article.appreciation.title}</h3><p>${article.appreciation.text.replace(/\n/g, '<br>')}</p></div>`;
+            const firstPageHeader = `<h2 class="article-title">${article.title}</h2><p class="article-author">文 / ${article.author}</p><div class="article-outline">${article.outline}</div>`;
+            const fullContent = article.content.replace(/\n/g, '<p></p>') + `<div class="article-appreciation"><h3>${article.appreciation.title}</h3><p>${article.appreciation.text.replace(/\n/g, '<br>')}</p></div>`;
             
-            const contentDoc = new DOMParser().parseFromString(`<div>${fullContentHTML}</div>`, 'text/html');
+            const contentDoc = new DOMParser().parseFromString(`<div>${fullContent}</div>`, 'text/html');
             const contentNodes = Array.from(contentDoc.body.firstChild.childNodes);
             
-            let currentPageHTML = '';
+            let pages = [];
+            let currentPageHTML = firstPageHeader;
             sizer.innerHTML = currentPageHTML;
 
             for (const node of contentNodes) {
@@ -820,8 +846,8 @@ JSON 格式如下：
                 sizer.innerHTML += nodeHTML;
                 
                 if (sizer.scrollHeight > sizer.clientHeight) {
-                    pages.push(currentPageHTML); 
-                    currentPageHTML = nodeHTML; 
+                    pages.push(currentPageHTML);
+                    currentPageHTML = nodeHTML;
                     sizer.innerHTML = currentPageHTML;
                 } else {
                     currentPageHTML += nodeHTML;
@@ -831,29 +857,21 @@ JSON 格式如下：
             return pages;
         }
 
-
         function displayArticleAsBook(article) {
+            const currentPageBeforeRepagination = state.currentPageNum;
             book.innerHTML = '';
             book.style.transition = 'none';
-
             setTimeout(() => {
-                if (!bookContainer.clientWidth) {
-                    console.error("Pagination failed: book container not visible or has zero width.");
-                    return;
-                }
                 const pagesContent = paginateArticle(article);
                 state.totalPages = pagesContent.length;
-
                 pagesContent.forEach((content, i) => {
                     const pageElement = document.createElement('div');
                     pageElement.className = 'page';
                     pageElement.innerHTML = `<div class="page-content">${content}<span class="page-number">${i + 1} / ${state.totalPages}</span></div>`;
                     book.appendChild(pageElement);
                 });
-                
-                const newPage = Math.min(state.currentPageNum, state.totalPages - 1);
+                const newPage = Math.min(currentPageBeforeRepagination, state.totalPages - 1);
                 goToPage(newPage, true);
-
             }, 50);
         }
 
@@ -865,113 +883,38 @@ JSON 格式如下：
             book.style.transform = `translateX(${currentTranslate}px)`;
         }
 
-        function chunkTextForIllustrations(content) {
-            const CHARS_PER_IMAGE = 500;
-            let paragraphs = content.split('\n').filter(p => p.trim() !== '');
-            let chunks = [];
-            let charCountSinceLastImage = 0;
-            let textBufferForPrompt = '';
-            let paragraphBuffer = [];
-
-            for (const para of paragraphs) {
-                paragraphBuffer.push(para);
-                textBufferForPrompt += para + " ";
-                charCountSinceLastImage += para.length;
-
-                if (charCountSinceLastImage >= CHARS_PER_IMAGE) {
-                    chunks.push({ paragraphs: [...paragraphBuffer], textForPrompt: textBufferForPrompt.trim() });
-                    charCountSinceLastImage = 0;
-                    textBufferForPrompt = '';
-                    paragraphBuffer = [];
-                }
-            }
-            if (paragraphBuffer.length > 0) {
-                 chunks.push({ paragraphs: [...paragraphBuffer], textForPrompt: textBufferForPrompt.trim() });
-            }
-            return chunks;
-        }
-
-        async function prepareIllustrations(content) {
-            const chunks = chunkTextForIllustrations(content);
-            const baseSeed = Math.floor(Math.random() * 1000000);
-            
-            const illustrationPromises = chunks.map((chunk, i) => {
-                return generateSingleImageURL(chunk.textForPrompt, baseSeed + i);
-            });
-            return await Promise.allSettled(illustrationPromises);
-        }
-        
-        async function generateSingleImageURL(textPrompt, seed) {
-            const englishPara = await translateToEnglish(textPrompt);
-            if (!englishPara) throw new Error('翻譯失敗');
-
-            const prompt = generateImagePrompt(englishPara);
-            const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?token=Jeq-UCxbpvrqUEzN&model=flux&enhance=false&private=true&nologo=true&seed=${seed}`;
-
-            const response = await fetch(imageUrl);
-            if (!response.ok) {
-                 throw new Error('圖片生成失敗 (fetch failed)');
-            }
-            return imageUrl;
-        }
-
-        async function handleIllustrationClick(e) {
-            const container = e.target.closest('.illustration-container');
-            if (!container) return;
-            
-            const illustrationIndexStr = container.dataset.illustrationIndex;
-            if (illustrationIndexStr === undefined) return;
-            
-            const illustrationIndex = parseInt(illustrationIndexStr);
-
-            if (confirm('您確定要重新生成這張插圖嗎？')) {
-                const textPrompt = decodeURIComponent(container.dataset.textPrompt);
-                const newSeed = Math.floor(Math.random() * 10000000);
-                
-                container.innerHTML = `<div class="illustration-loader"><div class="spinner"></div><p>重新生成中...</p></div>`;
-
-                try {
-                    const imageUrl = await generateSingleImageURL(textPrompt, newSeed);
-                    const img = new Image();
-                    img.onload = () => {
-                        container.innerHTML = '';
-                        img.alt = '文章插圖';
-                        container.appendChild(img);
-                        
-                        updateIllustrationInHistory(illustrationIndex, imageUrl);
-                    };
-                    img.onerror = () => { throw new Error('圖片載入失敗'); };
-                    img.src = imageUrl;
-
-                } catch (error) {
-                    const errorMessage = error.message.includes('翻譯') ? '翻譯失敗，無法生成。' : '圖片生成失敗。';
-                    container.innerHTML = `
-                        <div class="illustration-error" title="點擊以重試">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
-                            <p>${errorMessage}<br>點擊此處重試。</p>
-                        </div>`;
-                }
-            }
-        }
-        
-        function updateIllustrationInHistory(index, newImageUrl) {
-            if (!state.currentArticle || !state.currentArticle.illustrationData) return;
-            state.currentArticle.illustrationData[index] = {
-                status: 'fulfilled',
-                value: newImageUrl,
-                reason: undefined
-            };
-            const historyIndex = state.history.findIndex(item => item.title === state.currentArticle.title && item.author === state.currentArticle.author);
-            if (historyIndex !== -1) {
-                state.history[historyIndex].illustrationData = state.currentArticle.illustrationData;
-                localStorage.setItem('proseHistory_v3', JSON.stringify(state.history));
-            }
-        }
-
         // --- 7. 翻頁互動處理 ---
-        function dragStart(e) { isDragging = true; dragStartX = e.touches ? e.touches[0].clientX : e.clientX; startTranslate = currentTranslate; book.style.transition = 'none'; }
-        function dragMove(e) { if (!isDragging) return; const currentX = e.touches ? e.touches[0].clientX : e.clientX; const diff = currentX - dragStartX; currentTranslate = startTranslate + diff; book.style.transform = `translateX(${currentTranslate}px)`; }
-        function dragEnd() { if (!isDragging) return; isDragging = false; const threshold = bookContainer.clientWidth / 5; const endTranslate = -state.currentPageNum * bookContainer.clientWidth; const movedBy = currentTranslate - endTranslate; if (movedBy < -threshold && state.currentPageNum < state.totalPages - 1) { goToPage(state.currentPageNum + 1); } else if (movedBy > threshold && state.currentPageNum > 0) { goToPage(state.currentPageNum - 1); } else { goToPage(state.currentPageNum); } }
+        function dragStart(e) {
+            if (e.target.closest('a')) return;
+            isDragging = true;
+            dragStartX = e.touches ? e.touches[0].clientX : e.clientX;
+            startTranslate = currentTranslate;
+            book.style.transition = 'none';
+        }
+
+        function dragMove(e) {
+            if (!isDragging) return;
+            const currentX = e.touches ? e.touches[0].clientX : e.clientX;
+            const diff = currentX - dragStartX;
+            currentTranslate = startTranslate + diff;
+            book.style.transform = `translateX(${currentTranslate}px)`;
+        }
+
+        function dragEnd() {
+            if (!isDragging) return;
+            isDragging = false;
+            const threshold = bookContainer.clientWidth / 5;
+            const endTranslate = -state.currentPageNum * bookContainer.clientWidth;
+            const movedBy = currentTranslate - endTranslate;
+
+            if (movedBy < -threshold && state.currentPageNum < state.totalPages - 1) {
+                goToPage(state.currentPageNum + 1);
+            } else if (movedBy > threshold && state.currentPageNum > 0) {
+                goToPage(state.currentPageNum - 1);
+            } else {
+                goToPage(state.currentPageNum);
+            }
+        }
 
         // --- 8. 歷史紀錄相關函式 ---
         function showHistory() { renderHistory(); historyModal.classList.add('is-visible'); }
@@ -994,66 +937,23 @@ JSON 格式如下：
 
             historyList.innerHTML = items.length === 0 
                 ? `<li class="no-history-msg">${term ? '找不到符合條件的紀錄。' : '目前沒有閱覽紀錄。'}</li>`
-                : items.map(item => `<li data-history-title="${encodeURIComponent(item.title)}">
-                                        <div class="history-item-content">
-                                            <div class="history-list-item-title">${item.title}</div>
-                                            <div class="history-list-item-author">${item.author}</div>
-                                        </div>
-                                        <button class="icon-btn delete-history-btn" title="刪除此紀錄">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                                        </button>
+                : items.map(item => `<li data-history-title="${item.title}">
+                                        <div class="history-list-item-title">${item.title}</div>
+                                        <div class="history-list-item-author">${item.author}</div>
                                      </li>`).join('');
         }
         
-        function handleHistoryListClick(e) {
-            const deleteBtn = e.target.closest('.delete-history-btn');
-            if (deleteBtn) {
-                const li = deleteBtn.closest('li[data-history-title]');
-                if (li) {
-                    const titleToDelete = decodeURIComponent(li.dataset.historyTitle);
-                    if (confirm(`您確定要刪除「${titleToDelete}」這篇閱覽紀錄嗎？`)) {
-                        state.history = state.history.filter(item => item.title !== titleToDelete);
-                        localStorage.setItem('proseHistory_v3', JSON.stringify(state.history));
-                        renderHistory();
-                    }
-                }
-                return;
+        function handleHistoryItemClick(e) {
+            const li = e.target.closest('li[data-history-title]');
+            if (!li) return;
+            const article = state.history.find(item => item.title === li.dataset.historyTitle);
+            if (article) {
+                state.currentArticle = article;
+                displayArticleAsBook(article);
+                switchToReaderView();
+                hideHistory();
+                setTimeout(() => { if (!body.classList.contains('fullscreen-mode')) toggleFullscreen(); }, 300);
             }
-
-            const content = e.target.closest('.history-item-content');
-            if (content) {
-                const li = content.closest('li[data-history-title]');
-                const articleTitle = decodeURIComponent(li.dataset.historyTitle);
-                const article = state.history.find(item => item.title === articleTitle);
-                if (article) {
-                    state.currentArticle = article;
-                    state.currentPageNum = 0; 
-                    
-                    switchToReaderView();
-                    hideHistory();
-                    enterFullscreen();
-                }
-            }
-        }
-
-        // --- 9. 插圖生成輔助函式 ---
-        async function translateToEnglish(textToTranslate) {
-            const myEmail = 'kenchan20151@gmail.com'; 
-            const apiUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(textToTranslate)}&langpair=zh-TW|en&de=${myEmail}`;
-            try {
-                const response = await fetch(apiUrl);
-                if (!response.ok) throw new Error(`翻譯API失敗，狀態碼 ${response.status}`);
-                const data = await response.json();
-                if (data.responseStatus !== 200) throw new Error(`翻譯API錯誤: ${data.responseDetails}`);
-                return data.responseData?.translatedText || null;
-            } catch (error) {
-                console.error('翻譯錯誤:', error);
-                return null;
-            }
-        }
-        
-        function generateImagePrompt(englishParagraph) {
-            return `Illustration of: "${englishParagraph}". Rendered in a classic manga style with an emphasis on simplicity. Use only black and white, with clean, uniform, and minimalist line art. The overall feel should be a high-contrast, clear monochrome comic panel or sketch. No text is included.`;
         }
     }
 
@@ -1063,34 +963,50 @@ JSON 格式如下：
         const pageContainer = document.querySelector('.page-container');
         const savedTheme = localStorage.getItem('theme') || 'light-mode';
         document.body.className = savedTheme;
+
+        // --- NEW: Check for saved login state ---
         const isLoggedIn = localStorage.getItem('proseReaderLoggedIn');
+
         if (isLoggedIn === 'true') {
-            passwordOverlay.style.display = 'none';
+            // If remembered, skip the login screen
+            passwordOverlay.style.display = 'none'; // Hide it directly
             pageContainer.classList.remove('hidden');
             initializeApp();
-            return;
+            return; // Stop further execution of this password script
         }
+        // --- END NEW ---
+
+        // The rest of this script will only run if the user is not remembered
         const passwordForm = document.getElementById('password-form');
         const passwordInput = document.getElementById('password-input');
         const passwordError = document.getElementById('password-error');
         const passwordSubmitBtn = document.getElementById('password-submit-btn');
+        // NEW: Select the checkbox
         const rememberMeCheckbox = document.getElementById('remember-me');
+
         passwordInput.focus();
+
         passwordForm.addEventListener('submit', (e) => {
             e.preventDefault();
             passwordError.classList.add('hidden');
             passwordSubmitBtn.disabled = true;
             passwordSubmitBtn.textContent = '驗證中...';
+
             const enteredPassword = passwordInput.value;
             const passwordRef = database.ref('password');
+
             passwordRef.once('value').then((snapshot) => {
                 const correctPassword = snapshot.val();
                 if (enteredPassword === correctPassword) {
+                    
+                    // --- NEW: Handle "Remember Me" checkbox ---
                     if (rememberMeCheckbox.checked) {
                         localStorage.setItem('proseReaderLoggedIn', 'true');
                     } else {
                         localStorage.removeItem('proseReaderLoggedIn');
                     }
+                    // --- END NEW ---
+
                     passwordOverlay.style.opacity = '0';
                     passwordOverlay.style.visibility = 'hidden';
                     passwordOverlay.addEventListener('transitionend', () => passwordOverlay.remove());
