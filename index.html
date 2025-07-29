@@ -184,7 +184,7 @@
         @keyframes spin { to { transform: rotate(360deg); } }
 
         /* --- 6. 閱讀器頂部控制列 (Reader Header Controls) --- */
-        .reader-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding: 0 0.5rem; }
+        .reader-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding: 0 0.5rem; }
         .reader-controls .left-controls, .reader-controls .right-controls { display: flex; align-items: center; gap: 0.5rem; }
         
         .reader-pagination {
@@ -201,7 +201,7 @@
         .font-controls .icon-btn svg { width: 22px; height: 22px; }
 
         /* --- 7. 書本閱讀器 (Book Reader) --- */
-        .book-container { width: 100%; height: 75vh; min-height: 550px; display: flex; justify-content: center; align-items: center; overflow: hidden; user-select: none; cursor: grab; }
+        .book-container { width: 100%; height: 75vh; min-height: 550px; display: flex; justify-content: center; align-items: center; overflow: hidden; user-select: none; cursor: grab; margin-top: 1.5rem; margin-bottom: 1.5rem; }
         .book-container:active { cursor: grabbing; }
         .book { width: 100%; height: 100%; display: flex; }
         .page { width: 100%; height: 100%; flex-shrink: 0; position: relative; border: 1px solid; }
@@ -282,7 +282,7 @@
         body.dark-mode.fullscreen-mode { background-color: var(--content-bg-dark); }
         body.fullscreen-mode .page-container { padding: 0; }
         body.fullscreen-mode .main-content-wrapper { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; max-width: none; z-index: 1000; }
-        body.fullscreen-mode .reader-card { border-radius: 0; border: none; box-shadow: none; height: 100%; display: flex; flex-direction: column; padding: 1.5rem; }
+        body.fullscreen-mode .reader-card { border-radius: 0; border: none; box-shadow: none; height: 100%; display: flex; flex-direction: column; padding: 2rem; }
         body.fullscreen-mode .book-container { flex-grow: 1; min-height: auto; height: auto; }
         body.fullscreen-mode .fullscreen-btn .icon-enter-fullscreen { display: none; }
         body.fullscreen-mode .fullscreen-btn .icon-exit-fullscreen { display: block; }
@@ -336,7 +336,7 @@
             .main-content-wrapper { width: 90%; }
             .page-container { padding: 1rem 0; }
             .settings-card, .reader-card { padding: 1.5rem; box-shadow: none; }
-            body.fullscreen-mode .reader-card { padding: 1rem; }
+            body.fullscreen-mode .reader-card { padding: 1.5rem; } /* Keep mobile padding smaller */
             .settings-header { margin-bottom: 2rem; flex-direction: column; align-items: center; gap: 0.75rem; }
             .settings-header .title-group h1 { font-size: 1.8rem; }
             .settings-header .header-controls { position: static; }
@@ -610,6 +610,10 @@
                 article.generatedDate = new Date().toISOString();
                 state.currentArticle = article;
                 addToHistory(state.currentArticle);
+                
+                // 修訂 #1：重設頁碼為 0，確保從第一頁開始顯示
+                state.currentPageNum = 0; 
+                
                 body.classList.add('fullscreen-mode');
                 displayArticleAsBook(state.currentArticle);
                 switchToReaderView();
@@ -711,9 +715,12 @@
 
         async function generateProse() {
             const userPrompt = promptTextarea.value.trim();
+            // 修訂 #3：加入唯一時間戳 ID，確保請求唯一性
             const systemPrompt = `你是一位精通世界文學的圖書館員。你的任務是根據用戶要求，從浩瀚的文學作品中，找出一段真實、經典的繁體中文散文。
 用戶的文學鑑賞難度偏好（1星最淺白，5星最艱深）：${state.difficulty}顆星。
 ${userPrompt ? `用戶的個性化要求： "${userPrompt}"` : `請隨機推薦一篇符合上述難度的經典散文。`}
+
+為了確保每次都能生成全新的內容，請將此唯一請求 ID 納入考量：${Date.now()}。
 
 重要指示：
 1. 你必須找出現實世界中，由真實作家所寫的著名散文作品。禁止虛構內容。
@@ -1061,6 +1068,7 @@ JSON 格式如下：
                 const article = state.history.find(item => item.title === articleTitle);
                 if (article) {
                     state.currentArticle = article;
+                    state.currentPageNum = 0; // 從歷史紀錄讀取時，也從第一頁開始
                     body.classList.add('fullscreen-mode');
                     displayArticleAsBook(article);
                     switchToReaderView();
