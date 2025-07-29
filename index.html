@@ -35,7 +35,6 @@
             --font-serif: 'Noto Serif TC', serif;
             --max-width: 1100px;
 
-            /* NEW: Font size variable for the reader */
             --reader-font-size: 1.1rem;
         }
 
@@ -138,6 +137,28 @@
             outline: none; border-color: var(--accent-color);
             box-shadow: 0 0 0 2px rgba(41, 128, 185, 0.3);
         }
+        
+        /* --- NEW: Remember Me Checkbox Styling --- */
+        .password-modal .remember-me-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 8px;
+            margin-bottom: 1.25rem;
+        }
+        .password-modal .remember-me-wrapper input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+        .password-modal .remember-me-wrapper label {
+            font-size: 0.9rem;
+            cursor: pointer;
+            user-select: none;
+        }
+        .light-mode .password-modal .remember-me-wrapper label { color: var(--text-secondary-light); }
+        .dark-mode .password-modal .remember-me-wrapper label { color: var(--text-secondary-dark); }
+
         .password-modal button {
             width: 100%; background-color: var(--accent-color); color: white; border: none;
             padding: 0.75rem 1.5rem; border-radius: 5px; cursor: pointer;
@@ -226,7 +247,7 @@
         .dark-mode .font-controls { border-color: var(--border-color-dark); }
         .font-controls .icon-btn svg { width: 22px; height: 22px; }
 
-        /* --- 7. 書本閱讀器 (Book Reader) --- REVISED --- */
+        /* --- 7. 書本閱讀器 (Book Reader) --- */
         .book-container {
             width: 100%;
             height: 75vh;
@@ -257,7 +278,6 @@
         .page-content {
             width: 100%;
             height: 100%;
-            /* REVISED: Increased bottom padding for page number */
             padding: 2rem 2.5rem 5rem 2.5rem; 
             overflow: hidden;
             font-family: var(--font-serif);
@@ -285,7 +305,6 @@
         
         .page-content .page-number {
             position: absolute;
-            /* REVISED: Adjusted position to be higher and safer */
             bottom: 2.5rem; 
             left: 50%;
             transform: translateX(-50%);
@@ -304,7 +323,6 @@
             font-size: var(--reader-font-size);
             letter-spacing: 0.05em;
             line-height: 2;
-            /* REVISED: Sizer padding must match page-content padding */
             padding: 2rem 2.5rem 5rem 2.5rem;
         }
 
@@ -370,29 +388,26 @@
 
         /* --- 10. 響應式設計 (Responsive Design) --- */
         @media (max-width: 768px) {
-            /* REVISED: Constrain wrapper width to 90% on mobile */
             .main-content-wrapper {
                 width: 90%;
             }
             .page-container { padding: 1rem 0; }
-            /* REVISED: Card styles adjusted for constrained wrapper */
             .settings-card, .reader-card { 
                 padding: 1.5rem; 
                 box-shadow: none; 
             }
             body.fullscreen-mode .reader-card { padding: 1rem; }
            .settings-header {
-        margin-bottom: 2rem;      /* 增加一些底部間距，讓整體佈局更舒適 */
-        flex-direction: column;   /* 將內部元素改為垂直排列 */
-        align-items: center;      /* 讓垂直排列的元素水平置中 */
-        gap: 0.75rem;             /* 在標題和按鈕之間增加一些間隙 */
-    }
-    .settings-header .title-group h1 { font-size: 1.8rem; }
-    .settings-header .header-controls {
-        position: static;         /* 取消絕對定位，讓按鈕回到正常的排版流程 */
-    }
+                margin-bottom: 2rem;
+                flex-direction: column;
+                align-items: center;
+                gap: 0.75rem;
+            }
+            .settings-header .title-group h1 { font-size: 1.8rem; }
+            .settings-header .header-controls {
+                position: static;
+            }
             .reader-controls .left-controls, .reader-controls .right-controls { gap: 0.2rem; }
-            /* REVISED: Mobile padding for page content */
             .page-content { padding: 1.5rem; padding-bottom: 4.5rem; line-height: 1.9; }
             .page-content h2.article-title { font-size: calc(var(--reader-font-size) + 0.4rem); }
             .history-controls { flex-direction: column; }
@@ -407,6 +422,11 @@
             <h2>請輸入密碼登入</h2>
             <form id="password-form">
                 <input type="password" id="password-input" placeholder="••••••••" required autocomplete="current-password">
+                <!-- NEW: "Remember Me" Checkbox -->
+                <div class="remember-me-wrapper">
+                    <input type="checkbox" id="remember-me" checked>
+                    <label for="remember-me">記住登入狀態</label>
+                </div>
                 <button type="submit" id="password-submit-btn">登入</button>
             </form>
             <p id="password-error" class="password-error hidden">密碼錯誤，請重試。</p>
@@ -424,11 +444,9 @@
                         <p>與文學巨擘對話，探索思想的深度</p>
                     </div>
                     <div class="header-controls">
-                        <!-- REVISED: History icon is a book -->
                         <button class="icon-btn" id="history-btn" title="閱覽紀錄">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20v2H6.5A2.5 2.5 0 0 1 4 19.5z"></path><path d="M4 5h16v12H6.5A2.5 2.5 0 0 1 4 14.5V5z"></path></svg>
                         </button>
-                        <!-- NEW: Theme switcher for settings page -->
                         <button class="icon-btn theme-switcher-btn" id="settings-theme-switcher" title="切換主題">
                            <svg class="icon-theme-light" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                            <svg class="icon-theme-dark hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
@@ -464,7 +482,6 @@
                         </button>
                     </div>
                     <div class="right-controls">
-                         <!-- NEW: Font size controls -->
                          <div class="font-controls">
                             <button class="icon-btn" id="font-size-decrease-btn" title="縮小字體">
                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14h6m-6 0v-2a2 2 0 0 1 2-2h2"/><path d="M4 7V6a2 2 0 0 1 2-2h2"/><path d="M10 7V6a2 2 0 0 1 2-2h1"/><text x="14" y="15" font-size="10" font-family="sans-serif" text-anchor="middle">A</text><text x="19" y="15" font-size="6" font-family="sans-serif" text-anchor="middle">A</text></svg>
@@ -597,7 +614,6 @@
                 localStorage.setItem('theme', newTheme);
                 updateThemeIcons(newTheme);
 
-                // If in reader view, ensure it's fullscreen
                 if (!readingSection.classList.contains('hidden') && !body.classList.contains('fullscreen-mode')) {
                     toggleFullscreen();
                 }
@@ -632,7 +648,6 @@
                     addToHistory(state.currentArticle);
                     displayArticleAsBook(state.currentArticle);
                     switchToReaderView();
-                    // Auto enter fullscreen for a better experience
                     if (!body.classList.contains('fullscreen-mode')) {
                          toggleFullscreen();
                     }
@@ -713,7 +728,6 @@
 
         function toggleFullscreen() { 
             body.classList.toggle('fullscreen-mode');
-            // Recalculate pages on entering/exiting fullscreen as dimensions change
             if (state.currentArticle) {
                 displayArticleAsBook(state.currentArticle);
             }
@@ -763,7 +777,6 @@ JSON 格式如下：
                 }
                 
                 const data = await response.json();
-                // Ensure the response structure is what we expect before accessing nested properties
                 if (!data.choices || !data.choices[0] || !data.choices[0].message || !data.choices[0].message.content) {
                     throw new Error("API 回應格式不正確，缺少必要欄位。");
                 }
@@ -848,7 +861,6 @@ JSON 格式如下：
             const currentPageBeforeRepagination = state.currentPageNum;
             book.innerHTML = '';
             book.style.transition = 'none';
-            // Use a small timeout to allow the DOM to update and for container dimensions to be correct
             setTimeout(() => {
                 const pagesContent = paginateArticle(article);
                 state.totalPages = pagesContent.length;
@@ -948,14 +960,30 @@ JSON 格式如下：
     // --- Password validation logic on page load ---
     document.addEventListener('DOMContentLoaded', () => {
         const passwordOverlay = document.getElementById('password-overlay');
+        const pageContainer = document.querySelector('.page-container');
+        const savedTheme = localStorage.getItem('theme') || 'light-mode';
+        document.body.className = savedTheme;
+
+        // --- NEW: Check for saved login state ---
+        const isLoggedIn = localStorage.getItem('proseReaderLoggedIn');
+
+        if (isLoggedIn === 'true') {
+            // If remembered, skip the login screen
+            passwordOverlay.style.display = 'none'; // Hide it directly
+            pageContainer.classList.remove('hidden');
+            initializeApp();
+            return; // Stop further execution of this password script
+        }
+        // --- END NEW ---
+
+        // The rest of this script will only run if the user is not remembered
         const passwordForm = document.getElementById('password-form');
         const passwordInput = document.getElementById('password-input');
         const passwordError = document.getElementById('password-error');
         const passwordSubmitBtn = document.getElementById('password-submit-btn');
-        const pageContainer = document.querySelector('.page-container');
+        // NEW: Select the checkbox
+        const rememberMeCheckbox = document.getElementById('remember-me');
 
-        const savedTheme = localStorage.getItem('theme') || 'light-mode';
-        document.body.className = savedTheme;
         passwordInput.focus();
 
         passwordForm.addEventListener('submit', (e) => {
@@ -970,6 +998,15 @@ JSON 格式如下：
             passwordRef.once('value').then((snapshot) => {
                 const correctPassword = snapshot.val();
                 if (enteredPassword === correctPassword) {
+                    
+                    // --- NEW: Handle "Remember Me" checkbox ---
+                    if (rememberMeCheckbox.checked) {
+                        localStorage.setItem('proseReaderLoggedIn', 'true');
+                    } else {
+                        localStorage.removeItem('proseReaderLoggedIn');
+                    }
+                    // --- END NEW ---
+
                     passwordOverlay.style.opacity = '0';
                     passwordOverlay.style.visibility = 'hidden';
                     passwordOverlay.addEventListener('transitionend', () => passwordOverlay.remove());
