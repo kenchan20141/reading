@@ -133,16 +133,29 @@
         .password-error { color: #e74c3c; margin-top: 1rem; font-size: 0.9rem; }
 
         /* --- 4. 主要區塊：設定、閱讀器 (Main Sections: Settings, Reader) --- */
-        /* 【需求其一】修訂：主容器寬度設為90%，並透過 margin: auto 達成左右邊距 */
-        .main-content-wrapper { width: 95%; max-width: var(--max-width); transition: all 0.4s ease-in-out; margin: 0 auto; }
-        .settings-card, .reader-card {
+        .main-content-wrapper { width: 100%; max-width: var(--max-width); transition: all 0.4s ease-in-out; }
+        
+        .settings-card {
             border: 1px solid; border-radius: 8px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
             padding: 2rem 3rem;
             transition: background-color 0.4s, border-color 0.4s;
         }
-        .light-mode .settings-card, .light-mode .reader-card { background-color: var(--content-bg-light); border-color: var(--border-color-light); }
-        .dark-mode .settings-card, .dark-mode .reader-card { background-color: var(--content-bg-dark); border-color: var(--border-color-dark); }
+        .reader-card {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+            border-radius: 0;
+            border: none;
+            box-shadow: none;
+            transition: background-color 0.4s;
+        }
+
+        .light-mode .settings-card { background-color: var(--content-bg-light); border-color: var(--border-color-light); }
+        .dark-mode .settings-card { background-color: var(--content-bg-dark); border-color: var(--border-color-dark); }
+        .light-mode .reader-card { background-color: var(--content-bg-light); border-color: var(--border-color-light); }
+        .dark-mode .reader-card { background-color: var(--content-bg-dark); border-color: var(--border-color-dark); }
         
         /* --- 5. 設定區塊樣式 (Settings Section Styles) --- */
         .settings-header { display: flex; justify-content: space-between; align-items: flex-start; position: relative; margin-bottom: 2.5rem; }
@@ -192,52 +205,70 @@
         .font-controls .icon-btn svg { width: 22px; height: 22px; }
 
         /* --- 7. 書本閱讀器 (Book Reader) --- */
-        .book-container { width: 100%; height: 75vh; min-height: 550px; display: flex; justify-content: center; align-items: center; overflow: hidden; user-select: none; cursor: grab; }
+        .book-container {
+            width: 100%;
+            flex-grow: 1; /* Occupy remaining space */
+            min-height: auto;
+            height: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            user-select: none;
+            cursor: grab;
+        }
         .book-container:active { cursor: grabbing; }
         .book { width: 100%; height: 100%; display: flex; }
         .page { width: 100%; height: 100%; flex-shrink: 0; position: relative; border: 1px solid; }
-        .page-content { width: 100%; height: 100%; padding: 2rem 2.5rem 5rem 2.5rem; overflow: hidden; font-family: var(--font-serif); font-size: var(--reader-font-size); letter-spacing: 0.05em; line-height: 2; }
+        .page-content { width: 100%; height: 100%; padding: 2rem 2.5rem 5rem 2.5rem; overflow-y: hidden; font-family: var(--font-serif); font-size: var(--reader-font-size); letter-spacing: 0.05em; line-height: 2; }
         .light-mode .page { background: var(--content-bg-light); border-color: var(--border-color-light); }
         .dark-mode .page { background: var(--content-bg-dark); border-color: var(--border-color-dark); }
         .light-mode .page-content { color: var(--text-primary-light); }
         .dark-mode .page-content { color: var(--text-primary-dark); }
         .page-content h2.article-title { font-size: calc(var(--reader-font-size) + 0.9rem); font-weight: 600; margin-bottom: 0.75rem; text-align: center; }
         .page-content p.article-author { font-family: var(--font-sans); font-size: calc(var(--reader-font-size) - 0.1rem); margin-bottom: 1.5rem; text-align: center; color: var(--accent-color); }
-        .page-content > p:not(.article-author) { margin-bottom: 1em; }
         .page-content .article-outline { font-family: var(--font-sans); font-style: italic; font-size: calc(var(--reader-font-size) - 0.1rem); text-align: center; margin: 1rem 0 2rem 0; padding-bottom: 2rem; border-bottom: 1px solid; }
         .light-mode .page-content .article-outline { color: var(--text-secondary-light); border-color: var(--border-color-light); }
         .dark-mode .page-content .article-outline { color: var(--text-secondary-dark); border-color: var(--border-color-dark); }
-        /* 【需求其二】修訂：「作品賞析」區塊減少上方間距，將其位置上移 */
+        
+        /* [需求二修訂] 作品賞析區塊樣式 */
         .article-appreciation { margin-top: 0rem; padding-top: 0rem; border-top: 1px solid; }
         .light-mode .article-appreciation { border-color: var(--border-color-light); }
         .dark-mode .article-appreciation { border-color: var(--border-color-dark); }
         .article-appreciation h3 { font-family: var(--font-sans); font-weight: 500; font-size: calc(var(--reader-font-size) + 0.15rem); margin-bottom: 1rem; }
-        .article-appreciation p { font-family: var(--font-sans); font-size: calc(var(--reader-font-size) - 0.1rem); line-height: 1.8; margin-bottom: 1em; } /* Added margin for consistency */
+        .article-appreciation p { font-family: var(--font-sans); font-size: calc(var(--reader-font-size) - 0.1rem); line-height: 1.8; margin-bottom: 1em; } /* 為每個段落添加底部邊距 */
+
         .page-content .page-number { position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%); font-family: var(--font-sans); font-size: 0.9rem; }
         .light-mode .page-content .page-number { color: var(--text-secondary-light); }
         .dark-mode .page-content .page-number { color: var(--text-secondary-dark); }
         #sizer { position: absolute; visibility: hidden; z-index: -100; overflow: hidden; font-family: var(--font-serif); font-size: var(--reader-font-size); letter-spacing: 0.05em; line-height: 2; padding: 2rem 2.5rem 5rem 2.5rem; }
 
-        /* --- 插圖樣式 (Illustration Styles) --- */
+        /* [需求三修訂] 保留原有插圖樣式 */
         .illustration-container {
             width: 85%;
-            margin: 1em auto;
+            margin: 2.5rem auto;
             padding: 1rem;
-            padding-top: 2.5rem;
-            padding-bottom: 2.5rem;
             border: 1px dashed;
             border-radius: 8px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 220px;
             page-break-inside: avoid;
             cursor: pointer;
+            aspect-ratio: 16 / 10; /* Use aspect-ratio for predictable height */
         }
         .light-mode .illustration-container { border-color: var(--border-color-light); }
         .dark-mode .illustration-container { border-color: var(--border-color-dark); }
-        .illustration-container img { max-width: 100%; height: auto; border-radius: 4px; transition: opacity 0.3s; }
+        .illustration-container img {
+            max-width: 100%;
+            max-height: 100%;
+            height: auto;
+            width: auto;
+            object-fit: contain; /* Fit image inside container without distortion */
+            border-radius: 4px;
+            transition: opacity 0.3s;
+        }
         .illustration-container img:hover { opacity: 0.85; }
         .illustration-loader { display: flex; align-items: center; gap: 15px; cursor: default; }
         .illustration-loader .spinner { width: 30px; height: 30px; border: 4px solid rgba(0,0,0,0.1); border-radius: 50%; animation: spin 1s linear infinite; }
@@ -249,14 +280,30 @@
         .illustration-error svg { width: 40px; height: 40px; margin-bottom: 1rem; stroke: #e74c3c; }
         .illustration-error p { font-family: var(--font-sans); font-size: 0.9rem; color: #e74c3c; line-height: 1.6; }
 
-        /* --- 8. 全螢幕模式 (Fullscreen Mode) --- */
-        body.fullscreen-mode { overflow: hidden; }
-        body.light-mode.fullscreen-mode { background-color: var(--content-bg-light); }
-        body.dark-mode.fullscreen-mode { background-color: var(--content-bg-dark); }
-        body.fullscreen-mode .page-container { padding: 0; }
-        body.fullscreen-mode .main-content-wrapper { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; max-width: none; z-index: 1000; }
-        body.fullscreen-mode .reader-card { border-radius: 0; border: none; box-shadow: none; height: 100%; display: flex; flex-direction: column; padding: 1.5rem; }
-        body.fullscreen-mode .book-container { flex-grow: 1; min-height: auto; height: auto; }
+        /* --- 8. 閱讀器視圖模式 (Reader View Mode) --- */
+        /* [需求一修訂] 進入閱讀模式時，啟用全屏樣式 */
+        body.is-reading {
+            overflow: hidden;
+        }
+        body.light-mode.is-reading {
+            background-color: var(--content-bg-light);
+        }
+        body.dark-mode.is-reading {
+            background-color: var(--content-bg-dark);
+        }
+        body.is-reading .page-container {
+            padding: 0;
+            display: block; /* 取代 grid 以填滿全屏 */
+        }
+        body.is-reading .main-content-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            max-width: none;
+            z-index: 1000;
+        }
         
         /* --- 9. 歷史紀錄彈窗 (History Modal) --- */
         .history-modal {
@@ -304,20 +351,18 @@
 
         /* --- 10. 響應式設計 (Responsive Design) --- */
         @media (max-width: 768px) {
-            /* 【需求其一】修訂：移除手機版主容器的 width: 100%，使其繼承桌機版的 90% 寬度，以保留左右邊距 */
-            .main-content-wrapper { /* width: 100%; 已移除 */ }
-            /* 同時調整 page-container 的 padding，確保內容在90%寬度下仍有基本邊距 */
-            .page-container { padding: 1rem; }
-            .settings-card, .reader-card { padding: 1.5rem; border-radius: 0; border: none; box-shadow: none; }
-            body.fullscreen-mode .reader-card { padding: 1rem; }
+            .main-content-wrapper { width: 95%; }
+            .page-container { padding: 1rem 0; }
+            .settings-card { padding: 1.5rem; box-shadow: none; }
+            body.is-reading .reader-card { padding: 1rem; }
             .settings-header { margin-bottom: 2rem; flex-direction: column; align-items: center; gap: 0.75rem; }
             .settings-header .title-group h1 { font-size: 1.8rem; }
             .settings-header .header-controls { position: static; }
             .reader-controls .left-controls, .reader-controls .right-controls { gap: 0.2rem; }
-            .page-content { padding: 1.5rem; padding-bottom: 4.5rem; line-height: 1.9; overflow: hidden; }
+            .page-content { padding: 1.5rem; padding-bottom: 4.5rem; line-height: 1.9; overflow-y: hidden; }
             .page-content h2.article-title { font-size: calc(var(--reader-font-size) + 0.4rem); }
             .history-controls { flex-direction: column; }
-            .illustration-container { width: 100%; min-height: 180px; }
+            .illustration-container { width: 100%; }
         }
     </style>
 </head>
@@ -404,6 +449,7 @@
                            <svg class="icon-theme-light" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                            <svg class="icon-theme-dark hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
                         </button>
+                        <!-- [需求一修訂] 移除全屏按鈕 -->
                     </div>
                 </div>
                 <div class="book-container" id="book-container">
@@ -517,14 +563,14 @@
             switcher.addEventListener('click', () => {
                 const isLight = body.classList.contains('light-mode');
                 const newTheme = isLight ? 'dark-mode' : 'light-mode';
-                body.className = newTheme;
-                if (readingSection.classList.contains('hidden') === false) {
-                    body.classList.add('fullscreen-mode');
+                body.className = newTheme; // 先設定基礎主題
+                 if (body.classList.contains('is-reading')) {
+                    body.classList.add('is-reading'); // 確保閱讀模式 class 不被覆蓋
                 }
                 localStorage.setItem('theme', newTheme);
                 updateThemeIcons(newTheme);
 
-                if (!readingSection.classList.contains('hidden')) {
+                if (state.currentArticle) {
                     displayArticleAsBook(state.currentArticle);
                 }
             });
@@ -563,11 +609,11 @@
 
                 article.generatedDate = new Date().toISOString();
                 state.currentArticle = article;
-                state.currentPageNum = 0;
-
+                state.currentPageNum = 0; // 每次生成新文章都從第一頁開始
                 addToHistory(state.currentArticle);
-                switchToReaderView();
-                enterFullscreen();
+                
+                // [需求一修訂] 直接進入閱讀模式 (全屏)
+                enterReaderMode();
 
             } catch (error) {
                 console.error('生成流程錯誤:', error);
@@ -577,9 +623,9 @@
             }
         });
         
+        // [需求一修訂] 返回按鈕的功能是退出閱讀模式
         backToSettingsBtn.addEventListener('click', () => {
-            exitFullscreen();
-            switchToSettingsView();
+            exitReaderMode();
         });
 
         fontSizeIncreaseBtn.addEventListener('click', () => changeFontSize(0.1));
@@ -632,35 +678,29 @@
                 generateBtnText.textContent = '尋找經典';
             }
         }
-
-        function switchToReaderView() {
+        
+        // [需求一修訂] 進入和退出閱讀模式的函式
+        function enterReaderMode() {
+            body.classList.add('is-reading');
             settingsSection.classList.add('hidden');
             readingSection.classList.remove('hidden');
+
+            if (state.currentArticle) {
+                // 使用 timeout 確保瀏覽器有時間應用 is-reading 的 CSS，以便尺寸計算正確
+                setTimeout(() => displayArticleAsBook(state.currentArticle), 50);
+            }
         }
 
-        function switchToSettingsView() {
+        function exitReaderMode() {
+            body.classList.remove('is-reading');
             readingSection.classList.add('hidden');
             settingsSection.classList.remove('hidden');
             state.currentArticle = null;
         }
 
-        function enterFullscreen() {
-            if (!body.classList.contains('fullscreen-mode')) {
-                body.classList.add('fullscreen-mode');
-                if (state.currentArticle) {
-                    setTimeout(() => displayArticleAsBook(state.currentArticle), 50);
-                }
-            }
-        }
-
-        function exitFullscreen() {
-            if (body.classList.contains('fullscreen-mode')) {
-                body.classList.remove('fullscreen-mode');
-            }
-        }
-
         async function generateProse() {
             const userPrompt = promptTextarea.value.trim();
+            // [需求二修訂] 更新系統提示
             const systemPrompt = `你是一位精通世界文學的圖書館員。你的任務是根據用戶要求，從浩瀚的文學作品中，找出一段真實、經典的繁體中文散文。
 用戶的文學鑑賞難度偏好（1星最淺白，5星最艱深）：${state.difficulty}顆星。
 ${userPrompt ? `用戶的個性化要求： "${userPrompt}"` : `請隨機推薦一篇符合上述難度的經典散文。`}
@@ -670,7 +710,7 @@ ${userPrompt ? `用戶的個性化要求： "${userPrompt}"` : `請隨機推薦�
 2. 作品內容必須是完整的段落或一篇適合一次閱讀完畢的作品(5000字以內)。
 3. 你的回傳內容必須嚴格遵循以下 JSON 格式，不要包含任何 markdown 語法或額外說明。
 4. 所有文字都必須是繁體中文。
-5. [作品賞析] 必須針對你推薦的這篇真實作品進行分析，可包含作者背景、寫作風格、或該作品的歷史意義。段落之間請用 \\n 分隔。
+5. [作品賞析] 必須針對你推薦的這篇真實作品進行分析，可包含作者背景、寫作風格、或該作品的歷史意義。文字內容控制在 200 字左右，段落之間請用 \\n 分隔。
 6. [content] 的內容，段落與段落之間，必須用 \\n 分隔。
 
 JSON 格式如下：
@@ -778,7 +818,8 @@ JSON 格式如下：
             } else {
                 fullContentHTML = article.content.split('\n').filter(p => p.trim() !== '').map(p => `<p>${p}</p>`).join('');
             }
-            
+
+            // [需求二修訂] 將作品賞析的文字按換行符分割成多個<p>標籤
             const appreciationParagraphs = article.appreciation.text.split('\n').filter(p => p.trim() !== '').map(p => `<p>${p}</p>`).join('');
             fullContentHTML += `<div class="article-appreciation"><h3>${article.appreciation.title}</h3>${appreciationParagraphs}</div>`;
             
@@ -806,6 +847,7 @@ JSON 格式如下：
         }
 
         function displayArticleAsBook(article) {
+            const currentPageBeforeRepagination = state.currentPageNum;
             book.innerHTML = '';
             book.style.transition = 'none';
 
@@ -824,7 +866,7 @@ JSON 格式如下：
                     book.appendChild(pageElement);
                 });
                 
-                const newPage = Math.min(state.currentPageNum, state.totalPages - 1);
+                const newPage = Math.min(currentPageBeforeRepagination, state.totalPages - 1);
                 goToPage(newPage, true);
 
             }, 50);
@@ -887,7 +929,7 @@ JSON 格式如下：
             }
             return imageUrl;
         }
-
+        
         async function handleIllustrationClick(e) {
             const container = e.target.closest('.illustration-container');
             if (!container) return;
@@ -929,15 +971,21 @@ JSON 格式如下：
         
         function updateIllustrationInHistory(index, newImageUrl) {
             if (!state.currentArticle || !state.currentArticle.illustrationData) return;
+
             state.currentArticle.illustrationData[index] = {
                 status: 'fulfilled',
                 value: newImageUrl,
                 reason: undefined
             };
+
             const historyIndex = state.history.findIndex(item => item.title === state.currentArticle.title && item.author === state.currentArticle.author);
+
             if (historyIndex !== -1) {
                 state.history[historyIndex].illustrationData = state.currentArticle.illustrationData;
                 localStorage.setItem('proseHistory_v3', JSON.stringify(state.history));
+                console.log(`歷史紀錄已更新：文章 "${state.currentArticle.title}" 的第 ${index + 1} 張插圖已更新。`);
+            } else {
+                console.warn("在歷史紀錄中找不到當前文章，無法更新插圖。");
             }
         }
 
@@ -1000,11 +1048,10 @@ JSON 格式如下：
                 const article = state.history.find(item => item.title === articleTitle);
                 if (article) {
                     state.currentArticle = article;
-                    state.currentPageNum = 0;
-                    
-                    switchToReaderView();
+                    state.currentPageNum = 0; // 從歷史紀錄開啟也從第一頁開始
                     hideHistory();
-                    enterFullscreen();
+                    // [需求一修訂] 點擊歷史紀錄也直接進入全屏閱讀模式
+                    enterReaderMode();
                 }
             }
         }
