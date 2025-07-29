@@ -34,6 +34,9 @@
             --font-sans: 'Noto Sans TC', sans-serif;
             --font-serif: 'Noto Serif TC', serif;
             --max-width: 1100px;
+
+            /* NEW: Font size variable for the reader */
+            --reader-font-size: 1.1rem;
         }
 
         *, *::before, *::after {
@@ -87,21 +90,19 @@
         .icon-btn:hover { transform: scale(1.1); }
         .fullscreen-btn .icon-exit-fullscreen { display: none; }
         
-        /* --- NEW: Password Overlay & Modal --- */
+        /* --- Password Overlay & Modal --- */
         .password-overlay {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background-color: var(--bg-color-light); /* Start with light mode bg */
+            background-color: var(--bg-color-light);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 9999;
             transition: opacity 0.3s, visibility 0.3s;
         }
-        .dark-mode .password-overlay {
-            background-color: var(--bg-color-dark);
-        }
+        .dark-mode .password-overlay { background-color: var(--bg-color-dark); }
         .password-modal {
             background-color: var(--content-bg-light);
             color: var(--text-primary-light);
@@ -117,65 +118,35 @@
             background-color: var(--content-bg-dark);
             color: var(--text-primary-dark);
         }
-        .password-modal h2 {
-            font-family: var(--font-serif);
-            margin-bottom: 0.75rem;
-        }
-        .password-modal .subtitle {
-            font-size: 0.9rem;
-            margin-bottom: 1.5rem;
-        }
+        .password-modal h2 { font-family: var(--font-serif); margin-bottom: 0.75rem; }
+        .password-modal .subtitle { font-size: 0.9rem; margin-bottom: 1.5rem; }
         .light-mode .password-modal .subtitle { color: var(--text-secondary-light); }
         .dark-mode .password-modal .subtitle { color: var(--text-secondary-dark); }
-
         #password-input {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border-radius: 5px;
-            border: 1px solid;
-            font-size: 1rem;
-            margin-bottom: 1rem;
-            text-align: center;
+            width: 100%; padding: 0.75rem 1rem; border-radius: 5px; border: 1px solid;
+            font-size: 1rem; margin-bottom: 1rem; text-align: center;
         }
         .light-mode #password-input {
-            border-color: var(--border-color-light);
-            background-color: var(--bg-color-light);
+            border-color: var(--border-color-light); background-color: var(--bg-color-light);
             color: var(--text-primary-light);
         }
         .dark-mode #password-input {
-            border-color: var(--border-color-dark);
-            background-color: var(--bg-color-dark);
+            border-color: var(--border-color-dark); background-color: var(--bg-color-dark);
             color: var(--text-primary-dark);
         }
         #password-input:focus {
-            outline: none;
-            border-color: var(--accent-color);
+            outline: none; border-color: var(--accent-color);
             box-shadow: 0 0 0 2px rgba(41, 128, 185, 0.3);
         }
         .password-modal button {
-            width: 100%;
-            background-color: var(--accent-color);
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 5px;
-            cursor: pointer;
-            font-family: var(--font-sans);
-            font-size: 1.1rem;
-            font-weight: 500;
+            width: 100%; background-color: var(--accent-color); color: white; border: none;
+            padding: 0.75rem 1.5rem; border-radius: 5px; cursor: pointer;
+            font-family: var(--font-sans); font-size: 1.1rem; font-weight: 500;
             transition: background-color 0.3s;
         }
-        .password-modal button:hover {
-            background-color: var(--accent-color-hover);
-        }
-        .password-modal button:disabled {
-            background-color: #cccccc; cursor: not-allowed;
-        }
-        .password-error {
-            color: #e74c3c;
-            margin-top: 1rem;
-            font-size: 0.9rem;
-        }
+        .password-modal button:hover { background-color: var(--accent-color-hover); }
+        .password-modal button:disabled { background-color: #cccccc; cursor: not-allowed; }
+        .password-error { color: #e74c3c; margin-top: 1rem; font-size: 0.9rem; }
 
         /* --- 4. 主要區塊：設定、閱讀器 (Main Sections: Settings, Reader) --- */
         .main-content-wrapper {
@@ -208,7 +179,10 @@
         .settings-header .title-group p { font-size: 1rem; }
         .light-mode .settings-header .title-group p { color: var(--text-secondary-light); }
         .dark-mode .settings-header .title-group p { color: var(--text-secondary-dark); }
-        .settings-header .header-controls { position: absolute; top: -12px; right: -16px; }
+        .settings-header .header-controls { 
+            position: absolute; top: -12px; right: -16px; 
+            display: flex; align-items: center; gap: 0.25rem;
+        }
         
         .form-group { margin-bottom: 2rem; }
         .form-group label { display: block; margin-bottom: 0.75rem; font-weight: 500; font-size: 1.1rem; }
@@ -247,16 +221,22 @@
         /* --- 6. 閱讀器頂部控制列 (Reader Header Controls) --- */
         .reader-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding: 0 0.5rem; }
         .reader-controls .left-controls, .reader-controls .right-controls { display: flex; align-items: center; gap: 0.5rem; }
+        /* NEW: Container for font controls */
+        .font-controls { display: flex; align-items: center; gap: 0.25rem; border-right: 1px solid; padding-right: 0.75rem; margin-right: 0.25rem;}
+        .light-mode .font-controls { border-color: var(--border-color-light); }
+        .dark-mode .font-controls { border-color: var(--border-color-dark); }
+        .font-controls .icon-btn svg { width: 22px; height: 22px; } /* Slightly smaller icons */
+
 
         /* --- 7. 書本閱讀器 (Book Reader) --- REVISED --- */
         .book-container {
             width: 100%;
-            height: 75vh; /* 增加高度以容納更多內容 */
+            height: 75vh;
             min-height: 550px;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden; /* 隱藏容器外的頁面 */
+            overflow: hidden;
             user-select: none;
             cursor: grab;
         }
@@ -265,25 +245,26 @@
         .book {
             width: 100%;
             height: 100%;
-            display: flex; /* 讓頁面並排排列 */
-            /* JS 會控制 transform */
+            display: flex;
         }
 
         .page {
             width: 100%;
             height: 100%;
-            flex-shrink: 0; /* 防止頁面被壓縮 */
-            position: relative; /* 為了頁碼定位 */
+            flex-shrink: 0;
+            position: relative;
             border: 1px solid;
         }
         
         .page-content {
             width: 100%;
             height: 100%;
-            padding: 2rem 2.5rem 3.5rem 2.5rem; /* 增加底部 padding */
-            overflow: hidden; /* 確保內容不溢出，取代滾動條 */
+            /* REVISED: Increased bottom padding */
+            padding: 2rem 2.5rem 4.5rem 2.5rem; 
+            overflow: hidden;
             font-family: var(--font-serif);
-            font-size: 1.1rem;
+            /* REVISED: font-size now uses a variable */
+            font-size: var(--reader-font-size);
             letter-spacing: 0.05em;
             line-height: 2;
         }
@@ -293,21 +274,22 @@
         .light-mode .page-content { color: var(--text-primary-light); }
         .dark-mode .page-content { color: var(--text-primary-dark); }
         
-        .page-content h2.article-title { font-size: 2rem; font-weight: 600; margin-bottom: 0.75rem; text-align: center; }
-        .page-content p.article-author { font-family: var(--font-sans); font-size: 1rem; margin-bottom: 1.5rem; text-align: center; color: var(--accent-color); }
-        .page-content .article-outline { font-family: var(--font-sans); font-style: italic; font-size: 1rem; text-align: center; margin: 1rem 0 2rem 0; padding-bottom: 2rem; border-bottom: 1px solid; }
+        .page-content h2.article-title { font-size: calc(var(--reader-font-size) + 0.9rem); font-weight: 600; margin-bottom: 0.75rem; text-align: center; }
+        .page-content p.article-author { font-family: var(--font-sans); font-size: calc(var(--reader-font-size) - 0.1rem); margin-bottom: 1.5rem; text-align: center; color: var(--accent-color); }
+        .page-content .article-outline { font-family: var(--font-sans); font-style: italic; font-size: calc(var(--reader-font-size) - 0.1rem); text-align: center; margin: 1rem 0 2rem 0; padding-bottom: 2rem; border-bottom: 1px solid; }
         .light-mode .page-content .article-outline { color: var(--text-secondary-light); border-color: var(--border-color-light); }
         .dark-mode .page-content .article-outline { color: var(--text-secondary-dark); border-color: var(--border-color-dark); }
         
         .article-appreciation { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid; }
         .light-mode .article-appreciation { border-color: var(--border-color-light); }
         .dark-mode .article-appreciation { border-color: var(--border-color-dark); }
-        .article-appreciation h3 { font-family: var(--font-sans); font-weight: 500; font-size: 1.25rem; margin-bottom: 1rem; }
-        .article-appreciation p { font-family: var(--font-sans); font-size: 1rem; line-height: 1.8; }
+        .article-appreciation h3 { font-family: var(--font-sans); font-weight: 500; font-size: calc(var(--reader-font-size) + 0.15rem); margin-bottom: 1rem; }
+        .article-appreciation p { font-family: var(--font-sans); font-size: calc(var(--reader-font-size) - 0.1rem); line-height: 1.8; }
         
         .page-content .page-number {
             position: absolute;
-            bottom: 1.5rem; /* 調整位置以對應 padding */
+            /* REVISED: Adjusted position to be higher */
+            bottom: 2rem; 
             left: 50%;
             transform: translateX(-50%);
             font-family: var(--font-sans);
@@ -322,10 +304,11 @@
             z-index: -100;
             overflow: hidden;
             font-family: var(--font-serif);
-            font-size: 1.1rem;
+            /* REVISED: sizer also uses the font-size variable */
+            font-size: var(--reader-font-size);
             letter-spacing: 0.05em;
             line-height: 2;
-            padding: 2rem 2.5rem 3.5rem 2.5rem;
+            padding: 2rem 2.5rem 4.5rem 2.5rem;
         }
 
         /* --- 8. 全螢幕模式 (Fullscreen Mode) --- REVISED --- */
@@ -339,7 +322,7 @@
             display: flex; flex-direction: column; padding: 1.5rem;
         }
         body.fullscreen-mode .book-container {
-            flex-grow: 1; min-height: auto; height: auto; /* 改為自動高度 */
+            flex-grow: 1; min-height: auto; height: auto;
         }
         body.fullscreen-mode .fullscreen-btn .icon-enter-fullscreen { display: none; }
         body.fullscreen-mode .fullscreen-btn .icon-exit-fullscreen { display: block; }
@@ -396,19 +379,19 @@
             .settings-header { margin-bottom: 1.5rem; }
             .settings-header .title-group h1 { font-size: 1.8rem; }
             .settings-header .header-controls { top: -8px; right: -8px; }
-            .page-content { padding: 1.5rem; line-height: 1.9; }
-            .page-content h2.article-title { font-size: 1.5rem; }
+            .reader-controls .left-controls, .reader-controls .right-controls { gap: 0.2rem; }
+            .page-content { padding: 1.5rem; padding-bottom: 4rem; line-height: 1.9; }
+            .page-content h2.article-title { font-size: calc(var(--reader-font-size) + 0.4rem); }
             .history-controls { flex-direction: column; }
         }
     </style>
 </head>
 <body class="light-mode">
 
-    <!-- NEW: Password Overlay -->
+    <!-- Password Overlay -->
     <div id="password-overlay" class="password-overlay">
         <div id="password-modal" class="password-modal">
             <h2>請輸入密碼登入</h2>
- 
             <form id="password-form">
                 <input type="password" id="password-input" placeholder="••••••••" required autocomplete="current-password">
                 <button type="submit" id="password-submit-btn">登入</button>
@@ -428,8 +411,14 @@
                         <p>與文學巨擘對話，探索思想的深度</p>
                     </div>
                     <div class="header-controls">
+                        <!-- REVISED: History icon changed to a book -->
                         <button class="icon-btn" id="history-btn" title="閱覽紀錄">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 2v6h6M2.66 15.57a10 10 0 1 0 .57-8.38"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20v2H6.5A2.5 2.5 0 0 1 4 19.5z"></path><path d="M4 5h16v12H6.5A2.5 2.5 0 0 1 4 14.5V5z"></path></svg>
+                        </button>
+                        <!-- NEW: Theme switcher for settings page -->
+                        <button class="icon-btn theme-switcher-btn" id="settings-theme-switcher" title="切換主題">
+                           <svg class="icon-theme-light" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                           <svg class="icon-theme-dark hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
                         </button>
                     </div>
                 </header>
@@ -462,7 +451,16 @@
                         </button>
                     </div>
                     <div class="right-controls">
-                         <button class="icon-btn" id="theme-switcher" title="切換主題">
+                         <!-- NEW: Font size controls -->
+                         <div class="font-controls">
+                            <button class="icon-btn" id="font-size-decrease-btn" title="縮小字體">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 7 4"></polyline><path d="M10.29 13.71a2.43 2.43 0 0 0-2.66-.14 2.43 2.43 0 0 0-1.63 2.3V17h2"></path><path d="M4 11V9a2 2 0 0 1 2-2h2"></path><path d="M14 10h-1a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h1"></path><path d="M11 10V9a2 2 0 0 1 2-2h1"></path></svg>
+                            </button>
+                             <button class="icon-btn" id="font-size-increase-btn" title="放大字體">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 7 4"></polyline><path d="M10.29 13.71a2.43 2.43 0 0 0-2.66-.14 2.43 2.43 0 0 0-1.63 2.3V17h2.5"></path><path d="M4 11V9a2 2 0 0 1 2-2h2"></path><path d="M15 10h-1a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h1"></path><path d="M12 10V9a2 2 0 0 1 2-2h1"></path><path d="M17 11h2"></path><path d="M18 10v2"></path></svg>
+                            </button>
+                         </div>
+                         <button class="icon-btn theme-switcher-btn" id="reader-theme-switcher" title="切換主題">
                            <svg class="icon-theme-light" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                            <svg class="icon-theme-dark hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
                         </button>
@@ -503,30 +501,28 @@
     </div>
 
     <script>
-    // --- NEW: Firebase Configuration ---
+    // --- Firebase Configuration ---
     const firebaseConfig = {
       apiKey: "AIzaSyAOTRmML2Zje5e6DYihpExkRiVgJuuTFHQ",
       authDomain: "password-c344c.firebaseapp.com",
-      databaseURL: "https://password-c344c-default-rtdb.firebaseio.com", // Added for Realtime Database
+      databaseURL: "https://password-c344c-default-rtdb.firebaseio.com",
       projectId: "password-c344c",
       storageBucket: "password-c344c.firebasestorage.app",
       messagingSenderId: "1056032198970",
       appId: "1:1056032198970:web:fd3f821d4c2738bdab8003"
     };
 
-    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
 
-    // --- NEW: Main application logic is now in a function ---
+    // --- Main application logic ---
     function initializeApp() {
         // --- 1. DOM 元素選擇 ---
         const body = document.body;
+        const root = document.documentElement;
         const settingsSection = document.getElementById('settings-section');
         const readingSection = document.getElementById('reading-section');
-        const themeSwitcher = document.getElementById('theme-switcher');
-        const lightThemeIcon = themeSwitcher.querySelector('.icon-theme-light');
-        const darkThemeIcon = themeSwitcher.querySelector('.icon-theme-dark');
+        const themeSwitchers = document.querySelectorAll('.theme-switcher-btn'); // REVISED
         const proseForm = document.getElementById('prose-form');
         const difficultyRating = document.getElementById('difficulty-rating');
         const ratingDots = difficultyRating.querySelectorAll('.rating-dot');
@@ -544,6 +540,8 @@
         const historyList = document.getElementById('history-list');
         const historySearch = document.getElementById('history-search');
         const historySort = document.getElementById('history-sort');
+        const fontSizeIncreaseBtn = document.getElementById('font-size-increase-btn'); // NEW
+        const fontSizeDecreaseBtn = document.getElementById('font-size-decrease-btn'); // NEW
 
         // --- API 配置信息 ---
         const API_KEYS = ["sk-GruTbLTbtSeWof3rEBjtIg"];
@@ -558,6 +556,7 @@
             currentArticle: null,
             currentPageNum: 0,
             totalPages: 0,
+            fontSize: 1.1, // NEW: Font size state
         };
         let isDragging = false, dragStartX = 0, currentTranslate = 0, startTranslate = 0;
 
@@ -565,18 +564,31 @@
         const initTheme = () => {
             const savedTheme = localStorage.getItem('theme') || 'light-mode';
             body.className = savedTheme;
-            lightThemeIcon.classList.toggle('hidden', savedTheme === 'dark-mode');
-            darkThemeIcon.classList.toggle('hidden', savedTheme === 'light-mode');
+            updateThemeIcons(savedTheme);
         };
+
+        const initFontSize = () => {
+            state.fontSize = parseFloat(localStorage.getItem('fontSize')) || 1.1;
+            root.style.setProperty('--reader-font-size', `${state.fontSize}rem`);
+        };
+
         initTheme();
+        initFontSize();
         
         // --- 4. 事件監聽器 ---
-        themeSwitcher.addEventListener('click', () => {
-            const isLight = body.classList.contains('light-mode');
-            body.className = isLight ? 'dark-mode' : 'light-mode';
-            localStorage.setItem('theme', body.className);
-            lightThemeIcon.classList.toggle('hidden');
-            darkThemeIcon.classList.toggle('hidden');
+        themeSwitchers.forEach(switcher => {
+            switcher.addEventListener('click', () => {
+                const isLight = body.classList.contains('light-mode');
+                const newTheme = isLight ? 'dark-mode' : 'light-mode';
+                body.className = newTheme;
+                localStorage.setItem('theme', newTheme);
+                updateThemeIcons(newTheme);
+
+                // REVISED: If in reader view, ensure it's fullscreen
+                if (!readingSection.classList.contains('hidden') && !body.classList.contains('fullscreen-mode')) {
+                    toggleFullscreen();
+                }
+            });
         });
 
         ratingDots.forEach(dot => {
@@ -625,6 +637,10 @@
             switchToSettingsView();
         });
 
+        // NEW: Font size controls listeners
+        fontSizeIncreaseBtn.addEventListener('click', () => changeFontSize(0.1));
+        fontSizeDecreaseBtn.addEventListener('click', () => changeFontSize(-0.1));
+
         historyBtn.addEventListener('click', showHistory);
         historyCloseBtn.addEventListener('click', hideHistory);
         historyModal.addEventListener('click', (e) => { if (e.target === historyModal) hideHistory(); });
@@ -640,6 +656,15 @@
         document.addEventListener('touchend', dragEnd);
 
         // --- 5. 核心功能函式 ---
+        function updateThemeIcons(theme) {
+            themeSwitchers.forEach(switcher => {
+                const lightIcon = switcher.querySelector('.icon-theme-light');
+                const darkIcon = switcher.querySelector('.icon-theme-dark');
+                lightIcon.classList.toggle('hidden', theme === 'dark-mode');
+                darkIcon.classList.toggle('hidden', theme === 'light-mode');
+            });
+        }
+
         function updateRatingDots() {
             ratingDots.forEach(dot => {
                 dot.classList.toggle('selected', dot.dataset.value <= state.difficulty);
@@ -701,38 +726,43 @@ JSON 格式如下：
 }`;
             
             const currentKey = API_KEYS[currentApiKeyIndex];
-            const response = await fetch(API_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${currentKey}` },
-                body: JSON.stringify({
-                    model: MODEL,
-                    messages: [{ role: "user", content: systemPrompt }],
-                    response_format: { type: "json_object" },
-                    max_tokens: 64000,
-                    temperature: 0.8
-                })
-            });
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${currentKey}` },
+                    body: JSON.stringify({
+                        model: MODEL,
+                        messages: [{ role: "user", content: systemPrompt }],
+                        response_format: { type: "json_object" },
+                        max_tokens: 64000,
+                        temperature: 0.8
+                    })
+                });
 
-            if (!response.ok) {
-                if (response.status === 401) {
-                    currentApiKeyIndex = (currentApiKeyIndex + 1) % API_KEYS.length;
-                    if (currentApiKeyIndex !== 0) {
-                        console.warn(`API Key 失效，正在嘗試下一個 Key...`);
-                        return await generateProse();
-                    } else {
-                        throw new Error(`API 請求失敗 (401 Unauthorized): 所有 API Key 皆已失效或無效。`);
-                    }
+                if (!response.ok) {
+                    throw new Error(`API 請求失敗，狀態碼：${response.status}`);
                 }
-                throw new Error(`API 請求失敗，狀態碼：${response.status}`);
+                
+                const data = await response.json();
+                const contentString = data.choices[0].message.content;
+                if (!contentString) throw new Error("API 未返回有效內容。");
+                
+                const article = JSON.parse(contentString);
+                if (!article.title || !article.author || !article.content) throw new Error("API 回應格式不正確，無法解析文章。");
+                return article;
+
+            } catch(error) {
+                console.error("API Error:", error);
+                if (error.message.includes("401")) {
+                     alert("API 授權失敗，請檢查金鑰。");
+                } else if (error instanceof SyntaxError) {
+                    alert("API 回傳格式錯誤，無法解析文章。請稍後再試。");
+                }
+                else {
+                    alert(`獲取文章時發生錯誤: ${error.message}`);
+                }
+                return null;
             }
-            
-            currentApiKeyIndex = 0; 
-            const data = await response.json();
-            const contentString = data.choices[0].message.content;
-            if (!contentString) throw new Error("API 未返回有效內容。");
-            const article = JSON.parse(contentString);
-            if (!article.title || !article.author || !article.content) throw new Error("API 回應格式不正確，無法解析文章。");
-            return article;
         }
 
         function addToHistory(article) {
@@ -743,6 +773,20 @@ JSON 格式如下：
         }
 
         // --- 6. 書本與分頁邏輯 ---
+        function changeFontSize(amount) {
+            // Set min/max font size
+            const newSize = Math.max(0.8, Math.min(1.8, state.fontSize + amount));
+            state.fontSize = Math.round(newSize * 10) / 10; // round to one decimal place
+            
+            localStorage.setItem('fontSize', state.fontSize);
+            root.style.setProperty('--reader-font-size', `${state.fontSize}rem`);
+
+            // Re-paginate the article if one is currently being viewed
+            if (state.currentArticle) {
+                displayArticleAsBook(state.currentArticle);
+            }
+        }
+
         function paginateArticle(article) {
             const containerWidth = bookContainer.clientWidth;
             const containerHeight = bookContainer.clientHeight;
@@ -755,7 +799,7 @@ JSON 格式如下：
             sizer.style.height = containerHeight + 'px';
             
             const firstPageHeader = `<h2 class="article-title">${article.title}</h2><p class="article-author">文 / ${article.author}</p><div class="article-outline">${article.outline}</div>`;
-            const fullContent = article.content.replace(/\n/g, '<p></p>') + `<div class="article-appreciation"><h3>${article.appreciation.title}</h3><p>${article.appreciation.text}</p></div>`;
+            const fullContent = article.content.replace(/\n/g, '<p></p>') + `<div class="article-appreciation"><h3>${article.appreciation.title}</h3><p>${article.appreciation.text.replace(/\n/g, '<br>')}</p></div>`;
             
             const contentDoc = new DOMParser().parseFromString(`<div>${fullContent}</div>`, 'text/html');
             const contentNodes = Array.from(contentDoc.body.firstChild.childNodes);
@@ -781,6 +825,7 @@ JSON 格式如下：
         }
 
         function displayArticleAsBook(article) {
+            const currentPageBeforeRepagination = state.currentPageNum;
             book.innerHTML = '';
             book.style.transition = 'none';
             setTimeout(() => {
@@ -792,20 +837,23 @@ JSON 格式如下：
                     pageElement.innerHTML = `<div class="page-content">${content}<span class="page-number">${i + 1} / ${state.totalPages}</span></div>`;
                     book.appendChild(pageElement);
                 });
-                goToPage(0);
+                // Try to stay on a similar page after font size change
+                const newPage = Math.min(currentPageBeforeRepagination, state.totalPages - 1);
+                goToPage(newPage, true); // Go to page without animation
             }, 50);
         }
 
-        function goToPage(pageNum) {
+        function goToPage(pageNum, immediate = false) {
             const pageIndex = Math.max(0, Math.min(pageNum, state.totalPages - 1));
             state.currentPageNum = pageIndex;
             currentTranslate = -pageIndex * bookContainer.clientWidth;
-            book.style.transition = 'transform 0.4s ease-out';
+            book.style.transition = immediate ? 'none' : 'transform 0.4s ease-out';
             book.style.transform = `translateX(${currentTranslate}px)`;
         }
 
         // --- 7. 翻頁互動處理 ---
         function dragStart(e) {
+            if (e.target.closest('a')) return;
             isDragging = true;
             dragStartX = e.touches ? e.touches[0].clientX : e.clientX;
             startTranslate = currentTranslate;
@@ -873,7 +921,7 @@ JSON 格式如下：
         }
     }
 
-    // --- NEW: Password validation logic on page load ---
+    // --- Password validation logic on page load ---
     document.addEventListener('DOMContentLoaded', () => {
         const passwordOverlay = document.getElementById('password-overlay');
         const passwordForm = document.getElementById('password-form');
@@ -882,7 +930,6 @@ JSON 格式如下：
         const passwordSubmitBtn = document.getElementById('password-submit-btn');
         const pageContainer = document.querySelector('.page-container');
 
-        // Apply saved theme to the password page itself
         const savedTheme = localStorage.getItem('theme') || 'light-mode';
         document.body.className = savedTheme;
         passwordInput.focus();
@@ -894,18 +941,17 @@ JSON 格式如下：
             passwordSubmitBtn.textContent = '驗證中...';
 
             const enteredPassword = passwordInput.value;
-            const passwordRef = database.ref('password'); // Get reference to 'password' key in DB
+            const passwordRef = database.ref('password');
 
             passwordRef.once('value').then((snapshot) => {
                 const correctPassword = snapshot.val();
                 if (enteredPassword === correctPassword) {
-                    // Correct password
                     passwordOverlay.style.opacity = '0';
                     passwordOverlay.style.visibility = 'hidden';
+                    passwordOverlay.addEventListener('transitionend', () => passwordOverlay.remove());
                     pageContainer.classList.remove('hidden');
-                    initializeApp(); // Run the main app logic
+                    initializeApp();
                 } else {
-                    // Incorrect password
                     passwordError.classList.remove('hidden');
                     passwordInput.value = '';
                     passwordInput.focus();
