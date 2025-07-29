@@ -186,6 +186,15 @@
         /* --- 6. 閱讀器頂部控制列 (Reader Header Controls) --- */
         .reader-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding: 0 0.5rem; }
         .reader-controls .left-controls, .reader-controls .right-controls { display: flex; align-items: center; gap: 0.5rem; }
+        
+        .reader-pagination {
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        .light-mode .reader-pagination { color: var(--text-secondary-light); }
+        .dark-mode .reader-pagination { color: var(--text-secondary-dark); }
+
         .font-controls { display: flex; align-items: center; gap: 0.25rem; border-right: 1px solid; padding-right: 0.75rem; margin-right: 0.25rem;}
         .light-mode .font-controls { border-color: var(--border-color-light); }
         .dark-mode .font-controls { border-color: var(--border-color-dark); }
@@ -196,7 +205,8 @@
         .book-container:active { cursor: grabbing; }
         .book { width: 100%; height: 100%; display: flex; }
         .page { width: 100%; height: 100%; flex-shrink: 0; position: relative; border: 1px solid; }
-        .page-content { width: 100%; height: 100%; padding: 2rem 2.5rem 5rem 2.5rem; overflow-y: auto; font-family: var(--font-serif); font-size: var(--reader-font-size); letter-spacing: 0.05em; line-height: 2; }
+        
+        .page-content { width: 100%; height: 100%; padding: 2rem 2.5rem 2.5rem 2.5rem; overflow-y: auto; font-family: var(--font-serif); font-size: var(--reader-font-size); letter-spacing: 0.05em; line-height: 2; }
         .light-mode .page { background: var(--content-bg-light); border-color: var(--border-color-light); }
         .dark-mode .page { background: var(--content-bg-dark); border-color: var(--border-color-dark); }
         .light-mode .page-content { color: var(--text-primary-light); }
@@ -206,15 +216,17 @@
         .page-content .article-outline { font-family: var(--font-sans); font-style: italic; font-size: calc(var(--reader-font-size) - 0.1rem); text-align: center; margin: 1rem 0 2rem 0; padding-bottom: 2rem; border-bottom: 1px solid; }
         .light-mode .page-content .article-outline { color: var(--text-secondary-light); border-color: var(--border-color-light); }
         .dark-mode .page-content .article-outline { color: var(--text-secondary-dark); border-color: var(--border-color-dark); }
-        .article-appreciation { margin-top: 0rem; padding-top: 0rem; border-top: 1px solid; }
+
+        .page-content p { margin-bottom: 1em; }
+        .page-content p.article-author { margin-bottom: 1.5rem; }
+        .page-content p:last-child { margin-bottom: 0; }
+
+        .article-appreciation { margin-top: 2rem; padding-top: 2rem; border-top: 1px solid; }
         .light-mode .article-appreciation { border-color: var(--border-color-light); }
         .dark-mode .article-appreciation { border-color: var(--border-color-dark); }
         .article-appreciation h3 { font-family: var(--font-sans); font-weight: 500; font-size: calc(var(--reader-font-size) + 0.15rem); margin-bottom: 1rem; }
-        .article-appreciation p { font-family: var(--font-sans); font-size: calc(var(--reader-font-size) - 0.1rem); line-height: 1.8; }
-        .page-content .page-number { position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%); font-family: var(--font-sans); font-size: 0.9rem; }
-        .light-mode .page-content .page-number { color: var(--text-secondary-light); }
-        .dark-mode .page-content .page-number { color: var(--text-secondary-dark); }
-        #sizer { position: absolute; visibility: hidden; z-index: -100; overflow: hidden; font-family: var(--font-serif); font-size: var(--reader-font-size); letter-spacing: 0.05em; line-height: 2; padding: 2rem 2.5rem 5rem 2.5rem; }
+        
+        #sizer { position: absolute; visibility: hidden; z-index: -100; overflow: hidden; font-family: var(--font-serif); font-size: var(--reader-font-size); letter-spacing: 0.05em; line-height: 2; padding: 2rem 2.5rem 2.5rem 2.5rem; }
 
         /* --- 插圖樣式 (Illustration Styles) --- */
         .illustration-container {
@@ -227,7 +239,6 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            /* REVISED: min-height is removed to prevent reserving empty space */
             page-break-inside: avoid;
             cursor: pointer;
         }
@@ -245,6 +256,25 @@
         .illustration-error svg { width: 40px; height: 40px; margin-bottom: 1rem; stroke: #e74c3c; }
         .illustration-error p { font-family: var(--font-sans); font-size: 0.9rem; color: #e74c3c; line-height: 1.6; }
 
+        /* --- REVISED: 新增專為插圖頁設計的樣式 --- */
+        .page-content--illustration {
+            padding: 0 !important; /* 強制移除邊距，讓圖片最大化 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .page-content--illustration .illustration-container {
+            margin: 1rem; /* 在全頁模式下給予一個小邊距 */
+            width: 90%;
+            height: 90%;
+            border-style: solid;
+        }
+        .page-content--illustration .illustration-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* 確保圖片完整顯示不變形 */
+        }
+        
         /* --- 8. 全螢幕模式 (Fullscreen Mode) --- */
         body.fullscreen-mode { overflow: hidden; }
         body.light-mode.fullscreen-mode { background-color: var(--content-bg-light); }
@@ -310,10 +340,10 @@
             .settings-header .title-group h1 { font-size: 1.8rem; }
             .settings-header .header-controls { position: static; }
             .reader-controls .left-controls, .reader-controls .right-controls { gap: 0.2rem; }
-            .page-content { padding: 1.5rem; padding-bottom: 4.5rem; line-height: 1.9; overflow-y: auto; }
+            .page-content { padding: 1.5rem; padding-bottom: 2rem; line-height: 1.9; overflow-y: auto; }
             .page-content h2.article-title { font-size: calc(var(--reader-font-size) + 0.4rem); }
             .history-controls { flex-direction: column; }
-            .illustration-container { width: 100%; min-height: 180px; }
+            .illustration-container { width: 100%; }
         }
     </style>
 </head>
@@ -387,6 +417,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
                         </button>
                     </div>
+                    <div id="reader-pagination" class="reader-pagination"></div>
                     <div class="right-controls">
                          <div class="font-controls">
                             <button class="icon-btn" id="font-size-decrease-btn" title="縮小字體">
@@ -480,6 +511,7 @@
         const fontSizeIncreaseBtn = document.getElementById('font-size-increase-btn');
         const fontSizeDecreaseBtn = document.getElementById('font-size-decrease-btn');
         const generateIllustrationsCheckbox = document.getElementById('generate-illustrations-checkbox');
+        const readerPagination = document.getElementById('reader-pagination');
 
         // --- API 配置信息 ---
         const API_KEYS = ["sk-GruTbLTbtSeWof3rEBjtIg"];
@@ -501,7 +533,6 @@
         // --- 3. 初始化 ---
         const initTheme = () => {
             const savedTheme = localStorage.getItem('theme') || 'light-mode';
-            // body.className = savedTheme; // This can wipe other classes
             if (savedTheme === 'dark-mode') {
                 body.classList.remove('light-mode');
                 body.classList.add('dark-mode');
@@ -527,22 +558,16 @@
                 const currentTheme = isCurrentlyLight ? 'light-mode' : 'dark-mode';
                 const newTheme = isCurrentlyLight ? 'dark-mode' : 'light-mode';
                 
-                // 1. 安全地切換主題 class，避免影響 'fullscreen-mode'
                 body.classList.remove(currentTheme);
                 body.classList.add(newTheme);
                 localStorage.setItem('theme', newTheme);
                 updateThemeIcons(newTheme);
 
-                // 2. 新增需求：如果在閱讀器介面，則自動進入全螢幕模式
                 const inReaderView = !readingSection.classList.contains('hidden');
-
                 if (inReaderView) {
-                    // 如果尚未處於全螢幕，則啟用它
                     if (!body.classList.contains('fullscreen-mode')) {
                         body.classList.add('fullscreen-mode');
                     }
-                    
-                    // 3. 因為主題或全螢幕狀態已改變，務必重新計算分頁以適應新版面
                     if (state.currentArticle) {
                        setTimeout(() => displayArticleAsBook(state.currentArticle), 50);
                     }
@@ -583,12 +608,8 @@
 
                 article.generatedDate = new Date().toISOString();
                 state.currentArticle = article;
-
                 addToHistory(state.currentArticle);
-                
-                // 新增需求：在切換到閱讀器前，預設為全螢幕模式
                 body.classList.add('fullscreen-mode');
-                
                 displayArticleAsBook(state.currentArticle);
                 switchToReaderView();
 
@@ -666,6 +687,8 @@
             readingSection.classList.add('hidden');
             settingsSection.classList.remove('hidden');
             state.currentArticle = null;
+            state.totalPages = 0;
+            updatePaginationDisplay();
         }
 
         function toggleFullscreen() { 
@@ -674,11 +697,19 @@
                 setTimeout(() => displayArticleAsBook(state.currentArticle), 50);
             }
         }
+        
+        function updatePaginationDisplay() {
+            if (readerPagination) {
+                if (state.totalPages > 0) {
+                    readerPagination.textContent = `${state.currentPageNum + 1} / ${state.totalPages}`;
+                } else {
+                    readerPagination.textContent = '';
+                }
+            }
+        }
 
         async function generateProse() {
             const userPrompt = promptTextarea.value.trim();
-            
-            // --- 核心修改：更新系統提示以強制要求全文 ---
             const systemPrompt = `你是一位精通世界文學的圖書館員。你的任務是根據用戶要求，從浩瀚的文學作品中，找出一段真實、經典的繁體中文散文。
 用戶的文學鑑賞難度偏好（1星最淺白，5星最艱深）：${state.difficulty}顆星。
 ${userPrompt ? `用戶的個性化要求： "${userPrompt}"` : `請隨機推薦一篇符合上述難度的經典散文。`}
@@ -717,13 +748,10 @@ JSON 格式如下：
                 });
 
                 if (!response.ok) throw new Error(`API 請求失敗，狀態碼：${response.status}`);
-                
                 const data = await response.json();
                 if (!data.choices?.[0]?.message?.content) throw new Error("API 回應格式不正確。");
-
                 const article = JSON.parse(data.choices[0].message.content);
                 if (!article.title || !article.author || !article.content) throw new Error("API 回應的 JSON 內容不完整。");
-                
                 return article;
             } catch(error) {
                 console.error("API Error:", error);
@@ -751,6 +779,9 @@ JSON 格式如下：
             }
         }
         
+        /**
+         * REVISED: 重構分頁邏輯以獨立處理插圖頁面
+         */
         function paginateArticle(article) {
             const containerWidth = bookContainer.clientWidth;
             const containerHeight = bookContainer.clientHeight;
@@ -760,58 +791,44 @@ JSON 格式如下：
             }
 
             sizer.style.width = containerWidth + 'px';
-            sizer.style.height = containerHeight + 'px';
+            sizer.style.height = containerHeight + 'px'; // sizer needs a fixed height to check against scrollHeight
             
             const firstPageHeader = `<h2 class="article-title">${article.title}</h2><p class="article-author">文 / ${article.author}</p><div class="article-outline">${article.outline}</div>`;
             
             let fullContentHTML;
+            const textToParagraphs = (text) => {
+                if (!text) return "";
+                return text.split('\n').filter(p => p.trim() !== '').map(p => `<p>${p}</p>`).join('');
+            };
 
-            // 檢查是否需要處理插圖
             if (article.illustrationData && article.illustrationData.length > 0) {
                 let processedHTML = '';
                 const illustrationChunks = chunkTextForIllustrations(article.content);
 
                 for (let i = 0; i < illustrationChunks.length; i++) {
                     const chunk = illustrationChunks[i];
-                    // 先加入該區塊的段落文字
                     processedHTML += chunk.paragraphs.map(p => `<p>${p}</p>`).join('');
-                    
                     const illustrationResult = article.illustrationData[i];
                     
-                    // --- 核心修改 ---
-                    // 只有當插圖存在 (成功或失敗) 時，才創建其容器。
-                    // 如果 illustrationResult 為空，則不產生任何東西，文字會無縫銜接。
                     if (illustrationResult) {
                        const textPromptAttr = `data-text-prompt="${encodeURIComponent(chunk.textForPrompt)}"`;
                        const indexAttr = `data-illustration-index="${i}"`;
-                       
-                       // 情況一：圖片成功生成
                        if (illustrationResult.status === 'fulfilled' && illustrationResult.value) {
                            processedHTML += `<div class="illustration-container" ${textPromptAttr} ${indexAttr}><img src="${illustrationResult.value}" alt="文章插圖"></div>`;
-                       } 
-                       // 情況二：圖片生成失敗，顯示錯誤提示
-                       else if (illustrationResult.status === 'rejected') {
+                       } else if (illustrationResult.status === 'rejected') {
                            const errorMessage = illustrationResult.reason?.message?.includes('翻譯') ? '翻譯失敗，無法生成。' : '圖片生成失敗。';
-                           processedHTML += `<div class="illustration-container" ${textPromptAttr} ${indexAttr}>
-                                <div class="illustration-error" title="點擊以重試">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
-                                    <p>${errorMessage}<br>點擊此處重試。</p>
-                                </div>
-                           </div>`;
+                           processedHTML += `<div class="illustration-container" ${textPromptAttr} ${indexAttr}><div class="illustration-error" title="點擊以重試"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg><p>${errorMessage}<br>點擊此處重試。</p></div></div>`;
                        }
-                       // 如果插圖結果存在但狀態不明或沒有值，則不添加任何內容
                     }
                 }
                 fullContentHTML = processedHTML;
             } else {
-                // 如果沒有勾選生成插圖，則執行原始的純文字處理
-                fullContentHTML = article.content.split('\n').filter(p => p.trim() !== '').map(p => `<p>${p}</p>`).join('');
+                fullContentHTML = textToParagraphs(article.content);
             }
 
-            // 將作品賞析附加到內容末尾
-            fullContentHTML += `<div class="article-appreciation"><h3>${article.appreciation.title}</h3><p>${article.appreciation.text.replace(/\n/g, '<br>')}</p></div>`;
+            const appreciationHTML = textToParagraphs(article.appreciation.text);
+            fullContentHTML += `<div class="article-appreciation"><h3>${article.appreciation.title}</h3>${appreciationHTML}</div>`;
             
-            // 使用 DOMParser 進行後續的分頁處理
             const contentDoc = new DOMParser().parseFromString(`<div>${fullContentHTML}</div>`, 'text/html');
             const contentNodes = Array.from(contentDoc.body.firstChild.childNodes);
             
@@ -820,22 +837,53 @@ JSON 格式如下：
             sizer.innerHTML = currentPageHTML;
 
             for (const node of contentNodes) {
+                // REVISED LOGIC: Check if the node is an illustration container.
+                if (node.nodeType === 1 && node.classList.contains('illustration-container')) {
+                    // 1. Finalize the preceding text page, but only if it has actual content.
+                    // The header alone counts as content for the first page.
+                    if (currentPageHTML.trim()) {
+                        pages.push(currentPageHTML);
+                    }
+
+                    // 2. Add the illustration as its own, separate page.
+                    pages.push(node.outerHTML);
+                    
+                    // 3. Reset for the next text page, starting fresh.
+                    currentPageHTML = '';
+                    sizer.innerHTML = '';
+                    continue; // Move to the next node.
+                }
+
+                // --- Original logic for text nodes ---
                 const nodeHTML = node.outerHTML || node.textContent;
-                sizer.innerHTML += nodeHTML;
+                const potentialHTML = currentPageHTML + nodeHTML;
+                sizer.innerHTML = potentialHTML;
                 
-                if (sizer.scrollHeight > sizer.clientHeight) {
+                if (sizer.scrollHeight > containerHeight) {
                     pages.push(currentPageHTML);
                     currentPageHTML = nodeHTML;
                     sizer.innerHTML = currentPageHTML;
                 } else {
-                    currentPageHTML += nodeHTML;
+                    currentPageHTML = potentialHTML;
                 }
             }
-            pages.push(currentPageHTML);
+
+            // Push the last remaining page if it has content.
+            if (currentPageHTML.trim()) {
+                pages.push(currentPageHTML);
+            }
+            
+            // If no content was ever added, create at least one page with the header.
+            if (pages.length === 0) {
+                pages.push(firstPageHeader);
+            }
+
             return pages;
         }
 
-
+        /**
+         * REVISED: Dynamically add a class to illustration pages for special styling.
+         */
         function displayArticleAsBook(article) {
             const currentPageBeforeRepagination = state.currentPageNum;
             book.innerHTML = '';
@@ -852,7 +900,12 @@ JSON 格式如下：
                 pagesContent.forEach((content, i) => {
                     const pageElement = document.createElement('div');
                     pageElement.className = 'page';
-                    pageElement.innerHTML = `<div class="page-content">${content}<span class="page-number">${i + 1} / ${state.totalPages}</span></div>`;
+                    
+                    // REVISED: Check if the content is an illustration to apply the correct class.
+                    const isIllustrationPage = content.includes('class="illustration-container"');
+                    const contentClass = isIllustrationPage ? 'page-content page-content--illustration' : 'page-content';
+                    
+                    pageElement.innerHTML = `<div class="${contentClass}">${content}</div>`;
                     book.appendChild(pageElement);
                 });
                 
@@ -868,10 +921,11 @@ JSON 格式如下：
             currentTranslate = -pageIndex * bookContainer.clientWidth;
             book.style.transition = immediate ? 'none' : 'transform 0.4s ease-out';
             book.style.transform = `translateX(${currentTranslate}px)`;
+            updatePaginationDisplay();
         }
 
         function chunkTextForIllustrations(content) {
-            const CHARS_PER_IMAGE = 500;
+            const CHARS_PER_IMAGE = 400;
             let paragraphs = content.split('\n').filter(p => p.trim() !== '');
             let chunks = [];
             let charCountSinceLastImage = 0;
@@ -899,7 +953,6 @@ JSON 格式如下：
         async function prepareIllustrations(content) {
             const chunks = chunkTextForIllustrations(content);
             const baseSeed = Math.floor(Math.random() * 1000000);
-            
             const illustrationPromises = chunks.map((chunk, i) => {
                 return generateSingleImageURL(chunk.textForPrompt, baseSeed + i);
             });
@@ -909,10 +962,8 @@ JSON 格式如下：
         async function generateSingleImageURL(textPrompt, seed) {
             const englishPara = await translateToEnglish(textPrompt);
             if (!englishPara) throw new Error('翻譯失敗');
-
             const prompt = generateImagePrompt(englishPara);
             const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?token=Jeq-UCxbpvrqUEzN&model=flux&enhance=false&private=true&nologo=true&seed=${seed}`;
-
             const response = await fetch(imageUrl);
             if (!response.ok) {
                  throw new Error('圖片生成失敗 (fetch failed)');
@@ -920,25 +971,16 @@ JSON 格式如下：
             return imageUrl;
         }
 
-        /**
-         * [REVISED] 處理插圖容器的點擊事件，用於重新生成並更新歷史紀錄。
-         * @param {MouseEvent} e - 點擊事件
-         */
         async function handleIllustrationClick(e) {
             const container = e.target.closest('.illustration-container');
             if (!container) return;
-            
             const illustrationIndexStr = container.dataset.illustrationIndex;
             if (illustrationIndexStr === undefined) return;
-            
             const illustrationIndex = parseInt(illustrationIndexStr);
-
             if (confirm('您確定要重新生成這張插圖嗎？')) {
                 const textPrompt = decodeURIComponent(container.dataset.textPrompt);
                 const newSeed = Math.floor(Math.random() * 10000000);
-                
                 container.innerHTML = `<div class="illustration-loader"><div class="spinner"></div><p>重新生成中...</p></div>`;
-
                 try {
                     const imageUrl = await generateSingleImageURL(textPrompt, newSeed);
                     const img = new Image();
@@ -946,47 +988,23 @@ JSON 格式如下：
                         container.innerHTML = '';
                         img.alt = '文章插圖';
                         container.appendChild(img);
-                        
-                        // NEW LOGIC: Update history with the new image URL
                         updateIllustrationInHistory(illustrationIndex, imageUrl);
                     };
                     img.onerror = () => { throw new Error('圖片載入失敗'); };
                     img.src = imageUrl;
-
                 } catch (error) {
                     const errorMessage = error.message.includes('翻譯') ? '翻譯失敗，無法生成。' : '圖片生成失敗。';
-                    container.innerHTML = `
-                        <div class="illustration-error" title="點擊以重試">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
-                            <p>${errorMessage}<br>點擊此處重試。</p>
-                        </div>`;
+                    container.innerHTML = `<div class="illustration-error" title="點擊以重試"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg><p>${errorMessage}<br>點擊此處重試。</p></div>`;
                 }
             }
         }
         
-        /**
-         * [NEW] 更新當前文章及歷史紀錄中的插圖數據。
-         * @param {number} index - 要更新的插圖索引。
-         * @param {string} newImageUrl - 新生成的圖片 URL。
-         */
         function updateIllustrationInHistory(index, newImageUrl) {
             if (!state.currentArticle || !state.currentArticle.illustrationData) return;
-
-            // 1. 更新當前文章狀態中的插圖數據
-            state.currentArticle.illustrationData[index] = {
-                status: 'fulfilled',
-                value: newImageUrl,
-                reason: undefined // 清除舊的錯誤訊息
-            };
-
-            // 2. 在歷史紀錄陣列中找到對應的文章
+            state.currentArticle.illustrationData[index] = { status: 'fulfilled', value: newImageUrl, reason: undefined };
             const historyIndex = state.history.findIndex(item => item.title === state.currentArticle.title && item.author === state.currentArticle.author);
-
             if (historyIndex !== -1) {
-                // 3. 更新歷史紀錄中的插圖數據
                 state.history[historyIndex].illustrationData = state.currentArticle.illustrationData;
-
-                // 4. 將更新後的歷史紀錄存回 localStorage
                 localStorage.setItem('proseHistory_v3', JSON.stringify(state.history));
                 console.log(`歷史紀錄已更新：文章 "${state.currentArticle.title}" 的第 ${index + 1} 張插圖已更新。`);
             } else {
@@ -1053,12 +1071,7 @@ JSON 格式如下：
                 const article = state.history.find(item => item.title === articleTitle);
                 if (article) {
                     state.currentArticle = article;
-
-                    // 新增需求：從歷史紀錄載入時，也預設為全螢幕模式
                     body.classList.add('fullscreen-mode');
-
-                    // 當從歷史紀錄載入時，如果存在 'illustrationData'，
-                    // displayArticleAsBook 會自動使用它來還原插圖。
                     displayArticleAsBook(article);
                     switchToReaderView();
                     hideHistory();
