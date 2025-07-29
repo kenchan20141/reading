@@ -206,7 +206,7 @@
         .page-content .article-outline { font-family: var(--font-sans); font-style: italic; font-size: calc(var(--reader-font-size) - 0.1rem); text-align: center; margin: 1rem 0 2rem 0; padding-bottom: 2rem; border-bottom: 1px solid; }
         .light-mode .page-content .article-outline { color: var(--text-secondary-light); border-color: var(--border-color-light); }
         .dark-mode .page-content .article-outline { color: var(--text-secondary-dark); border-color: var(--border-color-dark); }
-        .article-appreciation { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid; }
+        .article-appreciation { margin-top: 0rem; padding-top: 0rem; border-top: 1px solid; }
         .light-mode .article-appreciation { border-color: var(--border-color-light); }
         .dark-mode .article-appreciation { border-color: var(--border-color-dark); }
         .article-appreciation h3 { font-family: var(--font-sans); font-weight: 500; font-size: calc(var(--reader-font-size) + 0.15rem); margin-bottom: 1rem; }
@@ -216,7 +216,7 @@
         .dark-mode .page-content .page-number { color: var(--text-secondary-dark); }
         #sizer { position: absolute; visibility: hidden; z-index: -100; overflow: hidden; font-family: var(--font-serif); font-size: var(--reader-font-size); letter-spacing: 0.05em; line-height: 2; padding: 2rem 2.5rem 5rem 2.5rem; }
 
-        /* --- REVISED: 插圖樣式 (Illustration Styles) --- */
+        /* --- 插圖樣式 (Illustration Styles) --- */
         .illustration-container {
             width: 85%;
             margin: 2.5rem auto;
@@ -227,7 +227,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 220px;
+            /* REVISED: min-height is removed to prevent reserving empty space */
             page-break-inside: avoid;
             cursor: pointer;
         }
@@ -677,13 +677,15 @@
 
         async function generateProse() {
             const userPrompt = promptTextarea.value.trim();
+            
+            // --- 核心修改：更新系統提示以強制要求全文 ---
             const systemPrompt = `你是一位精通世界文學的圖書館員。你的任務是根據用戶要求，從浩瀚的文學作品中，找出一段真實、經典的繁體中文散文。
 用戶的文學鑑賞難度偏好（1星最淺白，5星最艱深）：${state.difficulty}顆星。
 ${userPrompt ? `用戶的個性化要求： "${userPrompt}"` : `請隨機推薦一篇符合上述難度的經典散文。`}
 
 重要指示：
 1. 你必須找出現實世界中，由真實作家所寫的著名散文作品。禁止虛構內容。
-2. 作品內容必須是完整的段落或一篇適合一次閱讀完畢的作品(5000字以內)。
+2. 你必須提供此散文的「完整全文」，絕不應當進行任何形式的縮寫、節錄或摘要。無論原文多長，都必須完整引用。
 3. 你的回傳內容必須嚴格遵循以下 JSON 格式，不要包含任何 markdown 語法或額外說明。
 4. 所有文字都必須是繁體中文。
 5. [作品賞析] 必須針對你推薦的這篇真實作品進行分析，可包含作者背景、寫作風格、或該作品的歷史意義。
@@ -693,7 +695,7 @@ JSON 格式如下：
   "title": "{這裡填寫真實的作品標題}",
   "author": "{這裡填寫真實的作家姓名}",
   "outline": "{這裡填寫一段約 50 字的真實作品綱要或引言}",
-  "content": "{這裡貼上完整的真實散文內容，段落之間用 \\n 分隔}",
+  "content": "{這裡貼上完整的真實散文「全文」內容，段落之間用 \\n 分隔}",
   "appreciation": {
     "title": "作品賞析",
     "text": "{這裡填寫對這篇真實作品的賞析內容}"
@@ -738,7 +740,7 @@ JSON 格式如下：
             localStorage.setItem('proseHistory_v3', JSON.stringify(state.history));
         }
         
-        // --- 6. 書本、分頁與插圖邏輯 (REVISED) ---
+        // --- 6. 書本、分頁與插圖邏輯 ---
         function changeFontSize(amount) {
             const newSize = Math.max(0.8, Math.min(1.8, state.fontSize + amount));
             state.fontSize = Math.round(newSize * 10) / 10;
@@ -749,11 +751,6 @@ JSON 格式如下：
             }
         }
         
-        /**
-         * [REVISED] 將文章內容分頁，並在插圖容器上加入索引。
-         * @param {object} article - 文章物件
-         * @returns {string[]} 分頁後的 HTML 內容陣列
-         */
         function paginateArticle(article) {
             const containerWidth = bookContainer.clientWidth;
             const containerHeight = bookContainer.clientHeight;
@@ -768,22 +765,32 @@ JSON 格式如下：
             const firstPageHeader = `<h2 class="article-title">${article.title}</h2><p class="article-author">文 / ${article.author}</p><div class="article-outline">${article.outline}</div>`;
             
             let fullContentHTML;
-            if (article.illustrationData) {
-                const paragraphs = article.content.split('\n').filter(p => p.trim() !== '');
+
+            // 檢查是否需要處理插圖
+            if (article.illustrationData && article.illustrationData.length > 0) {
                 let processedHTML = '';
                 const illustrationChunks = chunkTextForIllustrations(article.content);
 
                 for (let i = 0; i < illustrationChunks.length; i++) {
                     const chunk = illustrationChunks[i];
+                    // 先加入該區塊的段落文字
                     processedHTML += chunk.paragraphs.map(p => `<p>${p}</p>`).join('');
                     
                     const illustrationResult = article.illustrationData[i];
+                    
+                    // --- 核心修改 ---
+                    // 只有當插圖存在 (成功或失敗) 時，才創建其容器。
+                    // 如果 illustrationResult 為空，則不產生任何東西，文字會無縫銜接。
                     if (illustrationResult) {
                        const textPromptAttr = `data-text-prompt="${encodeURIComponent(chunk.textForPrompt)}"`;
-                       const indexAttr = `data-illustration-index="${i}"`; // <-- REVISION: Add index
-                       if (illustrationResult.status === 'fulfilled') {
+                       const indexAttr = `data-illustration-index="${i}"`;
+                       
+                       // 情況一：圖片成功生成
+                       if (illustrationResult.status === 'fulfilled' && illustrationResult.value) {
                            processedHTML += `<div class="illustration-container" ${textPromptAttr} ${indexAttr}><img src="${illustrationResult.value}" alt="文章插圖"></div>`;
-                       } else {
+                       } 
+                       // 情況二：圖片生成失敗，顯示錯誤提示
+                       else if (illustrationResult.status === 'rejected') {
                            const errorMessage = illustrationResult.reason?.message?.includes('翻譯') ? '翻譯失敗，無法生成。' : '圖片生成失敗。';
                            processedHTML += `<div class="illustration-container" ${textPromptAttr} ${indexAttr}>
                                 <div class="illustration-error" title="點擊以重試">
@@ -792,15 +799,19 @@ JSON 格式如下：
                                 </div>
                            </div>`;
                        }
+                       // 如果插圖結果存在但狀態不明或沒有值，則不添加任何內容
                     }
                 }
                 fullContentHTML = processedHTML;
             } else {
+                // 如果沒有勾選生成插圖，則執行原始的純文字處理
                 fullContentHTML = article.content.split('\n').filter(p => p.trim() !== '').map(p => `<p>${p}</p>`).join('');
             }
 
+            // 將作品賞析附加到內容末尾
             fullContentHTML += `<div class="article-appreciation"><h3>${article.appreciation.title}</h3><p>${article.appreciation.text.replace(/\n/g, '<br>')}</p></div>`;
             
+            // 使用 DOMParser 進行後續的分頁處理
             const contentDoc = new DOMParser().parseFromString(`<div>${fullContentHTML}</div>`, 'text/html');
             const contentNodes = Array.from(contentDoc.body.firstChild.childNodes);
             
@@ -823,6 +834,7 @@ JSON 格式如下：
             pages.push(currentPageHTML);
             return pages;
         }
+
 
         function displayArticleAsBook(article) {
             const currentPageBeforeRepagination = state.currentPageNum;
