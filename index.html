@@ -760,8 +760,15 @@ JSON 格式如下：
             sizer.style.width = containerWidth + 'px';
             sizer.style.height = containerHeight + 'px';
             
-            const firstPageHeader = `<h2 class="article-title">${article.title}</h2><p class="article-author">文 / ${article.author}</p><div class="article-outline">${article.outline}</div>`;
-            
+            // **MODIFICATION START: Create a dedicated title page**
+            const titlePageHTML = `<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">
+                                    <h2 class="article-title">${article.title}</h2>
+                                    <p class="article-author">文 / ${article.author}</p>
+                                    <div class="article-outline">${article.outline}</div>
+                                 </div>`;
+            let pages = [titlePageHTML];
+            // **MODIFICATION END**
+
             let fullContentHTML;
             if (article.illustrationData) {
                 const paragraphs = article.content.split('\n').filter(p => p.trim() !== '');
@@ -799,33 +806,32 @@ JSON 格式如下：
             const contentDoc = new DOMParser().parseFromString(`<div>${fullContentHTML}</div>`, 'text/html');
             const contentNodes = Array.from(contentDoc.body.firstChild.childNodes);
             
-            let pages = [];
-            let currentPageHTML = firstPageHeader;
+            // **MODIFICATION START: Start pagination from an empty page**
+            let currentPageHTML = '';
             sizer.innerHTML = currentPageHTML;
+            // **MODIFICATION END**
 
-            // This loop iterates through each element (paragraph, image) and adds it to the page
-            // If an element overflows, a new page is created. This ensures content never covers the page number.
             for (const node of contentNodes) {
                 const nodeHTML = node.outerHTML || node.textContent;
                 sizer.innerHTML += nodeHTML;
                 
                 if (sizer.scrollHeight > sizer.clientHeight) {
-                    pages.push(currentPageHTML); // Push the content *before* the overflow
-                    currentPageHTML = nodeHTML; // The new page starts with the overflowing element
-                    sizer.innerHTML = currentPageHTML; // Reset the sizer for the new page
+                    pages.push(currentPageHTML); 
+                    currentPageHTML = nodeHTML; 
+                    sizer.innerHTML = currentPageHTML;
                 } else {
-                    currentPageHTML += nodeHTML; // If it fits, add it to the current page's HTML
+                    currentPageHTML += nodeHTML;
                 }
             }
-            pages.push(currentPageHTML); // Push the final page
+            pages.push(currentPageHTML);
             return pages;
         }
+
 
         function displayArticleAsBook(article) {
             book.innerHTML = '';
             book.style.transition = 'none';
 
-            // Use a short timeout to ensure the container dimensions (especially in fullscreen) are correctly calculated by the browser
             setTimeout(() => {
                 if (!bookContainer.clientWidth) {
                     console.error("Pagination failed: book container not visible or has zero width.");
