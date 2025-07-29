@@ -216,7 +216,7 @@
         .dark-mode .page-content .page-number { color: var(--text-secondary-dark); }
         #sizer { position: absolute; visibility: hidden; z-index: -100; overflow: hidden; font-family: var(--font-serif); font-size: var(--reader-font-size); letter-spacing: 0.05em; line-height: 2; padding: 2rem 2.5rem 5rem 2.5rem; }
 
-        /* --- REVISED: Illustration Styles --- */
+        /* --- REVISED: 插圖樣式 (Illustration Styles) --- */
         .illustration-container {
             width: 85%;
             margin: 2.5rem auto;
@@ -227,9 +227,9 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 220px; /* Revised for better layout calculation */
+            min-height: 220px;
             page-break-inside: avoid;
-            cursor: pointer; /* Add cursor to entire container for retry */
+            cursor: pointer;
         }
         .light-mode .illustration-container { border-color: var(--border-color-light); }
         .dark-mode .illustration-container { border-color: var(--border-color-dark); }
@@ -310,10 +310,9 @@
             .settings-header .title-group h1 { font-size: 1.8rem; }
             .settings-header .header-controls { position: static; }
             .reader-controls .left-controls, .reader-controls .right-controls { gap: 0.2rem; }
-            .page-content { padding: 1.5rem; padding-bottom: 4.5rem; line-height: 1.9; overflow-y: auto; } /* REVISED: Ensure scroll on mobile */
+            .page-content { padding: 1.5rem; padding-bottom: 4.5rem; line-height: 1.9; overflow-y: auto; }
             .page-content h2.article-title { font-size: calc(var(--reader-font-size) + 0.4rem); }
             .history-controls { flex-direction: column; }
-            /* REVISED: Illustration responsive styles */
             .illustration-container { width: 100%; min-height: 180px; }
         }
     </style>
@@ -553,9 +552,8 @@
             setLoading(true, '尋找文章中...');
             try {
                 const article = await generateProse();
-                if (!article) return; // Error already alerted in generateProse
+                if (!article) return; 
 
-                // REVISED LOGIC: Pre-generate illustrations if checkbox is checked
                 if (generateIllustrationsCheckbox.checked) {
                     setLoading(true, '生成插圖中...');
                     article.illustrationData = await prepareIllustrations(article.content);
@@ -725,6 +723,11 @@ JSON 格式如下：
             }
         }
         
+        /**
+         * [REVISED] 將文章內容分頁，並在插圖容器上加入索引。
+         * @param {object} article - 文章物件
+         * @returns {string[]} 分頁後的 HTML 內容陣列
+         */
         function paginateArticle(article) {
             const containerWidth = bookContainer.clientWidth;
             const containerHeight = bookContainer.clientHeight;
@@ -739,12 +742,9 @@ JSON 格式如下：
             const firstPageHeader = `<h2 class="article-title">${article.title}</h2><p class="article-author">文 / ${article.author}</p><div class="article-outline">${article.outline}</div>`;
             
             let fullContentHTML;
-            // REVISED: Build content with pre-generated illustrations
             if (article.illustrationData) {
                 const paragraphs = article.content.split('\n').filter(p => p.trim() !== '');
                 let processedHTML = '';
-                let illustrationIndex = 0;
-                
                 const illustrationChunks = chunkTextForIllustrations(article.content);
 
                 for (let i = 0; i < illustrationChunks.length; i++) {
@@ -754,11 +754,12 @@ JSON 格式如下：
                     const illustrationResult = article.illustrationData[i];
                     if (illustrationResult) {
                        const textPromptAttr = `data-text-prompt="${encodeURIComponent(chunk.textForPrompt)}"`;
+                       const indexAttr = `data-illustration-index="${i}"`; // <-- REVISION: Add index
                        if (illustrationResult.status === 'fulfilled') {
-                           processedHTML += `<div class="illustration-container" ${textPromptAttr}><img src="${illustrationResult.value}" alt="文章插圖"></div>`;
+                           processedHTML += `<div class="illustration-container" ${textPromptAttr} ${indexAttr}><img src="${illustrationResult.value}" alt="文章插圖"></div>`;
                        } else {
-                           const errorMessage = illustrationResult.reason.message.includes('翻譯') ? '翻譯失敗，無法生成。' : '圖片生成失敗。';
-                           processedHTML += `<div class="illustration-container" ${textPromptAttr}>
+                           const errorMessage = illustrationResult.reason?.message?.includes('翻譯') ? '翻譯失敗，無法生成。' : '圖片生成失敗。';
+                           processedHTML += `<div class="illustration-container" ${textPromptAttr} ${indexAttr}>
                                 <div class="illustration-error" title="點擊以重試">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
                                     <p>${errorMessage}<br>點擊此處重試。</p>
@@ -768,7 +769,6 @@ JSON 格式如下：
                     }
                 }
                 fullContentHTML = processedHTML;
-
             } else {
                 fullContentHTML = article.content.split('\n').filter(p => p.trim() !== '').map(p => `<p>${p}</p>`).join('');
             }
@@ -832,7 +832,6 @@ JSON 格式如下：
             book.style.transform = `translateX(${currentTranslate}px)`;
         }
 
-        // REVISED: Prepare illustrations before displaying
         function chunkTextForIllustrations(content) {
             const CHARS_PER_IMAGE = 500;
             let paragraphs = content.split('\n').filter(p => p.trim() !== '');
@@ -853,11 +852,9 @@ JSON 格式如下：
                     paragraphBuffer = [];
                 }
             }
-            // Add any remaining paragraphs as the last chunk
             if (paragraphBuffer.length > 0) {
                  chunks.push({ paragraphs: [...paragraphBuffer], textForPrompt: textBufferForPrompt.trim() });
             }
-
             return chunks;
         }
 
@@ -868,12 +865,9 @@ JSON 格式如下：
             const illustrationPromises = chunks.map((chunk, i) => {
                 return generateSingleImageURL(chunk.textForPrompt, baseSeed + i);
             });
-
-            // Use Promise.allSettled to wait for all, even if some fail
             return await Promise.allSettled(illustrationPromises);
         }
         
-        // REVISED: Now returns a URL promise, doesn't touch DOM
         async function generateSingleImageURL(textPrompt, seed) {
             const englishPara = await translateToEnglish(textPrompt);
             if (!englishPara) throw new Error('翻譯失敗');
@@ -881,24 +875,30 @@ JSON 格式如下：
             const prompt = generateImagePrompt(englishPara);
             const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?token=Jeq-UCxbpvrqUEzN&model=flux&enhance=false&private=true&nologo=true&seed=${seed}`;
 
-            // Pre-fetch the image to check if it's valid
             const response = await fetch(imageUrl);
             if (!response.ok) {
                  throw new Error('圖片生成失敗 (fetch failed)');
             }
-            // Cannot check blob content with no-cors, so we assume OK is good enough
             return imageUrl;
         }
 
+        /**
+         * [REVISED] 處理插圖容器的點擊事件，用於重新生成並更新歷史紀錄。
+         * @param {MouseEvent} e - 點擊事件
+         */
         async function handleIllustrationClick(e) {
             const container = e.target.closest('.illustration-container');
             if (!container) return;
+            
+            const illustrationIndexStr = container.dataset.illustrationIndex;
+            if (illustrationIndexStr === undefined) return;
+            
+            const illustrationIndex = parseInt(illustrationIndexStr);
 
             if (confirm('您確定要重新生成這張插圖嗎？')) {
                 const textPrompt = decodeURIComponent(container.dataset.textPrompt);
                 const newSeed = Math.floor(Math.random() * 10000000);
                 
-                // Show loader in the clicked container
                 container.innerHTML = `<div class="illustration-loader"><div class="spinner"></div><p>重新生成中...</p></div>`;
 
                 try {
@@ -906,11 +906,14 @@ JSON 格式如下：
                     const img = new Image();
                     img.onload = () => {
                         container.innerHTML = '';
+                        img.alt = '文章插圖';
                         container.appendChild(img);
+                        
+                        // NEW LOGIC: Update history with the new image URL
+                        updateIllustrationInHistory(illustrationIndex, imageUrl);
                     };
                     img.onerror = () => { throw new Error('圖片載入失敗'); };
                     img.src = imageUrl;
-                    img.alt = '文章插圖';
 
                 } catch (error) {
                     const errorMessage = error.message.includes('翻譯') ? '翻譯失敗，無法生成。' : '圖片生成失敗。';
@@ -920,6 +923,36 @@ JSON 格式如下：
                             <p>${errorMessage}<br>點擊此處重試。</p>
                         </div>`;
                 }
+            }
+        }
+        
+        /**
+         * [NEW] 更新當前文章及歷史紀錄中的插圖數據。
+         * @param {number} index - 要更新的插圖索引。
+         * @param {string} newImageUrl - 新生成的圖片 URL。
+         */
+        function updateIllustrationInHistory(index, newImageUrl) {
+            if (!state.currentArticle || !state.currentArticle.illustrationData) return;
+
+            // 1. 更新當前文章狀態中的插圖數據
+            state.currentArticle.illustrationData[index] = {
+                status: 'fulfilled',
+                value: newImageUrl,
+                reason: undefined // 清除舊的錯誤訊息
+            };
+
+            // 2. 在歷史紀錄陣列中找到對應的文章
+            const historyIndex = state.history.findIndex(item => item.title === state.currentArticle.title && item.author === state.currentArticle.author);
+
+            if (historyIndex !== -1) {
+                // 3. 更新歷史紀錄中的插圖數據
+                state.history[historyIndex].illustrationData = state.currentArticle.illustrationData;
+
+                // 4. 將更新後的歷史紀錄存回 localStorage
+                localStorage.setItem('proseHistory_v3', JSON.stringify(state.history));
+                console.log(`歷史紀錄已更新：文章 "${state.currentArticle.title}" 的第 ${index + 1} 張插圖已更新。`);
+            } else {
+                console.warn("在歷史紀錄中找不到當前文章，無法更新插圖。");
             }
         }
 
@@ -982,8 +1015,8 @@ JSON 格式如下：
                 const article = state.history.find(item => item.title === articleTitle);
                 if (article) {
                     state.currentArticle = article;
-                    // When loading from history, we assume illustrations are pre-generated
-                    // if the `illustrationData` property exists.
+                    // 當從歷史紀錄載入時，如果存在 'illustrationData'，
+                    // displayArticleAsBook 會自動使用它來還原插圖。
                     displayArticleAsBook(article);
                     switchToReaderView();
                     hideHistory();
