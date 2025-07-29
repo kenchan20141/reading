@@ -133,8 +133,8 @@
         .password-error { color: #e74c3c; margin-top: 1rem; font-size: 0.9rem; }
 
         /* --- 4. 主要區塊：設定、閱讀器 (Main Sections: Settings, Reader) --- */
-        /* REVISION #1: Main container width changed to 90% */
-        .main-content-wrapper { width: 90%; max-width: var(--max-width); transition: all 0.4s ease-in-out; margin: 0 auto; }
+        /* 【需求其一】修訂：主容器寬度設為90%，並透過 margin: auto 達成左右邊距 */
+        .main-content-wrapper { width: 95%; max-width: var(--max-width); transition: all 0.4s ease-in-out; margin: 0 auto; }
         .settings-card, .reader-card {
             border: 1px solid; border-radius: 8px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
@@ -203,14 +203,12 @@
         .dark-mode .page-content { color: var(--text-primary-dark); }
         .page-content h2.article-title { font-size: calc(var(--reader-font-size) + 0.9rem); font-weight: 600; margin-bottom: 0.75rem; text-align: center; }
         .page-content p.article-author { font-family: var(--font-sans); font-size: calc(var(--reader-font-size) - 0.1rem); margin-bottom: 1.5rem; text-align: center; color: var(--accent-color); }
-        /* REVISION #3: Added margin-bottom to main article paragraphs to create space between them */
-        .page-content > p:not(.article-author) {
-            margin-bottom: 1em;
-        }
+        .page-content > p:not(.article-author) { margin-bottom: 1em; }
         .page-content .article-outline { font-family: var(--font-sans); font-style: italic; font-size: calc(var(--reader-font-size) - 0.1rem); text-align: center; margin: 1rem 0 2rem 0; padding-bottom: 2rem; border-bottom: 1px solid; }
         .light-mode .page-content .article-outline { color: var(--text-secondary-light); border-color: var(--border-color-light); }
         .dark-mode .page-content .article-outline { color: var(--text-secondary-dark); border-color: var(--border-color-dark); }
-        .article-appreciation { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid; }
+        /* 【需求其二】修訂：「作品賞析」區塊減少上方間距，將其位置上移 */
+        .article-appreciation { margin-top: 0rem; padding-top: 0rem; border-top: 1px solid; }
         .light-mode .article-appreciation { border-color: var(--border-color-light); }
         .dark-mode .article-appreciation { border-color: var(--border-color-dark); }
         .article-appreciation h3 { font-family: var(--font-sans); font-weight: 500; font-size: calc(var(--reader-font-size) + 0.15rem); margin-bottom: 1rem; }
@@ -223,7 +221,7 @@
         /* --- 插圖樣式 (Illustration Styles) --- */
         .illustration-container {
             width: 85%;
-            margin: 1em auto; /* Adjusted margin for paragraph spacing */
+            margin: 1em auto;
             padding: 1rem;
             padding-top: 2.5rem;
             padding-bottom: 2.5rem;
@@ -306,9 +304,10 @@
 
         /* --- 10. 響應式設計 (Responsive Design) --- */
         @media (max-width: 768px) {
-            /* REVISION #1: Let main container take full width on mobile for better use of space */
-            .main-content-wrapper { width: 100%; }
-            .page-container { padding: 1rem 0; }
+            /* 【需求其一】修訂：移除手機版主容器的 width: 100%，使其繼承桌機版的 90% 寬度，以保留左右邊距 */
+            .main-content-wrapper { /* width: 100%; 已移除 */ }
+            /* 同時調整 page-container 的 padding，確保內容在90%寬度下仍有基本邊距 */
+            .page-container { padding: 1rem; }
             .settings-card, .reader-card { padding: 1.5rem; border-radius: 0; border: none; box-shadow: none; }
             body.fullscreen-mode .reader-card { padding: 1rem; }
             .settings-header { margin-bottom: 2rem; flex-direction: column; align-items: center; gap: 0.75rem; }
@@ -780,7 +779,6 @@ JSON 格式如下：
                 fullContentHTML = article.content.split('\n').filter(p => p.trim() !== '').map(p => `<p>${p}</p>`).join('');
             }
             
-            // REVISION #2: Split appreciation text into individual paragraphs for correct pagination.
             const appreciationParagraphs = article.appreciation.text.split('\n').filter(p => p.trim() !== '').map(p => `<p>${p}</p>`).join('');
             fullContentHTML += `<div class="article-appreciation"><h3>${article.appreciation.title}</h3>${appreciationParagraphs}</div>`;
             
