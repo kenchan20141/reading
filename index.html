@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>經典散文・沉浸式閱讀器</title>
+    <title>經典散文・閱讀</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@400;600&display=swap" rel="stylesheet">
@@ -221,12 +221,10 @@
         /* --- 6. 閱讀器頂部控制列 (Reader Header Controls) --- */
         .reader-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding: 0 0.5rem; }
         .reader-controls .left-controls, .reader-controls .right-controls { display: flex; align-items: center; gap: 0.5rem; }
-        /* NEW: Container for font controls */
         .font-controls { display: flex; align-items: center; gap: 0.25rem; border-right: 1px solid; padding-right: 0.75rem; margin-right: 0.25rem;}
         .light-mode .font-controls { border-color: var(--border-color-light); }
         .dark-mode .font-controls { border-color: var(--border-color-dark); }
-        .font-controls .icon-btn svg { width: 22px; height: 22px; } /* Slightly smaller icons */
-
+        .font-controls .icon-btn svg { width: 22px; height: 22px; }
 
         /* --- 7. 書本閱讀器 (Book Reader) --- REVISED --- */
         .book-container {
@@ -259,11 +257,10 @@
         .page-content {
             width: 100%;
             height: 100%;
-            /* REVISED: Increased bottom padding */
-            padding: 2rem 2.5rem 4.5rem 2.5rem; 
+            /* REVISED: Increased bottom padding for page number */
+            padding: 2rem 2.5rem 5rem 2.5rem; 
             overflow: hidden;
             font-family: var(--font-serif);
-            /* REVISED: font-size now uses a variable */
             font-size: var(--reader-font-size);
             letter-spacing: 0.05em;
             line-height: 2;
@@ -288,8 +285,8 @@
         
         .page-content .page-number {
             position: absolute;
-            /* REVISED: Adjusted position to be higher */
-            bottom: 2rem; 
+            /* REVISED: Adjusted position to be higher and safer */
+            bottom: 2.5rem; 
             left: 50%;
             transform: translateX(-50%);
             font-family: var(--font-sans);
@@ -304,14 +301,14 @@
             z-index: -100;
             overflow: hidden;
             font-family: var(--font-serif);
-            /* REVISED: sizer also uses the font-size variable */
             font-size: var(--reader-font-size);
             letter-spacing: 0.05em;
             line-height: 2;
-            padding: 2rem 2.5rem 4.5rem 2.5rem;
+            /* REVISED: Sizer padding must match page-content padding */
+            padding: 2rem 2.5rem 5rem 2.5rem;
         }
 
-        /* --- 8. 全螢幕模式 (Fullscreen Mode) --- REVISED --- */
+        /* --- 8. 全螢幕模式 (Fullscreen Mode) --- */
         body.fullscreen-mode { overflow: hidden; }
         body.light-mode.fullscreen-mode { background-color: var(--content-bg-light); }
         body.dark-mode.fullscreen-mode { background-color: var(--content-bg-dark); }
@@ -373,14 +370,23 @@
 
         /* --- 10. 響應式設計 (Responsive Design) --- */
         @media (max-width: 768px) {
+            /* REVISED: Constrain wrapper width to 90% on mobile */
+            .main-content-wrapper {
+                width: 90%;
+            }
             .page-container { padding: 1rem 0; }
-            .settings-card, .reader-card { padding: 1.5rem; border-radius: 0; border-left: none; border-right: none; box-shadow: none; }
+            /* REVISED: Card styles adjusted for constrained wrapper */
+            .settings-card, .reader-card { 
+                padding: 1.5rem; 
+                box-shadow: none; 
+            }
             body.fullscreen-mode .reader-card { padding: 1rem; }
             .settings-header { margin-bottom: 1.5rem; }
             .settings-header .title-group h1 { font-size: 1.8rem; }
-            .settings-header .header-controls { top: -8px; right: -8px; }
+            .settings-header .header-controls { top: -8px; right: 0; }
             .reader-controls .left-controls, .reader-controls .right-controls { gap: 0.2rem; }
-            .page-content { padding: 1.5rem; padding-bottom: 4rem; line-height: 1.9; }
+            /* REVISED: Mobile padding for page content */
+            .page-content { padding: 1.5rem; padding-bottom: 4.5rem; line-height: 1.9; }
             .page-content h2.article-title { font-size: calc(var(--reader-font-size) + 0.4rem); }
             .history-controls { flex-direction: column; }
         }
@@ -411,14 +417,14 @@
                         <p>與文學巨擘對話，探索思想的深度</p>
                     </div>
                     <div class="header-controls">
-                        <!-- REVISED: History icon changed to a book -->
+                        <!-- REVISED: History icon is a book -->
                         <button class="icon-btn" id="history-btn" title="閱覽紀錄">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20v2H6.5A2.5 2.5 0 0 1 4 19.5z"></path><path d="M4 5h16v12H6.5A2.5 2.5 0 0 1 4 14.5V5z"></path></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20v2H6.5A2.5 2.5 0 0 1 4 19.5z"></path><path d="M4 5h16v12H6.5A2.5 2.5 0 0 1 4 14.5V5z"></path></svg>
                         </button>
                         <!-- NEW: Theme switcher for settings page -->
                         <button class="icon-btn theme-switcher-btn" id="settings-theme-switcher" title="切換主題">
-                           <svg class="icon-theme-light" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-                           <svg class="icon-theme-dark hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                           <svg class="icon-theme-light" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                           <svg class="icon-theme-dark hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
                         </button>
                     </div>
                 </header>
@@ -447,26 +453,26 @@
                 <div class="reader-controls">
                      <div class="left-controls">
                         <button class="icon-btn" id="back-to-settings-btn" title="返回設定">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
                         </button>
                     </div>
                     <div class="right-controls">
                          <!-- NEW: Font size controls -->
                          <div class="font-controls">
                             <button class="icon-btn" id="font-size-decrease-btn" title="縮小字體">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 7 4"></polyline><path d="M10.29 13.71a2.43 2.43 0 0 0-2.66-.14 2.43 2.43 0 0 0-1.63 2.3V17h2"></path><path d="M4 11V9a2 2 0 0 1 2-2h2"></path><path d="M14 10h-1a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h1"></path><path d="M11 10V9a2 2 0 0 1 2-2h1"></path></svg>
+                               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14h6m-6 0v-2a2 2 0 0 1 2-2h2"/><path d="M4 7V6a2 2 0 0 1 2-2h2"/><path d="M10 7V6a2 2 0 0 1 2-2h1"/><text x="14" y="15" font-size="10" font-family="sans-serif" text-anchor="middle">A</text><text x="19" y="15" font-size="6" font-family="sans-serif" text-anchor="middle">A</text></svg>
                             </button>
                              <button class="icon-btn" id="font-size-increase-btn" title="放大字體">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 7 4"></polyline><path d="M10.29 13.71a2.43 2.43 0 0 0-2.66-.14 2.43 2.43 0 0 0-1.63 2.3V17h2.5"></path><path d="M4 11V9a2 2 0 0 1 2-2h2"></path><path d="M15 10h-1a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h1"></path><path d="M12 10V9a2 2 0 0 1 2-2h1"></path><path d="M17 11h2"></path><path d="M18 10v2"></path></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14h6m-6 0v-2a2 2 0 0 1 2-2h2"/><path d="M4 7V6a2 2 0 0 1 2-2h2"/><path d="M10 7V6a2 2 0 0 1 2-2h1"/><text x="15" y="15" font-size="12" font-family="sans-serif" text-anchor="middle">A</text><text x="21" y="15" font-size="8" font-family="sans-serif" text-anchor="middle">A</text></svg>
                             </button>
                          </div>
                          <button class="icon-btn theme-switcher-btn" id="reader-theme-switcher" title="切換主題">
-                           <svg class="icon-theme-light" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-                           <svg class="icon-theme-dark hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                           <svg class="icon-theme-light" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                           <svg class="icon-theme-dark hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
                         </button>
                         <button class="icon-btn fullscreen-btn" id="fullscreen-btn" title="全螢幕模式">
-                            <svg class="icon-enter-fullscreen" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
-                            <svg class="icon-exit-fullscreen" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 0-2-2h-3m-12 0H5a2 2 0 0 0-2 2v3"></path></svg>
+                            <svg class="icon-enter-fullscreen" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+                            <svg class="icon-exit-fullscreen" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 0-2-2h-3m-12 0H5a2 2 0 0 0-2 2v3"></path></svg>
                         </button>
                     </div>
                 </div>
@@ -484,7 +490,7 @@
             <div class="history-header">
                 <h2>閱覽紀錄</h2>
                 <button class="icon-btn" id="history-close-btn" title="關閉">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
             </div>
             <div class="history-controls">
@@ -522,7 +528,7 @@
         const root = document.documentElement;
         const settingsSection = document.getElementById('settings-section');
         const readingSection = document.getElementById('reading-section');
-        const themeSwitchers = document.querySelectorAll('.theme-switcher-btn'); // REVISED
+        const themeSwitchers = document.querySelectorAll('.theme-switcher-btn');
         const proseForm = document.getElementById('prose-form');
         const difficultyRating = document.getElementById('difficulty-rating');
         const ratingDots = difficultyRating.querySelectorAll('.rating-dot');
@@ -540,8 +546,8 @@
         const historyList = document.getElementById('history-list');
         const historySearch = document.getElementById('history-search');
         const historySort = document.getElementById('history-sort');
-        const fontSizeIncreaseBtn = document.getElementById('font-size-increase-btn'); // NEW
-        const fontSizeDecreaseBtn = document.getElementById('font-size-decrease-btn'); // NEW
+        const fontSizeIncreaseBtn = document.getElementById('font-size-increase-btn');
+        const fontSizeDecreaseBtn = document.getElementById('font-size-decrease-btn');
 
         // --- API 配置信息 ---
         const API_KEYS = ["sk-GruTbLTbtSeWof3rEBjtIg"];
@@ -556,7 +562,7 @@
             currentArticle: null,
             currentPageNum: 0,
             totalPages: 0,
-            fontSize: 1.1, // NEW: Font size state
+            fontSize: 1.1, // Font size state
         };
         let isDragging = false, dragStartX = 0, currentTranslate = 0, startTranslate = 0;
 
@@ -584,7 +590,7 @@
                 localStorage.setItem('theme', newTheme);
                 updateThemeIcons(newTheme);
 
-                // REVISED: If in reader view, ensure it's fullscreen
+                // If in reader view, ensure it's fullscreen
                 if (!readingSection.classList.contains('hidden') && !body.classList.contains('fullscreen-mode')) {
                     toggleFullscreen();
                 }
@@ -619,6 +625,7 @@
                     addToHistory(state.currentArticle);
                     displayArticleAsBook(state.currentArticle);
                     switchToReaderView();
+                    // Auto enter fullscreen for a better experience
                     if (!body.classList.contains('fullscreen-mode')) {
                          toggleFullscreen();
                     }
@@ -637,7 +644,6 @@
             switchToSettingsView();
         });
 
-        // NEW: Font size controls listeners
         fontSizeIncreaseBtn.addEventListener('click', () => changeFontSize(0.1));
         fontSizeDecreaseBtn.addEventListener('click', () => changeFontSize(-0.1));
 
@@ -698,7 +704,13 @@
             settingsSection.classList.remove('hidden');
         }
 
-        function toggleFullscreen() { body.classList.toggle('fullscreen-mode'); }
+        function toggleFullscreen() { 
+            body.classList.toggle('fullscreen-mode');
+            // Recalculate pages on entering/exiting fullscreen as dimensions change
+            if (state.currentArticle) {
+                displayArticleAsBook(state.currentArticle);
+            }
+        }
 
         async function generateProse() {
             const userPrompt = promptTextarea.value.trim();
@@ -744,21 +756,24 @@ JSON 格式如下：
                 }
                 
                 const data = await response.json();
+                // Ensure the response structure is what we expect before accessing nested properties
+                if (!data.choices || !data.choices[0] || !data.choices[0].message || !data.choices[0].message.content) {
+                    throw new Error("API 回應格式不正確，缺少必要欄位。");
+                }
+
                 const contentString = data.choices[0].message.content;
-                if (!contentString) throw new Error("API 未返回有效內容。");
-                
                 const article = JSON.parse(contentString);
-                if (!article.title || !article.author || !article.content) throw new Error("API 回應格式不正確，無法解析文章。");
+
+                if (!article.title || !article.author || !article.content) {
+                    throw new Error("API 回應的 JSON 內容不完整。");
+                }
                 return article;
 
             } catch(error) {
                 console.error("API Error:", error);
-                if (error.message.includes("401")) {
-                     alert("API 授權失敗，請檢查金鑰。");
-                } else if (error instanceof SyntaxError) {
+                if (error instanceof SyntaxError) {
                     alert("API 回傳格式錯誤，無法解析文章。請稍後再試。");
-                }
-                else {
+                } else {
                     alert(`獲取文章時發生錯誤: ${error.message}`);
                 }
                 return null;
@@ -774,14 +789,12 @@ JSON 格式如下：
 
         // --- 6. 書本與分頁邏輯 ---
         function changeFontSize(amount) {
-            // Set min/max font size
             const newSize = Math.max(0.8, Math.min(1.8, state.fontSize + amount));
-            state.fontSize = Math.round(newSize * 10) / 10; // round to one decimal place
+            state.fontSize = Math.round(newSize * 10) / 10;
             
             localStorage.setItem('fontSize', state.fontSize);
             root.style.setProperty('--reader-font-size', `${state.fontSize}rem`);
 
-            // Re-paginate the article if one is currently being viewed
             if (state.currentArticle) {
                 displayArticleAsBook(state.currentArticle);
             }
@@ -828,6 +841,7 @@ JSON 格式如下：
             const currentPageBeforeRepagination = state.currentPageNum;
             book.innerHTML = '';
             book.style.transition = 'none';
+            // Use a small timeout to allow the DOM to update and for container dimensions to be correct
             setTimeout(() => {
                 const pagesContent = paginateArticle(article);
                 state.totalPages = pagesContent.length;
@@ -837,9 +851,8 @@ JSON 格式如下：
                     pageElement.innerHTML = `<div class="page-content">${content}<span class="page-number">${i + 1} / ${state.totalPages}</span></div>`;
                     book.appendChild(pageElement);
                 });
-                // Try to stay on a similar page after font size change
                 const newPage = Math.min(currentPageBeforeRepagination, state.totalPages - 1);
-                goToPage(newPage, true); // Go to page without animation
+                goToPage(newPage, true);
             }, 50);
         }
 
@@ -875,9 +888,13 @@ JSON 格式如下：
             const endTranslate = -state.currentPageNum * bookContainer.clientWidth;
             const movedBy = currentTranslate - endTranslate;
 
-            if (movedBy < -threshold) goToPage(state.currentPageNum + 1);
-            else if (movedBy > threshold) goToPage(state.currentPageNum - 1);
-            else goToPage(state.currentPageNum);
+            if (movedBy < -threshold && state.currentPageNum < state.totalPages - 1) {
+                goToPage(state.currentPageNum + 1);
+            } else if (movedBy > threshold && state.currentPageNum > 0) {
+                goToPage(state.currentPageNum - 1);
+            } else {
+                goToPage(state.currentPageNum);
+            }
         }
 
         // --- 8. 歷史紀錄相關函式 ---
