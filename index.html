@@ -34,9 +34,6 @@
             --font-sans: 'Noto Sans TC', sans-serif;
             --font-serif: 'Noto Serif TC', serif;
             --max-width: 1100px;
-            
-            /* NEW: Font size variable for reader */
-            --reader-font-size: 1.1rem; 
         }
 
         *, *::before, *::after {
@@ -83,22 +80,14 @@
             width: 24px; height: 24px; stroke-width: 1.5;
             transition: stroke 0.2s, fill 0.2s;
         }
-        .icon-btn:disabled svg {
-            stroke: #ccc !important;
-        }
-        .icon-btn:disabled {
-            cursor: not-allowed;
-            transform: none;
-        }
-
         .light-mode .icon-btn svg { stroke: var(--text-primary-light); }
         .dark-mode .icon-btn svg { stroke: var(--text-primary-dark); }
-        .light-mode .icon-btn:not(:disabled):hover { background-color: rgba(0,0,0,0.05); }
-        .dark-mode .icon-btn:not(:disabled):hover { background-color: var(--content-bg-dark); }
-        .icon-btn:not(:disabled):hover { transform: scale(1.1); }
+        .light-mode .icon-btn:hover { background-color: rgba(0,0,0,0.05); }
+        .dark-mode .icon-btn:hover { background-color: var(--content-bg-dark); }
+        .icon-btn:hover { transform: scale(1.1); }
         .fullscreen-btn .icon-exit-fullscreen { display: none; }
         
-        /* --- REVISED: Password Overlay & Modal --- */
+        /* --- NEW: Password Overlay & Modal --- */
         .password-overlay {
             position: fixed;
             top: 0; left: 0;
@@ -108,14 +97,8 @@
             justify-content: center;
             align-items: center;
             z-index: 9999;
-            transition: opacity 0.3s ease-out, visibility 0s 0.3s;
+            transition: opacity 0.3s, visibility 0.3s;
         }
-        .password-overlay.hidden {
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease-out, visibility 0s 0.3s;
-        }
-
         .dark-mode .password-overlay {
             background-color: var(--bg-color-dark);
         }
@@ -265,15 +248,15 @@
         .reader-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding: 0 0.5rem; }
         .reader-controls .left-controls, .reader-controls .right-controls { display: flex; align-items: center; gap: 0.5rem; }
 
-        /* --- 7. 書本閱讀器 (Book Reader) --- */
+        /* --- 7. 書本閱讀器 (Book Reader) --- REVISED --- */
         .book-container {
             width: 100%;
-            height: 75vh;
+            height: 75vh; /* 增加高度以容納更多內容 */
             min-height: 550px;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
+            overflow: hidden; /* 隱藏容器外的頁面 */
             user-select: none;
             cursor: grab;
         }
@@ -282,24 +265,25 @@
         .book {
             width: 100%;
             height: 100%;
-            display: flex;
+            display: flex; /* 讓頁面並排排列 */
+            /* JS 會控制 transform */
         }
 
         .page {
             width: 100%;
             height: 100%;
-            flex-shrink: 0;
-            position: relative;
+            flex-shrink: 0; /* 防止頁面被壓縮 */
+            position: relative; /* 為了頁碼定位 */
             border: 1px solid;
         }
         
         .page-content {
             width: 100%;
             height: 100%;
-            padding: 2rem 2.5rem 4rem 2.5rem; /* REVISED: Increased bottom padding */
-            overflow: hidden;
+            padding: 2rem 2.5rem 3.5rem 2.5rem; /* 增加底部 padding */
+            overflow: hidden; /* 確保內容不溢出，取代滾動條 */
             font-family: var(--font-serif);
-            font-size: var(--reader-font-size); /* REVISED: Use CSS variable */
+            font-size: 1.1rem;
             letter-spacing: 0.05em;
             line-height: 2;
         }
@@ -309,21 +293,21 @@
         .light-mode .page-content { color: var(--text-primary-light); }
         .dark-mode .page-content { color: var(--text-primary-dark); }
         
-        .page-content h2.article-title { font-size: calc(var(--reader-font-size) + 0.9rem); font-weight: 600; margin-bottom: 0.75rem; text-align: center; }
-        .page-content p.article-author { font-family: var(--font-sans); font-size: calc(var(--reader-font-size) - 0.1rem); margin-bottom: 1.5rem; text-align: center; color: var(--accent-color); }
-        .page-content .article-outline { font-family: var(--font-sans); font-style: italic; font-size: calc(var(--reader-font-size) - 0.1rem); text-align: center; margin: 1rem 0 2rem 0; padding-bottom: 2rem; border-bottom: 1px solid; }
+        .page-content h2.article-title { font-size: 2rem; font-weight: 600; margin-bottom: 0.75rem; text-align: center; }
+        .page-content p.article-author { font-family: var(--font-sans); font-size: 1rem; margin-bottom: 1.5rem; text-align: center; color: var(--accent-color); }
+        .page-content .article-outline { font-family: var(--font-sans); font-style: italic; font-size: 1rem; text-align: center; margin: 1rem 0 2rem 0; padding-bottom: 2rem; border-bottom: 1px solid; }
         .light-mode .page-content .article-outline { color: var(--text-secondary-light); border-color: var(--border-color-light); }
         .dark-mode .page-content .article-outline { color: var(--text-secondary-dark); border-color: var(--border-color-dark); }
         
         .article-appreciation { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid; }
         .light-mode .article-appreciation { border-color: var(--border-color-light); }
         .dark-mode .article-appreciation { border-color: var(--border-color-dark); }
-        .article-appreciation h3 { font-family: var(--font-sans); font-weight: 500; font-size: calc(var(--reader-font-size) + 0.15rem); margin-bottom: 1rem; }
-        .article-appreciation p { font-family: var(--font-sans); font-size: calc(var(--reader-font-size) - 0.1rem); line-height: 1.8; }
+        .article-appreciation h3 { font-family: var(--font-sans); font-weight: 500; font-size: 1.25rem; margin-bottom: 1rem; }
+        .article-appreciation p { font-family: var(--font-sans); font-size: 1rem; line-height: 1.8; }
         
         .page-content .page-number {
             position: absolute;
-            bottom: 1.5rem; /* REVISED: Default bottom position */
+            bottom: 1.5rem; /* 調整位置以對應 padding */
             left: 50%;
             transform: translateX(-50%);
             font-family: var(--font-sans);
@@ -338,13 +322,13 @@
             z-index: -100;
             overflow: hidden;
             font-family: var(--font-serif);
-            font-size: var(--reader-font-size); /* REVISED: Use CSS variable */
+            font-size: 1.1rem;
             letter-spacing: 0.05em;
             line-height: 2;
-            padding: 2rem 2.5rem 4rem 2.5rem; /* REVISED: Match page-content padding */
+            padding: 2rem 2.5rem 3.5rem 2.5rem;
         }
 
-        /* --- 8. 全螢幕模式 (Fullscreen Mode) --- */
+        /* --- 8. 全螢幕模式 (Fullscreen Mode) --- REVISED --- */
         body.fullscreen-mode { overflow: hidden; }
         body.light-mode.fullscreen-mode { background-color: var(--content-bg-light); }
         body.dark-mode.fullscreen-mode { background-color: var(--content-bg-dark); }
@@ -355,16 +339,11 @@
             display: flex; flex-direction: column; padding: 1.5rem;
         }
         body.fullscreen-mode .book-container {
-            flex-grow: 1; min-height: auto; height: auto;
+            flex-grow: 1; min-height: auto; height: auto; /* 改為自動高度 */
         }
         body.fullscreen-mode .fullscreen-btn .icon-enter-fullscreen { display: none; }
         body.fullscreen-mode .fullscreen-btn .icon-exit-fullscreen { display: block; }
         
-        /* REVISED: Raise page number position in fullscreen */
-        body.fullscreen-mode .page-content .page-number {
-            bottom: 2.5rem;
-        }
-
         /* --- 9. 歷史紀錄彈窗 (History Modal) --- */
         .history-modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--overlay-bg);
@@ -417,8 +396,7 @@
             .settings-header { margin-bottom: 1.5rem; }
             .settings-header .title-group h1 { font-size: 1.8rem; }
             .settings-header .header-controls { top: -8px; right: -8px; }
-            .page-content { padding: 1.5rem 1.5rem 3.5rem 1.5rem; line-height: 1.9; } /* REVISED */
-            #sizer { padding: 1.5rem 1.5rem 3.5rem 1.5rem; }
+            .page-content { padding: 1.5rem; line-height: 1.9; }
             .page-content h2.article-title { font-size: 1.5rem; }
             .history-controls { flex-direction: column; }
         }
@@ -426,10 +404,11 @@
 </head>
 <body class="light-mode">
 
-    <!-- Password Overlay -->
+    <!-- NEW: Password Overlay -->
     <div id="password-overlay" class="password-overlay">
         <div id="password-modal" class="password-modal">
             <h2>請輸入密碼登入</h2>
+ 
             <form id="password-form">
                 <input type="password" id="password-input" placeholder="••••••••" required autocomplete="current-password">
                 <button type="submit" id="password-submit-btn">登入</button>
@@ -441,7 +420,7 @@
     <!-- Main Content (Initially Hidden) -->
     <div class="page-container hidden">
         <div class="main-content-wrapper">
-            <!-- 設定卡片 -->
+            <!-- 設定卡片 (初始顯示) -->
             <section class="settings-card" id="settings-section">
                 <header class="settings-header">
                     <div class="title-group">
@@ -450,23 +429,19 @@
                     </div>
                     <div class="header-controls">
                         <button class="icon-btn" id="history-btn" title="閱覽紀錄">
-                            <!-- REVISED: Book Icon -->
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 2v6h6M2.66 15.57a10 10 0 1 0 .57-8.38"/></svg>
                         </button>
                     </div>
                 </header>
                 <form id="prose-form">
                     <div class="form-group">
-                        <label for="difficulty">難度<span class="required-indicator">*</span></label>
+                        <label for="difficulty">文學鑑賞難度<span class="required-indicator">*</span></label>
                         <div class="rating-dots" id="difficulty-rating" data-rating="0">
                             <div class="rating-dot" data-value="1"></div><div class="rating-dot" data-value="2"></div>
                             <div class="rating-dot" data-value="3"></div><div class="rating-dot" data-value="4"></div>
                             <div class="rating-dot" data-value="5"></div>
                         </div>
-                        <div id="error-message">請選擇難度</div>
+                        <div id="error-message">請選擇一個鑑賞難度</div>
                     </div>
                     <div class="form-group">
                         <label for="prompt">作品主題或風格 (選填)</label>
@@ -487,17 +462,6 @@
                         </button>
                     </div>
                     <div class="right-controls">
-                         <!-- NEW: Font Size Controls -->
-                         <button class="icon-btn" id="font-size-decrease-btn" title="縮小字體">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M4 7V5h12v2"/><path d="M10 5v14"/><path d="M15 13h-5"/>
-                            </svg>
-                         </button>
-                         <button class="icon-btn" id="font-size-increase-btn" title="放大字體">
-                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                                 <path d="M4 7V5h12v2"/><path d="M10 5v14"/><path d="M15 13h-5"/><path d="M12.5 10v6"/>
-                             </svg>
-                         </button>
                          <button class="icon-btn" id="theme-switcher" title="切換主題">
                            <svg class="icon-theme-light" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                            <svg class="icon-theme-dark hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
@@ -539,23 +503,24 @@
     </div>
 
     <script>
-    // --- Firebase Configuration ---
+    // --- NEW: Firebase Configuration ---
     const firebaseConfig = {
       apiKey: "AIzaSyAOTRmML2Zje5e6DYihpExkRiVgJuuTFHQ",
       authDomain: "password-c344c.firebaseapp.com",
-      databaseURL: "https://password-c344c-default-rtdb.firebaseio.com",
+      databaseURL: "https://password-c344c-default-rtdb.firebaseio.com", // Added for Realtime Database
       projectId: "password-c344c",
       storageBucket: "password-c344c.firebasestorage.app",
       messagingSenderId: "1056032198970",
       appId: "1:1056032198970:web:fd3f821d4c2738bdab8003"
     };
 
+    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
 
+    // --- NEW: Main application logic is now in a function ---
     function initializeApp() {
         // --- 1. DOM 元素選擇 ---
-        const rootElement = document.documentElement;
         const body = document.body;
         const settingsSection = document.getElementById('settings-section');
         const readingSection = document.getElementById('reading-section');
@@ -579,20 +544,12 @@
         const historyList = document.getElementById('history-list');
         const historySearch = document.getElementById('history-search');
         const historySort = document.getElementById('history-sort');
-        // NEW: Font size controls
-        const fontSizeIncreaseBtn = document.getElementById('font-size-increase-btn');
-        const fontSizeDecreaseBtn = document.getElementById('font-size-decrease-btn');
 
         // --- API 配置信息 ---
         const API_KEYS = ["sk-GruTbLTbtSeWof3rEBjtIg"];
         let currentApiKeyIndex = 0;
         const API_URL = "https://chatapi.akash.network/api/v1/chat/completions";
         const MODEL = "DeepSeek-R1-0528";
-        
-        // --- NEW: Font size configuration ---
-        const FONT_SIZE_STEP = 0.05;
-        const MIN_FONT_SIZE = 0.8;
-        const MAX_FONT_SIZE = 1.4;
 
         // --- 2. 狀態管理 ---
         let state = {
@@ -601,47 +558,26 @@
             currentArticle: null,
             currentPageNum: 0,
             totalPages: 0,
-            fontSize: parseFloat(localStorage.getItem('proseReaderFontSize')) || 1.1, // NEW
         };
         let isDragging = false, dragStartX = 0, currentTranslate = 0, startTranslate = 0;
 
         // --- 3. 初始化 ---
         const initTheme = () => {
             const savedTheme = localStorage.getItem('theme') || 'light-mode';
-            body.classList.remove('light-mode', 'dark-mode'); // REVISED: Avoid replacing all classes
-            body.classList.add(savedTheme);
+            body.className = savedTheme;
             lightThemeIcon.classList.toggle('hidden', savedTheme === 'dark-mode');
             darkThemeIcon.classList.toggle('hidden', savedTheme === 'light-mode');
         };
-
-        const initFontSize = () => {
-            rootElement.style.setProperty('--reader-font-size', state.fontSize + 'rem');
-            updateFontSizeButtons();
-        };
-
         initTheme();
-        initFontSize(); 
         
         // --- 4. 事件監聽器 ---
         themeSwitcher.addEventListener('click', () => {
-            // REVISED: Use classList.toggle to preserve other classes like 'fullscreen-mode'
             const isLight = body.classList.contains('light-mode');
-            if (isLight) {
-                body.classList.remove('light-mode');
-                body.classList.add('dark-mode');
-                localStorage.setItem('theme', 'dark-mode');
-            } else {
-                body.classList.remove('dark-mode');
-                body.classList.add('light-mode');
-                localStorage.setItem('theme', 'light-mode');
-            }
+            body.className = isLight ? 'dark-mode' : 'light-mode';
+            localStorage.setItem('theme', body.className);
             lightThemeIcon.classList.toggle('hidden');
             darkThemeIcon.classList.toggle('hidden');
         });
-
-        // NEW: Font size listeners
-        fontSizeIncreaseBtn.addEventListener('click', () => changeFontSize(FONT_SIZE_STEP));
-        fontSizeDecreaseBtn.addEventListener('click', () => changeFontSize(-FONT_SIZE_STEP));
 
         ratingDots.forEach(dot => {
             dot.addEventListener('click', () => {
@@ -704,7 +640,11 @@
         document.addEventListener('touchend', dragEnd);
 
         // --- 5. 核心功能函式 ---
-        function updateRatingDots() { ratingDots.forEach(dot => dot.classList.toggle('selected', dot.dataset.value <= state.difficulty)); }
+        function updateRatingDots() {
+            ratingDots.forEach(dot => {
+                dot.classList.toggle('selected', dot.dataset.value <= state.difficulty);
+            });
+        }
         
         function setLoading(isLoading) {
             generateBtn.disabled = isLoading;
@@ -723,66 +663,69 @@
             }
         }
 
-        function switchToReaderView() { settingsSection.classList.add('hidden'); readingSection.classList.remove('hidden'); }
-        function switchToSettingsView() { readingSection.classList.add('hidden'); settingsSection.classList.remove('hidden'); }
-        function toggleFullscreen() { 
-            body.classList.toggle('fullscreen-mode');
-            // Re-paginate on entering/exiting fullscreen to adapt to new dimensions
-            if (state.currentArticle) {
-                const currentPage = state.currentPageNum;
-                displayArticleAsBook(state.currentArticle);
-                setTimeout(() => goToPage(currentPage), 100);
-            }
-        }
-        
-        // NEW: Font size functions
-        function updateFontSizeButtons() {
-            fontSizeDecreaseBtn.disabled = state.fontSize <= MIN_FONT_SIZE;
-            fontSizeIncreaseBtn.disabled = state.fontSize >= MAX_FONT_SIZE;
+        function switchToReaderView() {
+            settingsSection.classList.add('hidden');
+            readingSection.classList.remove('hidden');
         }
 
-        function changeFontSize(amount) {
-            const newSize = parseFloat((state.fontSize + amount).toPrecision(12));
-            if (newSize >= MIN_FONT_SIZE && newSize <= MAX_FONT_SIZE) {
-                state.fontSize = newSize;
-                localStorage.setItem('proseReaderFontSize', state.fontSize);
-                rootElement.style.setProperty('--reader-font-size', state.fontSize + 'rem');
-                updateFontSizeButtons();
-
-                // Re-paginate if an article is currently being read
-                if (state.currentArticle && !readingSection.classList.contains('hidden')) {
-                    const currentPage = state.currentPageNum;
-                    displayArticleAsBook(state.currentArticle);
-                    // Use a timeout to ensure DOM is updated before jumping to page
-                    setTimeout(() => goToPage(currentPage), 50);
-                }
-            }
+        function switchToSettingsView() {
+            readingSection.classList.add('hidden');
+            settingsSection.classList.remove('hidden');
         }
+
+        function toggleFullscreen() { body.classList.toggle('fullscreen-mode'); }
 
         async function generateProse() {
             const userPrompt = promptTextarea.value.trim();
             const systemPrompt = `你是一位精通世界文學的圖書館員。你的任務是根據用戶要求，從浩瀚的文學作品中，找出一段真實、經典的繁體中文散文。
 用戶的文學鑑賞難度偏好（1星最淺白，5星最艱深）：${state.difficulty}顆星。
 ${userPrompt ? `用戶的個性化要求： "${userPrompt}"` : `請隨機推薦一篇符合上述難度的經典散文。`}
-重要指示： JSON 格式如下...（略）`;
+
+重要指示：
+1. 你必須找出現實世界中，由真實作家所寫的著名散文作品。禁止虛構內容。
+2. 作品內容必須是完整的段落或一篇適合一次閱讀完畢的作品(5000字以內)。
+3. 你的回傳內容必須嚴格遵循以下 JSON 格式，不要包含任何 markdown 語法或額外說明。
+4. 所有文字都必須是繁體中文。
+5. [作品賞析] 必須針對你推薦的這篇真實作品進行分析，可包含作者背景、寫作風格、或該作品的歷史意義。
+
+JSON 格式如下：
+{
+  "title": "{這裡填寫真實的作品標題}",
+  "author": "{這裡填寫真實的作家姓名}",
+  "outline": "{這裡填寫一段約 50 字的真實作品綱要或引言}",
+  "content": "{這裡貼上完整的真實散文內容，段落之間用 \\n 分隔}",
+  "appreciation": {
+    "title": "作品賞析",
+    "text": "{這裡填寫對這篇真實作品的賞析內容}"
+  }
+}`;
             
             const currentKey = API_KEYS[currentApiKeyIndex];
             const response = await fetch(API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${currentKey}` },
                 body: JSON.stringify({
-                    model: MODEL, messages: [{ role: "user", content: systemPrompt }],
-                    response_format: { type: "json_object" }, max_tokens: 64000, temperature: 0.8
+                    model: MODEL,
+                    messages: [{ role: "user", content: systemPrompt }],
+                    response_format: { type: "json_object" },
+                    max_tokens: 64000,
+                    temperature: 0.8
                 })
             });
+
             if (!response.ok) {
                 if (response.status === 401) {
                     currentApiKeyIndex = (currentApiKeyIndex + 1) % API_KEYS.length;
-                    if (currentApiKeyIndex !== 0) return await generateProse();
-                    else throw new Error(`API 請求失敗 (401 Unauthorized): 所有 API Key 皆已失效或無效。`);
+                    if (currentApiKeyIndex !== 0) {
+                        console.warn(`API Key 失效，正在嘗試下一個 Key...`);
+                        return await generateProse();
+                    } else {
+                        throw new Error(`API 請求失敗 (401 Unauthorized): 所有 API Key 皆已失效或無效。`);
+                    }
                 }
                 throw new Error(`API 請求失敗，狀態碼：${response.status}`);
             }
+            
             currentApiKeyIndex = 0; 
             const data = await response.json();
             const contentString = data.choices[0].message.content;
@@ -791,40 +734,55 @@ ${userPrompt ? `用戶的個性化要求： "${userPrompt}"` : `請隨機推薦�
             if (!article.title || !article.author || !article.content) throw new Error("API 回應格式不正確，無法解析文章。");
             return article;
         }
+
         function addToHistory(article) {
             state.history = state.history.filter(item => item.title !== article.title);
             state.history.unshift(article);
             if (state.history.length > 50) state.history.pop();
             localStorage.setItem('proseHistory_v3', JSON.stringify(state.history));
         }
+
+        // --- 6. 書本與分頁邏輯 ---
         function paginateArticle(article) {
-            const containerWidth = bookContainer.clientWidth, containerHeight = bookContainer.clientHeight;
+            const containerWidth = bookContainer.clientWidth;
+            const containerHeight = bookContainer.clientHeight;
             if (containerWidth === 0 || containerHeight === 0) {
-                 console.warn("Pagination skipped: container dimensions are zero.");
-                 return ["錯誤：無法計算頁面尺寸，容器不可見。"];
+                console.error("Book container has no size. Cannot paginate.");
+                return ["錯誤：無法計算頁面尺寸。"];
             }
-            sizer.style.width = containerWidth + 'px'; sizer.style.height = containerHeight + 'px';
+
+            sizer.style.width = containerWidth + 'px';
+            sizer.style.height = containerHeight + 'px';
+            
             const firstPageHeader = `<h2 class="article-title">${article.title}</h2><p class="article-author">文 / ${article.author}</p><div class="article-outline">${article.outline}</div>`;
             const fullContent = article.content.replace(/\n/g, '<p></p>') + `<div class="article-appreciation"><h3>${article.appreciation.title}</h3><p>${article.appreciation.text}</p></div>`;
+            
             const contentDoc = new DOMParser().parseFromString(`<div>${fullContent}</div>`, 'text/html');
             const contentNodes = Array.from(contentDoc.body.firstChild.childNodes);
-            let pages = [], currentPageHTML = firstPageHeader;
+            
+            let pages = [];
+            let currentPageHTML = firstPageHeader;
             sizer.innerHTML = currentPageHTML;
+
             for (const node of contentNodes) {
                 const nodeHTML = node.outerHTML || node.textContent;
                 sizer.innerHTML += nodeHTML;
+                
                 if (sizer.scrollHeight > sizer.clientHeight) {
                     pages.push(currentPageHTML);
                     currentPageHTML = nodeHTML;
                     sizer.innerHTML = currentPageHTML;
-                } else currentPageHTML += nodeHTML;
+                } else {
+                    currentPageHTML += nodeHTML;
+                }
             }
             pages.push(currentPageHTML);
             return pages;
         }
+
         function displayArticleAsBook(article) {
-            book.innerHTML = ''; book.style.transition = 'none';
-            // Use a timeout to ensure the container is rendered with correct dimensions before paginating
+            book.innerHTML = '';
+            book.style.transition = 'none';
             setTimeout(() => {
                 const pagesContent = paginateArticle(article);
                 state.totalPages = pagesContent.length;
@@ -837,6 +795,7 @@ ${userPrompt ? `用戶的個性化要求： "${userPrompt}"` : `請隨機推薦�
                 goToPage(0);
             }, 50);
         }
+
         function goToPage(pageNum) {
             const pageIndex = Math.max(0, Math.min(pageNum, state.totalPages - 1));
             state.currentPageNum = pageIndex;
@@ -844,21 +803,44 @@ ${userPrompt ? `用戶的個性化要求： "${userPrompt}"` : `請隨機推薦�
             book.style.transition = 'transform 0.4s ease-out';
             book.style.transform = `translateX(${currentTranslate}px)`;
         }
-        function dragStart(e) { isDragging = true; dragStartX = e.touches ? e.touches[0].clientX : e.clientX; startTranslate = currentTranslate; book.style.transition = 'none'; }
-        function dragMove(e) { if (!isDragging) return; const currentX = e.touches ? e.touches[0].clientX : e.clientX; const diff = currentX - dragStartX; currentTranslate = startTranslate + diff; book.style.transform = `translateX(${currentTranslate}px)`; }
+
+        // --- 7. 翻頁互動處理 ---
+        function dragStart(e) {
+            isDragging = true;
+            dragStartX = e.touches ? e.touches[0].clientX : e.clientX;
+            startTranslate = currentTranslate;
+            book.style.transition = 'none';
+        }
+
+        function dragMove(e) {
+            if (!isDragging) return;
+            const currentX = e.touches ? e.touches[0].clientX : e.clientX;
+            const diff = currentX - dragStartX;
+            currentTranslate = startTranslate + diff;
+            book.style.transform = `translateX(${currentTranslate}px)`;
+        }
+
         function dragEnd() {
-            if (!isDragging) return; isDragging = false;
-            const threshold = bookContainer.clientWidth / 5, endTranslate = -state.currentPageNum * bookContainer.clientWidth, movedBy = currentTranslate - endTranslate;
+            if (!isDragging) return;
+            isDragging = false;
+            const threshold = bookContainer.clientWidth / 5;
+            const endTranslate = -state.currentPageNum * bookContainer.clientWidth;
+            const movedBy = currentTranslate - endTranslate;
+
             if (movedBy < -threshold) goToPage(state.currentPageNum + 1);
             else if (movedBy > threshold) goToPage(state.currentPageNum - 1);
             else goToPage(state.currentPageNum);
         }
+
+        // --- 8. 歷史紀錄相關函式 ---
         function showHistory() { renderHistory(); historyModal.classList.add('is-visible'); }
         function hideHistory() { historyModal.classList.remove('is-visible'); }
+        
         function renderHistory() {
             let items = [...state.history];
             const term = historySearch.value.toLowerCase();
             if (term) items = items.filter(i => i.title.toLowerCase().includes(term) || i.author.toLowerCase().includes(term));
+            
             const collator = new Intl.Collator('zh-Hant', { sensitivity: 'base', collation: 'stroke' });
             items.sort((a, b) => {
                 switch (historySort.value) {
@@ -868,77 +850,75 @@ ${userPrompt ? `用戶的個性化要求： "${userPrompt}"` : `請隨機推薦�
                     default: return new Date(b.generatedDate) - new Date(a.generatedDate);
                 }
             });
+
             historyList.innerHTML = items.length === 0 
                 ? `<li class="no-history-msg">${term ? '找不到符合條件的紀錄。' : '目前沒有閱覽紀錄。'}</li>`
-                : items.map(item => `<li data-history-title="${item.title}"><div class="history-list-item-title">${item.title}</div><div class="history-list-item-author">${item.author}</div></li>`).join('');
+                : items.map(item => `<li data-history-title="${item.title}">
+                                        <div class="history-list-item-title">${item.title}</div>
+                                        <div class="history-list-item-author">${item.author}</div>
+                                     </li>`).join('');
         }
+        
         function handleHistoryItemClick(e) {
-            const li = e.target.closest('li[data-history-title]'); if (!li) return;
+            const li = e.target.closest('li[data-history-title]');
+            if (!li) return;
             const article = state.history.find(item => item.title === li.dataset.historyTitle);
             if (article) {
-                state.currentArticle = article; displayArticleAsBook(article);
-                switchToReaderView(); hideHistory();
+                state.currentArticle = article;
+                displayArticleAsBook(article);
+                switchToReaderView();
+                hideHistory();
                 setTimeout(() => { if (!body.classList.contains('fullscreen-mode')) toggleFullscreen(); }, 300);
             }
         }
     }
 
-    // --- REVISED: Authentication logic on page load ---
+    // --- NEW: Password validation logic on page load ---
     document.addEventListener('DOMContentLoaded', () => {
-        const AUTH_TOKEN_KEY = 'prose_reader_auth_status_v1';
-        const AUTH_TOKEN_VALUE = 'user_is_validated';
-
         const passwordOverlay = document.getElementById('password-overlay');
+        const passwordForm = document.getElementById('password-form');
+        const passwordInput = document.getElementById('password-input');
+        const passwordError = document.getElementById('password-error');
+        const passwordSubmitBtn = document.getElementById('password-submit-btn');
         const pageContainer = document.querySelector('.page-container');
-        
-        // REVISED: Apply theme to password page itself using classList
+
+        // Apply saved theme to the password page itself
         const savedTheme = localStorage.getItem('theme') || 'light-mode';
-        document.body.classList.add(savedTheme);
+        document.body.className = savedTheme;
+        passwordInput.focus();
 
-        if (localStorage.getItem(AUTH_TOKEN_KEY) === AUTH_TOKEN_VALUE) {
-            passwordOverlay.classList.add('hidden');
-            pageContainer.classList.remove('hidden');
-            initializeApp();
-        } else {
-            const passwordForm = document.getElementById('password-form');
-            const passwordInput = document.getElementById('password-input');
-            const passwordError = document.getElementById('password-error');
-            const passwordSubmitBtn = document.getElementById('password-submit-btn');
+        passwordForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            passwordError.classList.add('hidden');
+            passwordSubmitBtn.disabled = true;
+            passwordSubmitBtn.textContent = '驗證中...';
 
-            passwordInput.focus();
+            const enteredPassword = passwordInput.value;
+            const passwordRef = database.ref('password'); // Get reference to 'password' key in DB
 
-            passwordForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                passwordError.classList.add('hidden');
-                passwordSubmitBtn.disabled = true;
-                passwordSubmitBtn.textContent = '驗證中...';
-
-                const enteredPassword = passwordInput.value;
-                const passwordRef = database.ref('password');
-
-                passwordRef.once('value').then((snapshot) => {
-                    const correctPassword = snapshot.val();
-                    if (enteredPassword === correctPassword) {
-                        localStorage.setItem(AUTH_TOKEN_KEY, AUTH_TOKEN_VALUE);
-                        
-                        passwordOverlay.classList.add('hidden');
-                        pageContainer.classList.remove('hidden');
-                        initializeApp();
-                    } else {
-                        passwordError.classList.remove('hidden');
-                        passwordInput.value = '';
-                        passwordInput.focus();
-                        passwordSubmitBtn.disabled = false;
-                        passwordSubmitBtn.textContent = '登入';
-                    }
-                }).catch((error) => {
-                    console.error("Firebase read failed: " + error.message);
-                    alert("無法驗證密碼，請檢查網絡連線或聯繫管理員。");
+            passwordRef.once('value').then((snapshot) => {
+                const correctPassword = snapshot.val();
+                if (enteredPassword === correctPassword) {
+                    // Correct password
+                    passwordOverlay.style.opacity = '0';
+                    passwordOverlay.style.visibility = 'hidden';
+                    pageContainer.classList.remove('hidden');
+                    initializeApp(); // Run the main app logic
+                } else {
+                    // Incorrect password
+                    passwordError.classList.remove('hidden');
+                    passwordInput.value = '';
+                    passwordInput.focus();
                     passwordSubmitBtn.disabled = false;
                     passwordSubmitBtn.textContent = '登入';
-                });
+                }
+            }).catch((error) => {
+                console.error("Firebase read failed: " + error.message);
+                alert("無法驗證密碼，請檢查網絡連線或聯繫管理員。");
+                passwordSubmitBtn.disabled = false;
+                passwordSubmitBtn.textContent = '登入';
             });
-        }
+        });
     });
     </script>
 </body>
