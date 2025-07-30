@@ -184,7 +184,7 @@
         @keyframes spin { to { transform: rotate(360deg); } }
 
         /* --- 6. 閱讀器頂部控制列 (Reader Header Controls) --- */
-        .reader-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding: 0 0.5rem; }
+        .reader-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding: 0 0.5rem; }
         .reader-controls .left-controls, .reader-controls .right-controls { display: flex; align-items: center; gap: 0.5rem; }
         
         .reader-pagination {
@@ -201,14 +201,23 @@
         .font-controls .icon-btn svg { width: 22px; height: 22px; }
 
         /* --- 7. 書本閱讀器 (Book Reader) --- */
-        .book-container { width: 100%; height: 75vh; min-height: 550px; display: flex; justify-content: center; align-items: center; overflow: hidden; user-select: none; cursor: grab; margin-top: 1.5rem; margin-bottom: 1.5rem; }
+        .book-container { width: 100%; height: 75vh; min-height: 550px; display: flex; justify-content: center; align-items: center; overflow: hidden; user-select: none; cursor: grab; margin-top: 0; margin-bottom: 2.5rem; }
         .book-container:active { cursor: grabbing; }
         .book { width: 100%; height: 100%; display: flex; }
         .page { width: 100%; height: 100%; flex-shrink: 0; position: relative; border: 1px solid; }
         
-        .page-content { width: 100%; height: 100%; padding: 2rem 2.5rem 2.5rem 2.5rem; overflow-y: auto; font-family: var(--font-serif); font-size: var(--reader-font-size); letter-spacing: 0.05em; line-height: 2;display: flex;
-    flex-direction: column;
-    justify-content: center; }
+        .page-content { 
+            width: 100%; height: 100%; 
+            padding: 3.5rem 3rem; /* 修訂 #1: 增加上下內距 */
+            overflow-y: auto; 
+            font-family: var(--font-serif); 
+            font-size: var(--reader-font-size); 
+            letter-spacing: 0.05em; 
+            line-height: 2;
+            display: flex;
+            flex-direction: column;
+            /* justify-content: center; 修訂 #1: 移除，讓文字從頂部開始 */
+        }
         .light-mode .page { background: var(--content-bg-light); border-color: var(--border-color-light); }
         .dark-mode .page { background: var(--content-bg-dark); border-color: var(--border-color-dark); }
         .light-mode .page-content { color: var(--text-primary-light); }
@@ -228,7 +237,7 @@
         .dark-mode .article-appreciation { border-color: var(--border-color-dark); }
         .article-appreciation h3 { font-family: var(--font-sans); font-weight: 500; font-size: calc(var(--reader-font-size) + 0.15rem); margin-bottom: 1rem; }
         
-        #sizer { position: absolute; visibility: hidden; z-index: -100; overflow: hidden; font-family: var(--font-serif); font-size: var(--reader-font-size); letter-spacing: 0.05em; line-height: 2; padding: 2rem 2.5rem 2.5rem 2.5rem; }
+        #sizer { position: absolute; visibility: hidden; z-index: -100; overflow: hidden; font-family: var(--font-serif); font-size: var(--reader-font-size); letter-spacing: 0.05em; line-height: 2; padding: 3.5rem 3rem; /* 修訂 #1: 與 page-content 同步 */ }
 
         /* --- 插圖樣式 (Illustration Styles) --- */
         .illustration-container {
@@ -317,16 +326,16 @@
         .history-list li:last-child { border-bottom: none; }
         .history-item-content { flex-grow: 1; cursor: pointer; }
         .history-list-item-title { font-family: var(--font-serif); font-size: 1.2rem; font-weight: 600; }
-        .history-list-item-author { font-family: var(--font-sans); font-size: 0.9rem; margin-top: 0.25rem; }
+        .history-list-item-meta { font-family: var(--font-sans); font-size: 0.9rem; margin-top: 0.25rem; }
         .light-mode .history-list li { border-color: var(--border-color-light); }
         .dark-mode .history-list li { border-color: var(--border-color-dark); }
         .light-mode .history-item-content:hover { background-color: var(--bg-color-light); }
         .dark-mode .history-item-content:hover { background-color: var(--bg-color-dark); }
-        .light-mode .history-list-item-author { color: var(--text-secondary-light); }
-        .dark-mode .history-list-item-author { color: var(--text-secondary-dark); }
+        .light-mode .history-list-item-meta { color: var(--text-secondary-light); }
+        .dark-mode .history-list-item-meta { color: var(--text-secondary-dark); }
         .delete-history-btn svg { width: 20px; height: 20px; }
-        .light-mode .delete-history-btn:hover svg { stroke: #e74c3c; }
-        .dark-mode .delete-history-btn:hover svg { stroke: #e74c3c; }
+        .light-mode .delete-history-btn:hover svg, #delete-all-history-btn:hover svg { stroke: #e74c3c; }
+        .dark-mode .delete-history-btn:hover svg, #delete-all-history-btn:hover svg { stroke: #e74c3c; }
         .no-history-msg { padding: 2rem; text-align: center; justify-content: center; }
         .light-mode .no-history-msg { color: var(--text-secondary-light); }
         .dark-mode .no-history-msg { color: var(--text-secondary-dark); }
@@ -341,7 +350,8 @@
             .settings-header .title-group h1 { font-size: 1.8rem; }
             .settings-header .header-controls { position: static; }
             .reader-controls .left-controls, .reader-controls .right-controls { gap: 0.2rem; }
-            .page-content { padding: 1.5rem; padding-bottom: 2rem; line-height: 1.9; overflow-y: auto; }
+            .page-content { padding: 2rem 1.5rem; line-height: 1.9; overflow-y: auto; }
+            #sizer { padding: 2rem 1.5rem; }
             .page-content h2.article-title { font-size: calc(var(--reader-font-size) + 0.4rem); }
             .history-controls { flex-direction: column; }
             .illustration-container { width: 100%; }
@@ -450,18 +460,23 @@
     <div class="history-modal" id="history-modal">
         <div class="history-container">
             <div class="history-header">
-                <h2>閱覽紀錄</h2>
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <h2>閱覽紀錄</h2>
+                    <button class="icon-btn" id="delete-all-history-btn" title="刪除全部紀錄">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                </div>
                 <button class="icon-btn" id="history-close-btn" title="關閉">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
             </div>
             <div class="history-controls">
-                <input type="search" id="history-search" placeholder="搜尋標題或作者...">
+                <input type="search" id="history-search" placeholder="搜尋標題...">
                 <select id="history-sort">
                     <option value="date_desc">按生成日期 (新到舊)</option>
                     <option value="date_asc">按生成日期 (舊到新)</option>
-                    <option value="stroke_asc">按作家姓名筆劃 (少到多)</option>
-                    <option value="stroke_desc">按作家姓名筆劃 (多到少)</option>
+                    <option value="stroke_asc">按文章標題筆劃 (少到多)</option>
+                    <option value="stroke_desc">按文章標題筆劃 (多到少)</option>
                 </select>
             </div>
             <ul class="history-list" id="history-list"></ul>
@@ -509,6 +524,7 @@
         const historyList = document.getElementById('history-list');
         const historySearch = document.getElementById('history-search');
         const historySort = document.getElementById('history-sort');
+        const deleteAllHistoryBtn = document.getElementById('delete-all-history-btn');
         const fontSizeIncreaseBtn = document.getElementById('font-size-increase-btn');
         const fontSizeDecreaseBtn = document.getElementById('font-size-decrease-btn');
         const generateIllustrationsCheckbox = document.getElementById('generate-illustrations-checkbox');
@@ -611,7 +627,6 @@
                 state.currentArticle = article;
                 addToHistory(state.currentArticle);
                 
-                // 修訂 #1：重設頁碼為 0，確保從第一頁開始顯示
                 state.currentPageNum = 0; 
                 
                 body.classList.add('fullscreen-mode');
@@ -637,6 +652,7 @@
 
         historyBtn.addEventListener('click', showHistory);
         historyCloseBtn.addEventListener('click', hideHistory);
+        deleteAllHistoryBtn.addEventListener('click', deleteAllHistory);
         historyModal.addEventListener('click', (e) => { if (e.target === historyModal) hideHistory(); });
         historyList.addEventListener('click', handleHistoryListClick);
         historySearch.addEventListener('input', renderHistory);
@@ -715,8 +731,7 @@
 
         async function generateProse() {
             const userPrompt = promptTextarea.value.trim();
-            // 修訂 #3：加入唯一時間戳 ID，確保請求唯一性
-            const systemPrompt = `你是一位精通世界文學的圖書館員。你的任務是根據用戶要求，從浩瀚的文學作品中，找出一篇真實繁體中文文章或小說節錄段落。
+            const systemPrompt = `你是一位精通世界文學的圖書館員。你的任務是根據用戶要求，從浩瀚的白話文學作品中，找出一篇真實繁體中文文章或小說節錄段落。
 用戶的文學鑑賞難度偏好（1星最淺白，5星最艱深）：${state.difficulty}顆星。
 ${userPrompt ? `用戶的個性化要求： "${userPrompt}"` : `請隨機推薦一篇符合上述難度的文章或小說節錄。`}
 
@@ -732,12 +747,12 @@ ${userPrompt ? `用戶的個性化要求： "${userPrompt}"` : `請隨機推薦�
 JSON 格式如下：
 {
   "title": "{這裡填寫真實的作品標題，注明【節錄】}",
-  "author": "{這裡填寫真實的作家姓名}",
-  "outline": "{這裡填寫一段約 50 字的真實作品綱要或引言}",
+  "author": "{這裡強制以「小說散文・節錄」替代真實的作家姓名}",
+  "outline": "{這裡填寫一段約 50 字的真實作品綱要或引言，這裡強制以「作者」二字替代真實的作家姓名}",
   "content": "{這裡貼上完整的真實文章或小說節錄段落，段落之間用 \\n 分隔}",
   "appreciation": {
     "title": "作品賞析",
-    "text": "{這裡填寫對這篇真實作品節錄段落的賞析內容}"
+    "text": "{這裡填寫對這篇真實作品節錄段落的賞析內容，這裡強制以「作者」二字替代真實的作家姓名，請隱真真實的作家姓名}"
   }
 }`;
             
@@ -751,7 +766,7 @@ JSON 格式如下：
                         messages: [{ role: "user", content: systemPrompt }],
                         response_format: { type: "json_object" },
                         max_tokens: 64000,
-                        temperature: 0.8
+                        temperature: 1.0
                     })
                 });
 
@@ -787,9 +802,6 @@ JSON 格式如下：
             }
         }
         
-        /**
-         * BUG FIX: 修訂分頁邏輯以防止在插圖後產生空白頁。
-         */
         function paginateArticle(article) {
             const containerWidth = bookContainer.clientWidth;
             const containerHeight = bookContainer.clientHeight;
@@ -846,7 +858,7 @@ JSON 格式如下：
 
             for (const node of contentNodes) {
                 if (node.nodeType === 1 && node.classList.contains('illustration-container')) {
-                    if (currentPageHTML.trim()) {
+                    if (currentPageHTML.trim() && currentPageHTML !== firstPageHeader) {
                         pages.push(currentPageHTML);
                     }
                     pages.push(node.outerHTML);
@@ -860,8 +872,6 @@ JSON 格式如下：
                 sizer.innerHTML = potentialHTML;
                 
                 if (sizer.scrollHeight > containerHeight) {
-                    // BUG FIX: 只有當 currentPageHTML 有實際內容時才將其存為一頁。
-                    // 這可以防止在插圖後，因下一個元素溢位而產生空白頁。
                     if (currentPageHTML) { 
                         pages.push(currentPageHTML);
                     }
@@ -1018,17 +1028,26 @@ JSON 格式如下：
         function showHistory() { renderHistory(); historyModal.classList.add('is-visible'); }
         function hideHistory() { historyModal.classList.remove('is-visible'); }
         
+        function deleteAllHistory() {
+            if (state.history.length === 0) return;
+            if (confirm('您確定要刪除所有閱覽紀錄嗎？此操作無法復原。')) {
+                state.history = [];
+                localStorage.setItem('proseHistory_v3', JSON.stringify(state.history));
+                renderHistory();
+            }
+        }
+
         function renderHistory() {
             let items = [...state.history];
             const term = historySearch.value.toLowerCase();
-            if (term) items = items.filter(i => i.title.toLowerCase().includes(term) || i.author.toLowerCase().includes(term));
+            if (term) items = items.filter(i => i.title.toLowerCase().includes(term));
             
             const collator = new Intl.Collator('zh-Hant', { sensitivity: 'base', collation: 'stroke' });
             items.sort((a, b) => {
                 switch (historySort.value) {
                     case 'date_asc': return new Date(a.generatedDate) - new Date(b.generatedDate);
-                    case 'stroke_asc': return collator.compare(a.author, b.author);
-                    case 'stroke_desc': return collator.compare(b.author, a.author);
+                    case 'stroke_asc': return collator.compare(a.title, b.title);
+                    case 'stroke_desc': return collator.compare(b.title, a.title);
                     default: return new Date(b.generatedDate) - new Date(a.generatedDate);
                 }
             });
@@ -1038,7 +1057,7 @@ JSON 格式如下：
                 : items.map(item => `<li data-history-title="${encodeURIComponent(item.title)}">
                                         <div class="history-item-content">
                                             <div class="history-list-item-title">${item.title}</div>
-                                            <div class="history-list-item-author">${item.author}</div>
+                                            <div class="history-list-item-meta">${new Date(item.generatedDate).toLocaleDateString('zh-TW')}</div>
                                         </div>
                                         <button class="icon-btn delete-history-btn" title="刪除此紀錄">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
@@ -1068,7 +1087,7 @@ JSON 格式如下：
                 const article = state.history.find(item => item.title === articleTitle);
                 if (article) {
                     state.currentArticle = article;
-                    state.currentPageNum = 0; // 從歷史紀錄讀取時，也從第一頁開始
+                    state.currentPageNum = 0;
                     body.classList.add('fullscreen-mode');
                     displayArticleAsBook(article);
                     switchToReaderView();
