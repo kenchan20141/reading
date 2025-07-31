@@ -400,7 +400,7 @@
                 <form id="prose-form">
                     <div class="form-group">
                         <label for="difficulty">難度<span class="required-indicator">*</span></label>
-                        <div class="rating-dots" id="difficulty-rating" data-rating="0">
+                        <div class="rating-dots" id="difficulty-rating" data-rating="3">
                             <div class="rating-dot" data-value="1"></div><div class="rating-dot" data-value="2"></div>
                             <div class="rating-dot" data-value="3"></div><div class="rating-dot" data-value="4"></div>
                             <div class="rating-dot" data-value="5"></div>
@@ -538,7 +538,7 @@
         
         // --- 2. 狀態管理 ---
         let state = {
-            difficulty: 0,
+            difficulty: 3,
             history: JSON.parse(localStorage.getItem('proseHistory_v3')) || [],
             currentArticle: null,
             currentPageNum: 0,
@@ -567,6 +567,7 @@
 
         initTheme();
         initFontSize();
+        updateRatingDots();
         
         // --- 4. 事件監聽器 ---
         themeSwitchers.forEach(switcher => {
