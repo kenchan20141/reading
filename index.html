@@ -171,6 +171,40 @@
         .light-mode textarea { background-color: var(--bg-color-light); border: 1px solid var(--border-color-light); color: var(--text-primary-light); }
         .dark-mode textarea { background-color: var(--bg-color-dark); border: 1px solid var(--border-color-dark); color: var(--text-primary-dark); }
         textarea:focus { outline: none; border-color: var(--accent-color); box-shadow: 0 0 0 2px rgba(41, 128, 185, 0.3); }
+        
+        /* --- NEW: Select dropdown styles --- */
+        select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 5px;
+            font-family: inherit;
+            font-size: 1rem;
+            line-height: 1.6;
+            transition: background-color 0.4s, color 0.4s, border-color 0.4s;
+            -webkit-appearance: none; -moz-appearance: none; appearance: none;
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: .65em auto;
+            cursor: pointer;
+        }
+        .light-mode select {
+            background-color: var(--bg-color-light);
+            border: 1px solid var(--border-color-light);
+            color: var(--text-primary-light);
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%232c3e50%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-13%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2013l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.4-12.8z%22%2F%3E%3C%2Fsvg%3E');
+        }
+        .dark-mode select {
+            background-color: var(--bg-color-dark);
+            border: 1px solid var(--border-color-dark);
+            color: var(--text-primary-dark);
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23D1CFCB%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-13%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2013l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.4-12.8z%22%2F%3E%3C%2Fsvg%3E');
+        }
+        select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(41, 128, 185, 0.3);
+        }
+
         .submit-btn {
             background-color: var(--accent-color); color: white; border: none; padding: 0.75rem 1.75rem; border-radius: 5px; cursor: pointer;
             font-family: inherit; font-size: 1.1rem; font-weight: 500; transition: background-color 0.3s, transform 0.2s;
@@ -406,6 +440,14 @@
                         </div>
                         <div id="error-message">請選擇一個鑑賞難度</div>
                     </div>
+                    <!-- NEW: Model Selector -->
+                    <div class="form-group">
+                        <label for="model-select">對話模型</label>
+                        <select id="model-select" name="model">
+                            <option value="Qwen3-235B-A22B-Instruct-2507-FP8" selected>水心</option>
+                            <option value="DeepSeek-R1-0528">魚木</option>
+                        </select>
+                    </div>
                     <div class="form-group">
                         <label for="prompt">作品主題或風格 (選填)</label>
                         <textarea id="prompt" placeholder="輸入作品主題或風格..."></textarea>
@@ -510,6 +552,7 @@
         const difficultyRating = document.getElementById('difficulty-rating');
         const ratingDots = difficultyRating.querySelectorAll('.rating-dot');
         const errorMessage = document.getElementById('error-message');
+        const modelSelect = document.getElementById('model-select'); // NEW: Select model dropdown
         const promptTextarea = document.getElementById('prompt');
         const generateBtn = document.getElementById('generate-btn');
         const generateBtnText = generateBtn.querySelector('.btn-text');
@@ -534,7 +577,7 @@
         const API_KEYS = ["sk-GruTbLTbtSeWof3rEBjtIg"];
         let currentApiKeyIndex = 0;
         const API_URL = "https://chatapi.akash.network/api/v1/chat/completions";
-        const MODEL = "DeepSeek-R1-0528";
+        // REMOVED: const MODEL = "DeepSeek-R1-0528";
 
         // --- 2. 狀態管理 ---
         let state = {
@@ -731,6 +774,7 @@
 
         async function generateProse() {
             const userPrompt = promptTextarea.value.trim();
+            const selectedModel = modelSelect.value; // NEW: Get selected model
             const systemPrompt = `你是一位精通世界文學的圖書館員。你的任務是根據用戶要求，從浩瀚的白話文學作品中，找出一篇真實繁體中文文章或小說節錄段落。
 用戶的文學鑑賞難度偏好（1星最淺白，5星最艱深）：${state.difficulty}顆星。
 ${userPrompt ? `用戶的個性化要求： "${userPrompt}"` : `請隨機推薦一篇符合上述難度的文章或小說節錄。`}
@@ -762,7 +806,7 @@ JSON 格式如下：
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${currentKey}` },
                     body: JSON.stringify({
-                        model: MODEL,
+                        model: selectedModel, // UPDATED: Use selected model
                         messages: [{ role: "user", content: systemPrompt }],
                         response_format: { type: "json_object" },
                         max_tokens: 64000,
