@@ -399,32 +399,32 @@
                 </header>
                 <form id="prose-form">
                     <div class="form-group">
-                        <label for="difficulty">鑑賞難度<span class="required-indicator">*</span></label>
+                        <label for="difficulty">難度<span class="required-indicator">*</span></label>
                         <div class="rating-dots" id="difficulty-rating" data-rating="0">
                             <div class="rating-dot" data-value="1"></div><div class="rating-dot" data-value="2"></div>
                             <div class="rating-dot" data-value="3"></div><div class="rating-dot" data-value="4"></div>
                             <div class="rating-dot" data-value="5"></div>
                         </div>
-                        <div id="error-message">請選擇一個鑑賞難度</div>
+                        <div id="error-message">請選擇難度</div>
                     </div>
                     <!-- NEW: Model Selector -->
                     <div class="form-group">
-                        <label for="model-select">對話模型</label>
-                        <select id="model-select" name="model">
-                            <option value="Qwen3-235B-A22B-Instruct-2507-FP8" selected>水心</option>
-                            <option value="DeepSeek-R1-0528">魚木</option>
-                        </select>
+                        <label for="model-select">模型</label>
+                       <select id="model-select" name="model">
+    <option value="Qwen3-235B-A22B-Instruct-2507-FP8">水心</option>
+    <option value="DeepSeek-R1-0528" selected>魚木</option>
+</select>
                     </div>
                     <div class="form-group">
-                        <label for="prompt">作品主題或風格 (選填)</label>
-                        <textarea id="prompt" placeholder="輸入作品主題或風格..."></textarea>
+                        <label for="prompt">作品主題 (選填)</label>
+                        <textarea id="prompt" placeholder="輸入作品主題..."></textarea>
                     </div>
                     <div class="form-group" style="display: flex; align-items: center; gap: 10px; margin-bottom: 1.5rem;">
                         <input type="checkbox" id="generate-illustrations-checkbox" style="width: 18px; height: 18px; cursor: pointer;">
                         <label for="generate-illustrations-checkbox" style="margin-bottom: 0; cursor: pointer; font-weight: normal;">插圖</label>
                     </div>
                     <button type="submit" id="generate-btn" class="submit-btn">
-                        <span class="btn-text">尋找經典</span>
+                        <span class="btn-text">尋找節錄</span>
                     </button>
                 </form>
             </section>
