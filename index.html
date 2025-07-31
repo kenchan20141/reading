@@ -8,10 +8,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@400;600&display=swap" rel="stylesheet">
     
-    <!-- Firebase SDK (Compatibility version for easier integration) -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
-
     <style>
         /* --- 1. 核心與主題設定 (Core & Theming) --- */
         :root {
@@ -89,50 +85,6 @@
         .icon-btn:hover { transform: scale(1.1); }
         .fullscreen-btn .icon-exit-fullscreen { display: none; }
         
-        /* --- Password Overlay & Modal --- */
-        .password-overlay {
-            position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-color: var(--bg-color-light);
-            display: flex; justify-content: center; align-items: center;
-            z-index: 9999;
-            transition: opacity 0.3s, visibility 0.3s;
-        }
-        .dark-mode .password-overlay { background-color: var(--bg-color-dark); }
-        .password-modal {
-            background-color: var(--content-bg-light); color: var(--text-primary-light);
-            padding: 2.5rem; border-radius: 8px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            text-align: center; width: 90%; max-width: 400px;
-            transition: background-color 0.4s, color 0.4s;
-        }
-        .dark-mode .password-modal { background-color: var(--content-bg-dark); color: var(--text-primary-dark); }
-        .password-modal h2 { font-family: var(--font-serif); margin-bottom: 0.75rem; }
-        .password-modal .subtitle { font-size: 0.9rem; margin-bottom: 1.5rem; }
-        .light-mode .password-modal .subtitle { color: var(--text-secondary-light); }
-        .dark-mode .password-modal .subtitle { color: var(--text-secondary-dark); }
-        #password-input {
-            width: 100%; padding: 0.75rem 1rem; border-radius: 5px; border: 1px solid;
-            font-size: 1rem; margin-bottom: 1rem; text-align: center;
-        }
-        .light-mode #password-input { border-color: var(--border-color-light); background-color: var(--bg-color-light); color: var(--text-primary-light); }
-        .dark-mode #password-input { border-color: var(--border-color-dark); background-color: var(--bg-color-dark); color: var(--text-primary-dark); }
-        #password-input:focus { outline: none; border-color: var(--accent-color); box-shadow: 0 0 0 2px rgba(41, 128, 185, 0.3); }
-        .password-modal .remember-me-wrapper { display: flex; align-items: center; justify-content: flex-start; gap: 8px; margin-bottom: 1.25rem; }
-        .password-modal .remember-me-wrapper input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; }
-        .password-modal .remember-me-wrapper label { font-size: 0.9rem; cursor: pointer; user-select: none; }
-        .light-mode .password-modal .remember-me-wrapper label { color: var(--text-secondary-light); }
-        .dark-mode .password-modal .remember-me-wrapper label { color: var(--text-secondary-dark); }
-        .password-modal button {
-            width: 100%; background-color: var(--accent-color); color: white; border: none;
-            padding: 0.75rem 1.5rem; border-radius: 5px; cursor: pointer;
-            font-family: var(--font-sans); font-size: 1.1rem; font-weight: 500;
-            transition: background-color 0.3s;
-        }
-        .password-modal button:hover { background-color: var(--accent-color-hover); }
-        .password-modal button:disabled { background-color: #cccccc; cursor: not-allowed; }
-        .password-error { color: #e74c3c; margin-top: 1rem; font-size: 0.9rem; }
-
         /* --- 4. 主要區塊：設定、閱讀器 (Main Sections: Settings, Reader) --- */
         .main-content-wrapper { width: 100%; max-width: var(--max-width); transition: all 0.4s ease-in-out; }
         .settings-card, .reader-card {
@@ -390,28 +342,43 @@
             .history-controls { flex-direction: column; }
             .illustration-container { width: 100%; }
         }
+
+        /* --- 11. 版權聲明 (Copyright) --- */
+        .copyright-footer {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            padding: 5px 10px;
+            background-color: var(--bg-color-light);
+            z-index: 500;
+            transition: background-color 0.4s, color 0.4s;
+        }
+
+        .dark-mode .copyright-footer {
+            background-color: var(--bg-color-dark);
+        }
+
+        .copyright-footer p {
+            margin: 0;
+            font-size: 14px;
+            color: var(--text-secondary-light);
+        }
+
+        .dark-mode .copyright-footer p {
+             color: var(--text-secondary-dark);
+        }
+
+        @media (max-width: 600px) {
+            .copyright-footer p {
+                font-size: 12px;
+            }
+        }
     </style>
 </head>
 <body class="light-mode">
 
-    <!-- Password Overlay -->
-    <div id="password-overlay" class="password-overlay">
-        <div id="password-modal" class="password-modal">
-            <h2>請輸入密碼登入</h2>
-            <form id="password-form">
-                <input type="password" id="password-input" placeholder="••••••••" required autocomplete="current-password">
-                <div class="remember-me-wrapper">
-                    <input type="checkbox" id="remember-me" checked>
-                    <label for="remember-me">記住登入狀態</label>
-                </div>
-                <button type="submit" id="password-submit-btn">登入</button>
-            </form>
-            <p id="password-error" class="password-error hidden">密碼錯誤，請重試。</p>
-        </div>
-    </div>
-
-    <!-- Main Content (Initially Hidden) -->
-    <div class="page-container hidden">
+    <!-- Main Content -->
+    <div class="page-container">
         <div class="main-content-wrapper">
             <!-- 設定卡片 (初始顯示) -->
             <section class="settings-card" id="settings-section">
@@ -454,7 +421,7 @@
                     </div>
                     <div class="form-group" style="display: flex; align-items: center; gap: 10px; margin-bottom: 1.5rem;">
                         <input type="checkbox" id="generate-illustrations-checkbox" style="width: 18px; height: 18px; cursor: pointer;">
-                        <label for="generate-illustrations-checkbox" style="margin-bottom: 0; cursor: pointer; font-weight: normal;">為文章生成內文插圖</label>
+                        <label for="generate-illustrations-checkbox" style="margin-bottom: 0; cursor: pointer; font-weight: normal;">插圖</label>
                     </div>
                     <button type="submit" id="generate-btn" class="submit-btn">
                         <span class="btn-text">尋找經典</span>
@@ -524,22 +491,12 @@
             <ul class="history-list" id="history-list"></ul>
         </div>
     </div>
+    
+    <footer class="copyright-footer">
+        <p>Copyright © 2025 陳冠健. All rights reserved.</p>
+    </footer>
 
     <script>
-    // --- Firebase Configuration ---
-    const firebaseConfig = {
-      apiKey: "AIzaSyAOTRmML2Zje5e6DYihpExkRiVgJuuTFHQ",
-      authDomain: "password-c344c.firebaseapp.com",
-      databaseURL: "https://password-c344c-default-rtdb.firebaseio.com",
-      projectId: "password-c344c",
-      storageBucket: "password-c344c.firebasestorage.app",
-      messagingSenderId: "1056032198970",
-      appId: "1:1056032198970:web:fd3f821d4c2738bdab8003"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
-
     // --- Main application logic ---
     function initializeApp() {
         // --- 1. DOM 元素選擇 ---
@@ -577,8 +534,7 @@
         const API_KEYS = ["sk-GruTbLTbtSeWof3rEBjtIg"];
         let currentApiKeyIndex = 0;
         const API_URL = "https://chatapi.akash.network/api/v1/chat/completions";
-        // REMOVED: const MODEL = "DeepSeek-R1-0528";
-
+        
         // --- 2. 狀態管理 ---
         let state = {
             difficulty: 0,
@@ -1161,59 +1117,9 @@ JSON 格式如下：
         }
     }
 
-    // --- Password validation logic on page load ---
+    // --- Initialize app on page load ---
     document.addEventListener('DOMContentLoaded', () => {
-        const passwordOverlay = document.getElementById('password-overlay');
-        const pageContainer = document.querySelector('.page-container');
-        const savedTheme = localStorage.getItem('theme') || 'light-mode';
-        document.body.className = savedTheme;
-        const isLoggedIn = localStorage.getItem('proseReaderLoggedIn');
-        if (isLoggedIn === 'true') {
-            passwordOverlay.style.display = 'none';
-            pageContainer.classList.remove('hidden');
-            initializeApp();
-            return;
-        }
-        const passwordForm = document.getElementById('password-form');
-        const passwordInput = document.getElementById('password-input');
-        const passwordError = document.getElementById('password-error');
-        const passwordSubmitBtn = document.getElementById('password-submit-btn');
-        const rememberMeCheckbox = document.getElementById('remember-me');
-        passwordInput.focus();
-        passwordForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            passwordError.classList.add('hidden');
-            passwordSubmitBtn.disabled = true;
-            passwordSubmitBtn.textContent = '驗證中...';
-            const enteredPassword = passwordInput.value;
-            const passwordRef = database.ref('password');
-            passwordRef.once('value').then((snapshot) => {
-                const correctPassword = snapshot.val();
-                if (enteredPassword === correctPassword) {
-                    if (rememberMeCheckbox.checked) {
-                        localStorage.setItem('proseReaderLoggedIn', 'true');
-                    } else {
-                        localStorage.removeItem('proseReaderLoggedIn');
-                    }
-                    passwordOverlay.style.opacity = '0';
-                    passwordOverlay.style.visibility = 'hidden';
-                    passwordOverlay.addEventListener('transitionend', () => passwordOverlay.remove());
-                    pageContainer.classList.remove('hidden');
-                    initializeApp();
-                } else {
-                    passwordError.classList.remove('hidden');
-                    passwordInput.value = '';
-                    passwordInput.focus();
-                    passwordSubmitBtn.disabled = false;
-                    passwordSubmitBtn.textContent = '登入';
-                }
-            }).catch((error) => {
-                console.error("Firebase read failed: " + error.message);
-                alert("無法驗證密碼，請檢查網絡連線或聯繫管理員。");
-                passwordSubmitBtn.disabled = false;
-                passwordSubmitBtn.textContent = '登入';
-            });
-        });
+        initializeApp();
     });
     </script>
 </body>
