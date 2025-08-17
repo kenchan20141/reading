@@ -535,14 +535,8 @@ const generateIllustrationsCheckbox = document.getElementById('generate-illustra
 const readerPagination = document.getElementById('reader-pagination');
 
 // --- API 配置信息 ---
-
-    const API_KEYS = [
-    "sk-GruTbLTbtSeWof3rEBjtIg", 
-    "sk-N2hJEV5h9dQl9K_bUrxLtw",
-"sk-GruTbLTbtSeWof3rEBjtIg",
-"sk-ugZDzju3AbV2QeJS1Y415Q"
-    // ... 在這裡可以繼續增加更多 KEY
-];
+const API_KEYS = ["sk-GruTbLTbtSeWof3rEBjtIg"];
+let currentApiKeyIndex = 0;
 const API_URL = "https://chatapi.akash.network/api/v1/chat/completions";
 
 // --- 2. 狀態管理 ---
@@ -870,7 +864,7 @@ JSON 格式如下：
 }
 }`;
 
-    const currentKey = API_KEYS[Math.floor(Math.random() * API_KEYS.length)];
+    const currentKey = API_KEYS[currentApiKeyIndex];
     try {
         const response = await fetch(API_URL, {
             method: 'POST',
