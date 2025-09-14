@@ -804,17 +804,12 @@ async function generateProse() {
 
         while (!isKeywordValid && attempts < randomKeywords.length * 2) {
             selectedKeyword = randomKeywords[Math.floor(Math.random() * randomKeywords.length)];
-            
-            // ## 修訂後的碰撞檢查邏輯 ##
             const collisionFound = historyTitles.some(title => {
-                // 只有當關鍵詞長度大於或等於2，且歷史標題包含該關鍵詞時，才視為相撞
                 if (selectedKeyword.length >= 2) {
                     return title.includes(selectedKeyword);
                 }
-                // 如果關鍵詞只有一個字，則永遠不視為相撞
                 return false;
             });
-
             if (!collisionFound) {
                 isKeywordValid = true;
                 console.log(`找到有效關鍵詞: "${selectedKeyword}"`);
@@ -845,10 +840,10 @@ ${promptInstruction}
 
 為了確保每次都能生成全新的內容，請將此唯一請求 ID 納入考量：${Date.now()}。
 
-重要指示：
+極重要指示：
 1. 你必須找出現實世界中，由真實作家所寫的文章或小說作品節錄段落。禁止虛構內容。
-2. 你必須提供此散文或小說的節錄段落，適合一次閱讀完。
-3. 你的回傳內容必須嚴格遵循以下 JSON 格式，不要包含任何 markdown 語法或額外說明。
+2. 你的回傳內容必須是「純粹的、單一的、有效的 JSON 物件」。
+3. 絕對禁止在 JSON 物件前後添加任何說明文字、註解、或 markdown 的 \`\`\`json 標籤。
 4. 所有文字都必須是繁體中文。
 5. [作品賞析] 必須針對你推薦的這篇真實作品節錄段落進行分析，可包含作者背景、寫作風格、或該作品的歷史意義。
 
@@ -865,6 +860,9 @@ JSON 格式如下：
 }`;
 
     const currentKey = API_KEYS[currentApiKeyIndex];
+
+    // --- [已移除] 超時控制器相關的所有代碼 ---
+
     try {
         const response = await fetch(API_URL, {
             method: 'POST',
@@ -872,22 +870,38 @@ JSON 格式如下：
             body: JSON.stringify({
                 model: selectedModel,
                 messages: [{ role: "user", content: systemPrompt }],
-                response_format: { type: "json_object" },
                 max_tokens: 64000,
                 temperature: 1.0
             })
+            // --- [已移除] signal 屬性 ---
         });
 
         if (!response.ok) throw new Error(`API 請求失敗，狀態碼：${response.status}`);
+        
         const data = await response.json();
+        
         if (!data.choices?.[0]?.message?.content) throw new Error("API 回應格式不正確。");
-        const article = JSON.parse(data.choices[0].message.content);
+        
+        let contentString = data.choices[0].message.content;
+        let article;
+        try {
+            article = JSON.parse(contentString);
+        } catch (parseError) {
+            console.error("解析 JSON 失敗，原始字串:", contentString);
+            throw new Error("API 回傳的內容不是有效的 JSON 格式。");
+        }
+
         if (!article.title || !article.author || !article.content) throw new Error("API 回應的 JSON 內容不完整。");
+        
         return article;
+
     } catch(error) {
         console.error("API Error:", error);
-        if (error instanceof SyntaxError) alert("API 回傳格式錯誤，無法解析文章。請稍後再試。");
-        else alert(`獲取文章時發生錯誤: ${error.message}`);
+        if (error instanceof SyntaxError || error.message.includes("JSON")) {
+            alert("API 回傳格式錯誤，無法解析文章。模型可能不穩定，請稍後再試。");
+        } else {
+            alert(`獲取文章時發生錯誤: ${error.message}`);
+        }
         return null;
     }
 }
