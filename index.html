@@ -414,8 +414,8 @@ font-size: 12px;
 <div class="form-group">
 <label for="model-select">模型</label>
 <select id="model-select" name="model">
-<option value="Qwen3-235B-A22B-Instruct-2507-FP8" selected>水心</option>
-<option value="DeepSeek-V3-1" >魚木</option> 
+<option value="openai-large" selected>水心</option>
+<option value="openai-large" >魚木</option> 
 
 </select>
 </div>
@@ -535,9 +535,9 @@ const generateIllustrationsCheckbox = document.getElementById('generate-illustra
 const readerPagination = document.getElementById('reader-pagination');
 
 // --- API 配置信息 ---
-const API_KEYS = ["sk-GruTbLTbtSeWof3rEBjtIg"];
+const API_KEYS = ["Jeq-UCxbpvrqUEzN"];
 let currentApiKeyIndex = 0;
-const API_URL = "https://chatapi.akash.network/api/v1/chat/completions";
+const API_URL = "https://text.pollinations.ai/openai";
 
 // --- 2. 狀態管理 ---
 let state = {
