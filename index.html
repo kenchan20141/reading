@@ -415,8 +415,8 @@ font-size: 12px;
 <div class="form-group">
 <label for="model-select">模型</label>
 <select id="model-select" name="model">
-<option value="openai-large" selected>水心</option>
-<option value="openai-large" >魚木</option> 
+<option value="gemini" selected>水心</option>
+<option value="gemini" >魚木</option> 
 
 </select>
 </div>
@@ -884,17 +884,24 @@ JSON 格式如下：
         if (!response.ok) throw new Error(`API 請求失敗，狀態碼：${response.status}`);
         
         const data = await response.json();
-        
-        if (!data.choices?.[0]?.message?.content) throw new Error("API 回應格式不正確。");
-        
-        let contentString = data.choices[0].message.content;
-        let article;
-        try {
-            article = JSON.parse(contentString);
-        } catch (parseError) {
-            console.error("解析 JSON 失敗，原始字串:", contentString);
-            throw new Error("API 回傳的內容不是有效的 JSON 格式。");
-        }
+
+if (!data.choices?.[0]?.message?.content) throw new Error("API 回應格式不正確。");
+
+let contentString = data.choices[0].message.content;
+
+// 新增：清理 Markdown 包裹（去除 ```json
+contentString = contentString
+  .replace(/^```(?:json)?\s*\n?/, '')  // 去除開頭的 ```json 或 ```
+  .replace(/\n?```(?:\s*json)?\s*$/, '')  // 去除結尾的 ```
+  .trim();  // 去除多餘空白
+
+let article;
+try {
+    article = JSON.parse(contentString);
+} catch (parseError) {
+    console.error("解析 JSON 失敗，原始字串:", contentString);
+    throw new Error("API 回傳的內容不是有效的 JSON 格式。");
+}
 
         if (!article.title || !article.author || !article.content) throw new Error("API 回應的 JSON 內容不完整。");
         
