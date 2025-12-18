@@ -416,8 +416,8 @@ font-size: 12px;
 <div class="form-group">
 <label for="model-select">模型</label>
 <select id="model-select" name="model">
-<option value="qwen-3-235b-a22b-instruct-2507" selected>水心</option>
-<option value="zai-glm-4.6" >魚木</option> 
+<option value="gemini" selected>水心</option>
+<option value="deepseek" >魚木</option> 
 
 </select>
 </div>
@@ -537,9 +537,17 @@ const generateIllustrationsCheckbox = document.getElementById('generate-illustra
 const readerPagination = document.getElementById('reader-pagination');
 
 // --- API 配置信息 ---
-const API_KEYS = [ "friend1"];
+const API_KEYS = [    "Jeq-UCxbpvrqUEzN",
+
+"F6uI8FZMRyGMAFaz",
+
+"VaFpRKCV9L60sYla",
+
+"zkQBAzGMKVY7BcHs",
+
+"hoew4Zqe5HerDgXf"];
 let currentApiKeyIndex = 0;
-const API_URL = "https://api-fawn-chi.vercel.app/api/v1/chat/completions";
+const API_URL = "https://text.pollinations.ai/v1/chat/completions";
 
 // --- 2. 狀態管理 ---
 let state = {
